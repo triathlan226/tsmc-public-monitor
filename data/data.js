@@ -4,7 +4,7 @@ window.TSMC_DASHBOARD_DATA = {
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-05-26T20:58:58+08:00",
+    "generated_at": "2026-05-26T21:03:07+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -19,7 +19,7 @@ window.TSMC_DASHBOARD_DATA = {
       "yahoo_ticker": "2330.TW"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-05-26T20:59:00+08:00",
+      "ran_at": "2026-05-26T21:03:10+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
         "Google Sheet events merged: 0",
@@ -93,7 +93,7 @@ window.TSMC_DASHBOARD_DATA = {
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-05-26T20:58:58+08:00",
+      "as_of": "2026-05-26T21:03:09+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
@@ -132,7 +132,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-26T20:58:58+08:00"
+        "retrieved_at": "2026-05-26T21:03:09+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
@@ -416,7 +416,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-26T20:58:58+08:00"
+        "retrieved_at": "2026-05-26T21:03:09+08:00"
       }
     }
   },
@@ -647,20 +647,6 @@ window.TSMC_DASHBOARD_DATA = {
     ]
   },
   "events": [
-    {
-      "id": "SHEET_EVENT_e80230304e",
-      "date": "2026-05-26",
-      "category": "重要新聞",
-      "title": "範例：台積電追蹤事件",
-      "summary": "這是一筆範例資料，正式使用時可刪除。",
-      "sentiment": "neutral",
-      "importance": "medium",
-      "dashboard_tag": "Manual",
-      "analyst_take": "分析師觀點填在這裡。",
-      "source_ids": [
-        "SRC_SHEET_49293f6431"
-      ]
-    },
     {
       "id": "EVT_20260526_INTRADAY",
       "date": "2026-05-26",
@@ -1038,13 +1024,6 @@ window.TSMC_DASHBOARD_DATA = {
       "name": "Tom's Hardware - TSMC allocates $20 billion to Arizona expansion",
       "type": "public_news",
       "url": "https://www.tomshardware.com/tech-industry/semiconductors/tsmc-allocates-usd20-billion-to-arizona-expansion-project-faces-water-and-labor-shortages-complicated-by-visa-rules",
-      "retrieved_at": "2026-05-26"
-    },
-    {
-      "id": "SRC_SHEET_49293f6431",
-      "name": "Example source",
-      "type": "google_sheet_manual",
-      "url": "https://example.com",
       "retrieved_at": "2026-05-26"
     }
   ]
