@@ -1,0 +1,2 @@
+id,date,title,category,sentiment,importance,dashboard_tag,summary,analyst_take,source_name,source_url,enabled,reviewed_by,updated_at
+,2026-05-26,範例：台積電追蹤事件,重要新聞,neutral,medium,Manual,這是一筆範例資料，正式使用時可刪除。,分析師觀點填在這裡。,Example source,https://example.com,TRUE,,2026-05-26

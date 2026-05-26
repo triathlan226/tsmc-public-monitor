@@ -120,6 +120,9 @@ def merge_sheet_events(data: dict[str, Any], rows: list[dict[str, str]]) -> int:
     merged = 0
 
     for index, row in enumerate(rows, start=1):
+        if row.get("enabled", "TRUE").strip().lower() in {"false", "0", "no", "n"}:
+            continue
+
         title = row.get("title", "")
         date = row.get("date", "")
         if not title or not date:
@@ -158,6 +161,9 @@ def merge_sheet_events(data: dict[str, Any], rows: list[dict[str, str]]) -> int:
 def replace_watchlist_from_sheet(data: dict[str, Any], rows: list[dict[str, str]]) -> int:
     items: list[dict[str, str]] = []
     for row in rows:
+        if row.get("enabled", "TRUE").strip().lower() in {"false", "0", "no", "n"}:
+            continue
+
         item = row.get("item", "")
         if not item:
             continue

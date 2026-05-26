@@ -1,0 +1,3 @@
+date,item,why_it_matters,expected_source_id,owner,status,updated_at
+2026-06-10,TSMC Monthly Sales - May 2026,驗證 AI/HPC 與先進製程需求是否延續。,SRC_TSMC_FINANCIAL_CALENDAR,,open,2026-05-26
+rolling,CoWoS / HBM / ABF 供應鏈,先進封裝仍是 AI 出貨瓶頸，需追蹤供需缺口。,SRC_REUTERS_TECH_SYMPOSIUM,,open,2026-05-26

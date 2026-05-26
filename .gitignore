@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+node_modules/
+google_sheet_template/*_preview.png

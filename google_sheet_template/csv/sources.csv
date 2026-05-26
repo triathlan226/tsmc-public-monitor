@@ -1,0 +1,6 @@
+source_name,source_type,url,priority,enabled,notes
+TSMC Press Releases,official,https://pr.tsmc.com/english,1,TRUE,台積電官方新聞稿
+TSMC Investor Relations,official,https://investor.tsmc.com/english,1,TRUE,財報、月營收、法說會
+Yahoo Finance 2330.TW,stock_price,https://finance.yahoo.com/quote/2330.TW,2,TRUE,股價來源
+Reuters,public_news,https://www.reuters.com,2,TRUE,公開新聞
+Focus Taiwan,public_news,https://focustaiwan.tw,3,TRUE,公開新聞

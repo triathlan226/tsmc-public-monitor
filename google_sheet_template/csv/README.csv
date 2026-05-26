@@ -1,0 +1,8 @@
+TSMC Public Monitor - Google Sheet 後台
+
+用途,這份試算表是 dashboard 的人工審核後台。GitHub Actions 每天讀取發布成 CSV 的分頁，合併 Yahoo Finance 與公開資料後產生 data/data.json 與 data/data.js。
+主要分頁,manual_events：手動新增新聞/事件；watchlist：追蹤清單；sources：常用來源；rules：關鍵字分類規則；companies：未來擴充多公司用。
+目前程式會讀取,manual_events 與 watchlist。其他分頁先作為資料名單與後續擴充。
+發布方式,Google Sheet 匯入後，將 manual_events 與 watchlist 各自發布為 CSV，並把網址填入 GitHub Secrets。
+GitHub Secrets,GOOGLE_SHEET_EVENTS_CSV_URL、GOOGLE_SHEET_WATCHLIST_CSV_URL
+注意,不要把私人資訊或非公開資料放入會發布成 CSV 的分頁。

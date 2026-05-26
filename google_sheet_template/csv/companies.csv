@@ -1,0 +1,3 @@
+ticker,company_name,enabled,official_ir_url,press_url,finance_source,notes
+2330.TW,TSMC,TRUE,https://investor.tsmc.com/english,https://pr.tsmc.com/english,Yahoo Finance,目前 dashboard 主追蹤標的
+TSM,TSMC ADR,FALSE,https://investor.tsmc.com/english,https://pr.tsmc.com/english,Yahoo Finance,未來可擴充 ADR
