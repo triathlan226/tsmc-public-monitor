@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TSMC Public Intelligence Monitor</title>
+  <style>
+    :root {
+      --bg: #101112;
+      --panel: #181a1c;
+      --panel-2: #202326;
+      --ink: #f4f0e8;
+      --muted: #aaa59a;
+      --line: #34373a;
+      --green: #2bd17e;
+      --green-soft: rgba(43, 209, 126, 0.14);
+      --red: #ff6666;
+      --red-soft: rgba(255, 102, 102, 0.14);
+      --amber: #ffc857;
+      --amber-soft: rgba(255, 200, 87, 0.14);
+      --cyan: #49c7d8;
+      --cyan-soft: rgba(73, 199, 216, 0.13);
+      --violet: #a88cff;
+      --shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+      font-family: "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 200, 87, 0.06), transparent 22rem),
+        radial-gradient(circle at 88% 12%, rgba(73, 199, 216, 0.13), transparent 18rem),
+        var(--bg);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1440px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+
+    .headline {
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: rgba(24, 26, 28, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px var(--green);
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      font-size: clamp(28px, 4vw, 56px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .brief {
+      margin: 0;
+      max-width: 960px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .status-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: rgba(24, 26, 28, 0.84);
+      box-shadow: var(--shadow);
+    }
+
+    .status-item {
+      min-height: 96px;
+      padding: 14px;
+      background: var(--panel-2);
+      border: 1px solid #2b2e31;
+    }
+
+    .label {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .value {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.05;
+    }
+
+    .subvalue {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+    .amber { color: var(--amber); }
+    .cyan { color: var(--cyan); }
+
+    .ticker {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .kpi {
+      min-height: 126px;
+      padding: 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent, var(--cyan));
+    }
+
+    .kpi .value {
+      font-size: 24px;
+    }
+
+    .grid-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(360px, 0.85fr);
+      gap: 18px;
+    }
+
+    section {
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: rgba(24, 26, 28, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .caption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .summary-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .summary-card {
+      padding: 16px;
+      background: var(--panel-2);
+      border: 1px solid #2d3034;
+      min-height: 132px;
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--amber);
+      font-size: 13px;
+    }
+
+    .summary-card p {
+      margin: 0;
+      color: #ded9cf;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .chart-box {
+      min-height: 250px;
+      padding: 14px;
+      background: var(--panel-2);
+      border: 1px solid #2d3034;
+    }
+
+    .chart-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .chart-title h3,
+    .compact-title {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .price-chart {
+      width: 100%;
+      height: 170px;
+      display: block;
+      background: linear-gradient(180deg, rgba(73, 199, 216, 0.07), transparent);
+      border: 1px solid #303438;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) 128px;
+      align-items: center;
+      gap: 10px;
+      min-height: 34px;
+      color: #e9e2d8;
+      font-size: 13px;
+    }
+
+    .bar-row strong {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .track {
+      height: 10px;
+      background: #2c3033;
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      width: var(--w);
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+    }
+
+    .segmented {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      background: #1f2225;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      color: var(--ink);
+      border-color: var(--amber);
+      background: rgba(255, 200, 87, 0.12);
+    }
+
+    .events {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .event-card {
+      min-height: 210px;
+      padding: 15px;
+      background: var(--panel-2);
+      border: 1px solid #2d3034;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .event-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .event-date {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.bullish {
+      color: var(--green);
+      background: var(--green-soft);
+      border-color: rgba(43, 209, 126, 0.35);
+    }
+
+    .badge.bearish {
+      color: var(--red);
+      background: var(--red-soft);
+      border-color: rgba(255, 102, 102, 0.35);
+    }
+
+    .badge.mixed,
+    .badge.neutral {
+      color: var(--amber);
+      background: var(--amber-soft);
+      border-color: rgba(255, 200, 87, 0.35);
+    }
+
+    .event-card h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .event-card p {
+      margin: 0;
+      color: #d8d1c7;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .event-card .take {
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid #303438;
+      color: var(--muted);
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      min-height: 24px;
+      align-items: center;
+      padding: 2px 7px;
+      border: 1px solid #3a3e42;
+      color: #d9d2c8;
+      background: rgba(255, 255, 255, 0.03);
+      font-size: 11px;
+      line-height: 1.35;
+      max-width: 100%;
+      white-space: normal;
+    }
+
+    .source-link:hover {
+      border-color: var(--cyan);
+      color: white;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .thesis {
+      padding: 14px;
+      background: var(--panel-2);
+      border: 1px solid #2d3034;
+      min-height: 152px;
+    }
+
+    .thesis h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    .thesis p {
+      margin: 0;
+      color: #ded8cf;
+      font-size: 13px;
+      line-height: 1.58;
+    }
+
+    .risk-list,
+    .watch-list,
+    .source-list,
+    .mix-list {
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .risk-item {
+      padding: 13px;
+      border: 1px solid #2d3034;
+      background: var(--panel-2);
+    }
+
+    .risk-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .risk-item h3,
+    .watch-item h3 {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .risk-meter {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin: 6px 0;
+    }
+
+    .dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .dot {
+      width: 16px;
+      height: 8px;
+      background: #34383b;
+    }
+
+    .dot.on {
+      background: var(--amber);
+    }
+
+    .risk-item p,
+    .watch-item p {
+      margin: 8px 0 0;
+      color: #d8d1c7;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .watch-item,
+    .source-item {
+      padding: 13px;
+      border: 1px solid #2d3034;
+      background: var(--panel-2);
+    }
+
+    .watch-date {
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .source-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .source-item strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .source-item span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mix-box {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .mix-card {
+      background: var(--panel-2);
+      border: 1px solid #2d3034;
+      padding: 14px;
+    }
+
+    .footer-note {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    @media (max-width: 1180px) {
+      .topbar,
+      .grid-main,
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ticker {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 20px, 680px);
+        padding-top: 12px;
+      }
+
+      .ticker,
+      .status-board,
+      .summary-list,
+      .events,
+      .two-col,
+      .mix-box {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .source-item {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="headline">
+        <div class="eyebrow"><span class="pulse-dot"></span><span>Public Sources Only</span><span id="windowLabel"></span></div>
+        <h1>TSMC Public Intelligence Monitor</h1>
+        <p class="brief" id="morningBrief"></p>
+      </div>
+      <div class="status-board" id="statusBoard"></div>
+    </header>
+
+    <div class="ticker" id="kpiGrid"></div>
+
+    <main class="grid-main">
+      <div>
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>今日摘要</h2>
+              <div class="caption">股市分析師早會視角，重點看催化與風險。</div>
+            </div>
+            <div class="badge mixed" id="stanceBadge"></div>
+          </div>
+          <div class="summary-list" id="summaryList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>市場與營收脈搏</h2>
+              <div class="caption">股價以 TWSE/PChome 公開資訊為錨，營收採台積電官方月營收。</div>
+            </div>
+          </div>
+          <div class="chart-grid">
+            <div class="chart-box">
+              <div class="chart-title">
+                <h3>2330.TW 近一週收盤</h3>
+                <span class="caption" id="priceRange"></span>
+              </div>
+              <svg class="price-chart" id="priceChart" viewBox="0 0 520 170" role="img" aria-label="台積電近一週股價圖"></svg>
+            </div>
+            <div class="chart-box">
+              <div class="chart-title">
+                <h3>2026 月營收</h3>
+                <span class="caption">NT$ bn</span>
+              </div>
+              <div id="revenueBars"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>事件卡片</h2>
+              <div class="caption">最近一週新聞優先；財報、法說與營收採最近一期官方資訊補足監控面板。</div>
+            </div>
+            <div class="segmented">
+              <button class="filter-btn active" data-filter="all">全部</button>
+              <button class="filter-btn" data-filter="bullish">利多</button>
+              <button class="filter-btn" data-filter="bearish">利空</button>
+              <button class="filter-btn" data-filter="mixed">中性/混合</button>
+            </div>
+          </div>
+          <div class="events" id="eventGrid"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>利多利空分類</h2>
+              <div class="caption">把資訊轉成投資辯論用的正反論點。</div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div>
+              <div class="compact-title green">利多</div>
+              <div id="bullishList"></div>
+            </div>
+            <div>
+              <div class="compact-title red">利空 / 壓力</div>
+              <div id="bearishList"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside>
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>財務與業務組合</h2>
+              <div class="caption">1Q26 最新官方財報與管理報告。</div>
+            </div>
+          </div>
+          <div class="mix-box" id="mixBox"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>風險雷達</h2>
+              <div class="caption">Probability / Impact 以 1-5 主觀量化，利於早會排序。</div>
+            </div>
+          </div>
+          <div class="risk-list" id="riskList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>追蹤清單</h2>
+              <div class="caption">下一步要盯的日期、數據與新聞。</div>
+            </div>
+          </div>
+          <div class="watch-list" id="watchList"></div>
+        </section>
+      </aside>
+    </main>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>來源連結</h2>
+          <div class="caption">官方來源、公開新聞與公開股價資訊。資料層另存於 tsmc_public_monitor_data.json。</div>
+        </div>
+      </div>
+      <div class="source-list" id="sourceList"></div>
+    </section>
+
+    <p class="footer-note">本頁為公開資訊整理，不構成投資建議。資料時間以 2026-05-26 Asia/Taipei 為準。</p>
+  </div>
+
+  <script id="dashboardData" type="application/json">
+{
+  "window": "2026-05-19 to 2026-05-26",
+  "stance": "正向但估值敏感",
+  "brief": "早會重點：維持 AI 供應鏈核心受益者視角，短線看 5 月營收、CoWoS 供需缺口、Arizona 建廠節奏與華為/出口管制新聞對情緒的擾動。",
+  "summary": [
+    { "title": "AI/HPC 仍是主軸", "text": "1Q26 HPC 佔營收 61%，先進製程 7nm 以下佔晶圓營收 74%，Q2 營收指引維持高檔。" },
+    { "title": "2nm 與 CoWoS 延續領先", "text": "AMD Venice 公開驗證 2nm 量產爬坡，CoWoS 5.5 倍光罩尺寸良率超過 98%，14 倍光罩尺寸 roadmap 指向 2028。" },
+    { "title": "海外擴產是雙面刃", "text": "董事會核准 US$31.284bn 資本預算與不超過 US$20bn Arizona 增資，支撐長期產能，也提高成本與執行風險。" },
+    { "title": "短線股價進入消化區", "text": "5/25 TWSE 收盤 2310 元、接近一年高點；5/26 盤中回落至 2290 元，估值與新聞面更敏感。" }
+  ],
+  "kpis": [
+    { "label": "2330.TW 最新官方收盤", "value": "2310", "unit": "TWD", "sub": "2026-05-25, +2.44%", "tone": "green" },
+    { "label": "5/26 盤中", "value": "2290", "unit": "TWD", "sub": "-0.87% vs previous close", "tone": "red" },
+    { "label": "4 月營收", "value": "410.73", "unit": "NT$ bn", "sub": "YoY +17.5%, MoM -1.1%", "tone": "cyan" },
+    { "label": "1Q26 EPS", "value": "22.08", "unit": "NT$", "sub": "毛利率 66.2%", "tone": "green" },
+    { "label": "HPC 營收占比", "value": "61", "unit": "%", "sub": "1Q26 platform mix", "tone": "amber" },
+    { "label": "CoWoS 5.5x 良率", "value": ">98", "unit": "%", "sub": "公開新聞引述技術論壇", "tone": "violet" }
+  ],
+  "status": [
+    { "label": "Analyst Stance", "value": "正向", "sub": "但估值敏感" },
+    { "label": "Catalyst", "value": "5 月營收", "sub": "6/10 前後官方公告" },
+    { "label": "Core Driver", "value": "AI/HPC", "sub": "2nm + CoWoS + Advanced Packaging" },
+    { "label": "Main Risk", "value": "海外成本", "sub": "Arizona, FX, export controls" }
+  ],
+  "priceHistory": [
+    { "date": "05/19", "close": 2205 },
+    { "date": "05/20", "close": 2185 },
+    { "date": "05/21", "close": 2230 },
+    { "date": "05/22", "close": 2255 },
+    { "date": "05/25", "close": 2310 }
+  ],
+  "revenueSeries": [
+    { "month": "Jan", "revenue": 401.255, "yoy": 36.8 },
+    { "month": "Feb", "revenue": 317.657, "yoy": 22.2 },
+    { "month": "Mar", "revenue": 415.191, "yoy": 45.2 },
+    { "month": "Apr", "revenue": 410.726, "yoy": 17.5 }
+  ],
+  "mix": {
+    "technology": [
+      { "name": "3nm", "value": 25 },
+      { "name": "5nm", "value": 36 },
+      { "name": "7nm", "value": 13 },
+      { "name": "16/20nm", "value": 7 },
+      { "name": "28nm", "value": 7 },
+      { "name": "Other", "value": 12 }
+    ],
+    "platform": [
+      { "name": "HPC", "value": 61 },
+      { "name": "Smartphone", "value": 26 },
+      { "name": "IoT", "value": 6 },
+      { "name": "Automotive", "value": 4 },
+      { "name": "Other", "value": 3 }
+    ]
+  },
+  "events": [
+    {
+      "date": "2026-05-26",
+      "category": "公開股價資訊",
+      "title": "台積電 5/26 盤中回落至 2290 元",
+      "summary": "PChome 股價頁顯示 5/26 盤中價格 2290 元，較前收 2310 元下跌 20 元或 0.87%；5/25 TWSE 官方收盤則為 2310 元。",
+      "sentiment": "bearish",
+      "tag": "短線消化",
+      "take": "短線漲多後整理，若 5 月營收或 Nvidia/AMD 需求訊號延續，回檔仍偏健康。",
+      "sources": ["SRC_PCHOME_2330", "SRC_TWSE_2330_PDF"]
+    },
+    {
+      "date": "2026-05-25",
+      "category": "市場風險",
+      "title": "華為宣稱以 LogicFolding 縮小與台積電差距",
+      "summary": "公開新聞報導華為提出新晶片設計路徑，目標 2031 年達到等效 1.4nm 密度，以繞開先進設備限制。",
+      "sentiment": "bearish",
+      "tag": "競爭/地緣",
+      "take": "短期不改變台積電先進製程優勢，但會提高中國自主化與出口管制議題對估值的雜訊。",
+      "sources": ["SRC_TAIPEI_TIMES_HUAWEI"]
+    },
+    {
+      "date": "2026-05-21",
+      "category": "先進製程",
+      "title": "AMD Venice 採台積電 2nm 進入量產爬坡",
+      "summary": "AMD 宣布下一代 EPYC Venice 已在台灣採用台積電 2nm 製程進入量產爬坡，並規劃未來於 TSMC Arizona 量產。",
+      "sentiment": "bullish",
+      "tag": "2nm 客戶驗證",
+      "take": "2nm 商業化的重要需求驗證，對 2026-2028 先進節點產能利用率與 ASP 有支撐。",
+      "sources": ["SRC_AMD_VENICE_2NM"]
+    },
+    {
+      "date": "2026-05-21",
+      "category": "市場風險",
+      "title": "Tokyo Electron Taiwan 不上訴台積電營業秘密案",
+      "summary": "公開新聞報導 Tokyo Electron Taiwan 表示尊重司法程序，將不對涉及台積電敏感技術的營業秘密案上訴。",
+      "sentiment": "mixed",
+      "tag": "IP 風險",
+      "take": "判決強化 IP 保護訊號，但也提醒先進製程人才流動與供應鏈接觸面帶來長期控管成本。",
+      "sources": ["SRC_TAIPEI_TIMES_TEL"]
+    },
+    {
+      "date": "2026-05-15",
+      "category": "重要新聞",
+      "title": "台積電擬出售世界先進 8.1% 股權",
+      "summary": "台積電宣布擬透過鉅額交易出售最多 1.52 億股世界先進普通股，持股預期由約 27.1% 降至約 19%。",
+      "sentiment": "neutral",
+      "tag": "聚焦核心",
+      "take": "非核心資產配置調整；公司表示不影響與 VIS 的策略關係。",
+      "sources": ["SRC_TSMC_VIS_SALE"]
+    },
+    {
+      "date": "2026-05-14",
+      "category": "先進製程 / CoWoS",
+      "title": "技術論壇釋出 2nm、A16 與 CoWoS 擴產訊號",
+      "summary": "公開新聞引述技術論壇資料：2nm/A16 產能 2026-2028 CAGR 約 70%，CoWoS 產能 2022-2027 CAGR 超過 80%。",
+      "sentiment": "bullish",
+      "tag": "AI 長多",
+      "take": "先進製程與先進封裝同步擴產，台積電仍是 AI capex 週期核心供應商。",
+      "sources": ["SRC_REUTERS_TECH_SYMPOSIUM", "SRC_FOCUS_TAIWAN_TECH_SYMPOSIUM"]
+    },
+    {
+      "date": "2026-05-12",
+      "category": "海外設廠 / 資本支出",
+      "title": "董事會核准 US$31.284bn 資本預算與 Arizona 增資",
+      "summary": "董事會核准約 US$31.284bn 資本預算，以及不超過 US$20bn 對 TSMC Arizona 增資。",
+      "sentiment": "mixed",
+      "tag": "擴產與成本",
+      "take": "需求能見度強，但資本密集度、折舊、海外成本與執行風險將主導毛利率討論。",
+      "sources": ["SRC_TSMC_BOARD_20260512"]
+    },
+    {
+      "date": "2026-05-08",
+      "category": "月營收公告",
+      "title": "4 月營收 NT$410.73bn，年增 17.5%",
+      "summary": "4 月合併營收月減 1.1%、年增 17.5%；1-4 月累計營收 NT$1,544.83bn，年增 29.9%。",
+      "sentiment": "bullish",
+      "tag": "營收動能",
+      "take": "年增仍強，月減幅度小；下一個催化點是 6/10 公布的 5 月營收。",
+      "sources": ["SRC_TSMC_APRIL_REVENUE", "SRC_TSMC_MONTHLY_2026"]
+    },
+    {
+      "date": "2026-04-16",
+      "category": "財報 / 法說會",
+      "title": "1Q26 EPS NT$22.08，毛利率 66.2%",
+      "summary": "1Q26 營收 NT$1,134.10bn、淨利 NT$572.48bn、EPS NT$22.08，毛利率 66.2%。",
+      "sentiment": "bullish",
+      "tag": "獲利品質",
+      "take": "高毛利率與 HPC 比重支撐獲利品質；後續看 N2 ramp、海外廠折舊與匯率。",
+      "sources": ["SRC_TSMC_Q1_EARNINGS", "SRC_TSMC_Q1_CALL"]
+    }
+  ],
+  "bullish": [
+    { "title": "AI/HPC 結構性需求", "detail": "1Q26 HPC 佔營收 61%，Q2 營收指引 US$39.0-40.2bn，顯示領先製程需求仍強。", "sources": ["SRC_TSMC_Q1_MANAGEMENT_REPORT"] },
+    { "title": "先進製程收入占比高", "detail": "3nm、5nm、7nm 分別佔 25%、36%、13%，7nm 以下合計 74%。", "sources": ["SRC_TSMC_Q1_MANAGEMENT_REPORT"] },
+    { "title": "CoWoS 良率與產能提升", "detail": "5.5 倍光罩尺寸 CoWoS 良率超過 98%，CoWoS 產能 2022-2027 CAGR 超過 80%。", "sources": ["SRC_FOCUS_TAIWAN_TECH_SYMPOSIUM", "SRC_REUTERS_TECH_SYMPOSIUM"] },
+    { "title": "2nm 客戶導入具體化", "detail": "AMD Venice 成為公開可驗證的 2nm HPC 量產爬坡案例。", "sources": ["SRC_AMD_VENICE_2NM"] }
+  ],
+  "bearish": [
+    { "title": "估值與漲多風險", "detail": "5/25 收盤 2310 元接近一年高點 2345 元，本益比約 31.06 倍；5/26 盤中拉回。", "sources": ["SRC_TWSE_2330_PDF", "SRC_PCHOME_2330"] },
+    { "title": "海外擴產成本與執行風險", "detail": "Arizona 擴建雖利於供應安全，但水、勞動力、簽證與成本都是市場會反覆追問的變數。", "sources": ["SRC_TSMC_BOARD_20260512", "SRC_TOMSHARDWARE_ARIZONA"] },
+    { "title": "地緣與出口管制變數", "detail": "華為自主化新聞短期技術威脅有限，但會增加政策與情緒波動。", "sources": ["SRC_TAIPEI_TIMES_HUAWEI"] },
+    { "title": "客戶集中與 AI capex 週期", "detail": "1Q26 北美客戶佔 76%，若雲端 AI 投資節奏放緩，營收與估值波動會放大。", "sources": ["SRC_TSMC_Q1_MANAGEMENT_REPORT"] }
+  ],
+  "risks": [
+    { "risk": "海外廠成本與建廠進度", "level": "high", "probability": 4, "impact": 5, "watch": "Arizona 第二廠機台移入、先進封裝廠啟動、用水/勞動力/簽證新聞" },
+    { "risk": "AI 需求與客戶集中", "level": "high", "probability": 3, "impact": 5, "watch": "Nvidia/AMD/ASIC 訂單、雲端 capex、CoWoS 排程" },
+    { "risk": "地緣政治與出口管制", "level": "high", "probability": 4, "impact": 4, "watch": "美中半導體管制、華為/中國自主晶片、台美投資與關稅談判" },
+    { "risk": "先進封裝瓶頸", "level": "medium-high", "probability": 3, "impact": 4, "watch": "CoWoS 產能、HBM 供應、ABF/基板供應鏈" },
+    { "risk": "毛利率與匯率", "level": "medium", "probability": 3, "impact": 4, "watch": "USD/TWD、N2 ramp 折舊、海外廠成本稀釋" },
+    { "risk": "IP 與人才流動", "level": "medium", "probability": 3, "impact": 3, "watch": "營業秘密訴訟、競業案件、供應鏈保密制度" }
+  ],
+  "watchlist": [
+    { "date": "2026-06-10", "item": "TSMC Monthly Sales - May 2026", "why": "驗證 AI/HPC 與 2nm/3nm 需求是否延續，並檢查 4 月後營收動能。" },
+    { "date": "2026-07-10", "item": "TSMC Monthly Sales - June 2026", "why": "搭配 Q2 指引 US$39.0-40.2bn，判斷季度達標機率。" },
+    { "date": "2026-07-16", "item": "推估 2Q26 法說會窗口", "why": "重點追問 CoWoS 產能、N2/A16 ramp、海外廠毛利率稀釋與全年 capex。" },
+    { "date": "rolling", "item": "CoWoS / HBM / ABF 供應鏈", "why": "先進封裝仍是 AI 出貨瓶頸，供需缺口直接影響 ASP 與客戶分配。" },
+    { "date": "rolling", "item": "Arizona 建廠與政策新聞", "why": "美國產能是供應安全加分項，但也是成本與執行風險來源。" }
+  ],
+  "sources": [
+    { "id": "SRC_TSMC_MONTHLY_2026", "name": "TSMC Investor Relations - 2026 Monthly Revenue", "type": "official", "url": "https://investor.tsmc.com/english/monthly-revenue/2026" },
+    { "id": "SRC_TSMC_APRIL_REVENUE", "name": "TSMC April 2026 Revenue Report", "type": "official", "url": "https://pr.tsmc.com/english/news/3305" },
+    { "id": "SRC_TSMC_Q1_EARNINGS", "name": "TSMC 1Q26 Earnings Release", "type": "official", "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/qr/phase4_reports/2026-04/bd8eb0403902fdea59a2f5e390e48d010b50edc9/1Q26%20EarningsRelease_WoG.pdf" },
+    { "id": "SRC_TSMC_Q1_MANAGEMENT_REPORT", "name": "TSMC 1Q26 Management Report", "type": "official", "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-04/5508a9df8981f587c73dbfaf9f577f142e22bbb1/1Q26ManagementReport.pdf" },
+    { "id": "SRC_TSMC_Q1_CALL", "name": "TSMC First Quarter 2026 Earnings Conference", "type": "official", "url": "https://investor.tsmc.com/english/quarterly-results/teleconference" },
+    { "id": "SRC_TSMC_BOARD_20260512", "name": "TSMC Board of Directors Meeting Resolutions", "type": "official", "url": "https://pr.tsmc.com/english/news/3311" },
+    { "id": "SRC_TSMC_A13_SYMPOSIUM", "name": "TSMC Debuts A13 Technology", "type": "official", "url": "https://pr.tsmc.com/english/news/3302" },
+    { "id": "SRC_TSMC_VIS_SALE", "name": "TSMC to Sell 8.1% of Vanguard International Semiconductor", "type": "official", "url": "https://pr.tsmc.com/english/news/3314" },
+    { "id": "SRC_TWSE_2330_PDF", "name": "TWSE 2330 Company Snapshot PDF", "type": "public_stock_price", "url": "https://www.twse.com.tw/pdf/en/2330_en.pdf" },
+    { "id": "SRC_PCHOME_2330", "name": "PChome 股市 2330 價量走勢", "type": "public_stock_price", "url": "https://pchome.megatime.com.tw/stock/sid2330.html" },
+    { "id": "SRC_REUTERS_TECH_SYMPOSIUM", "name": "Reuters via MarketScreener - TSMC tech symposium", "type": "public_news", "url": "https://www.marketscreener.com/news/tsmc-says-global-chip-market-to-hit-1-5-trillion-by-2030-as-ai-drives-growth-ce7f5bdcd08cf62d" },
+    { "id": "SRC_FOCUS_TAIWAN_TECH_SYMPOSIUM", "name": "Focus Taiwan - Advanced packaging and 2nm progress", "type": "public_news", "url": "https://focustaiwan.tw/sci-tech/202605140021" },
+    { "id": "SRC_AMD_VENICE_2NM", "name": "AMD IR - Venice on TSMC 2nm Process Technology", "type": "public_company_news", "url": "https://ir.amd.com/news-events/press-releases/detail/1287/amd-announces-production-ramp-of-next-generation-amd-epyc-processor-venice-on-tsmc-2nm-process-technology" },
+    { "id": "SRC_TAIPEI_TIMES_TEL", "name": "Taipei Times / Reuters - Tokyo Electron ruling", "type": "public_news", "url": "https://www.taipeitimes.com/News/topic/TSMC" },
+    { "id": "SRC_TAIPEI_TIMES_HUAWEI", "name": "Taipei Times - Huawei chip breakthrough", "type": "public_news", "url": "https://www.taipeitimes.com/News/biz/archives/2026/05/26/2003857959" },
+    { "id": "SRC_TOMSHARDWARE_ARIZONA", "name": "Tom's Hardware - TSMC Arizona expansion risk", "type": "public_news", "url": "https://www.tomshardware.com/tech-industry/semiconductors/tsmc-allocates-usd20-billion-to-arizona-expansion-project-faces-water-and-labor-shortages-complicated-by-visa-rules" }
+  ]
+}
+  </script>
+
+  <script>
+    const data = JSON.parse(document.getElementById("dashboardData").textContent);
+    const sourceMap = new Map(data.sources.map((source) => [source.id, source]));
+
+    const toneColor = {
+      green: "var(--green)",
+      red: "var(--red)",
+      amber: "var(--amber)",
+      cyan: "var(--cyan)",
+      violet: "var(--violet)"
+    };
+
+    function sourceLinks(ids) {
+      const list = Array.isArray(ids) ? ids : [ids];
+      return list
+        .map((id) => sourceMap.get(id))
+        .filter(Boolean)
+        .map((source) => `<a class="source-link" href="${source.url}" target="_blank" rel="noreferrer">${source.name}</a>`)
+        .join("");
+    }
+
+    function sentimentLabel(sentiment) {
+      return {
+        bullish: "利多",
+        bearish: "利空",
+        mixed: "混合",
+        neutral: "中性"
+      }[sentiment] || sentiment;
+    }
+
+    function renderStatus() {
+      document.getElementById("windowLabel").textContent = data.window;
+      document.getElementById("morningBrief").textContent = data.brief;
+      document.getElementById("stanceBadge").textContent = data.stance;
+
+      document.getElementById("statusBoard").innerHTML = data.status.map((item) => `
+        <div class="status-item">
+          <p class="label">${item.label}</p>
+          <p class="value">${item.value}</p>
+          <div class="subvalue">${item.sub}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderKpis() {
+      document.getElementById("kpiGrid").innerHTML = data.kpis.map((item) => `
+        <div class="kpi" style="--accent:${toneColor[item.tone] || "var(--cyan)"}">
+          <p class="label">${item.label}</p>
+          <p class="value ${item.tone || ""}">${item.value} <span class="caption">${item.unit}</span></p>
+          <div class="subvalue">${item.sub}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderSummary() {
+      document.getElementById("summaryList").innerHTML = data.summary.map((item) => `
+        <article class="summary-card">
+          <strong>${item.title}</strong>
+          <p>${item.text}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderPriceChart() {
+      const svg = document.getElementById("priceChart");
+      const values = data.priceHistory.map((point) => point.close);
+      const min = Math.min(...values) - 20;
+      const max = Math.max(...values) + 20;
+      const width = 520;
+      const height = 170;
+      const pad = 28;
+      const xStep = (width - pad * 2) / (data.priceHistory.length - 1);
+      const points = data.priceHistory.map((point, index) => {
+        const x = pad + index * xStep;
+        const y = height - pad - ((point.close - min) / (max - min)) * (height - pad * 2);
+        return { ...point, x, y };
+      });
+      const line = points.map((point) => `${point.x},${point.y}`).join(" ");
+      const area = `${pad},${height - pad} ${line} ${width - pad},${height - pad}`;
+
+      document.getElementById("priceRange").textContent = `${min + 20} - ${max - 20} TWD`;
+      svg.innerHTML = `
+        <polyline points="${area}" fill="rgba(73,199,216,0.16)" stroke="none"></polyline>
+        <polyline points="${line}" fill="none" stroke="var(--cyan)" stroke-width="3"></polyline>
+        ${points.map((point) => `
+          <circle cx="${point.x}" cy="${point.y}" r="4" fill="var(--amber)"></circle>
+          <text x="${point.x}" y="${height - 8}" text-anchor="middle" fill="#aaa59a" font-size="11">${point.date}</text>
+          <text x="${point.x}" y="${point.y - 10}" text-anchor="middle" fill="#f4f0e8" font-size="11">${point.close}</text>
+        `).join("")}
+      `;
+    }
+
+    function renderBars(targetId, rows, valueKey, maxValue) {
+      document.getElementById(targetId).innerHTML = rows.map((row) => {
+        const width = Math.max(3, Math.round((row[valueKey] / maxValue) * 100));
+        const extra = row.yoy !== undefined ? `<span class="green">YoY ${row.yoy}%</span>` : `${row.value}%`;
+        return `
+          <div class="bar-row">
+            <span>${row.month || row.name}</span>
+            <div class="track"><div class="fill" style="--w:${width}%"></div></div>
+            <strong>${row[valueKey].toFixed ? row[valueKey].toFixed(1) : row[valueKey]} ${extra}</strong>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderRevenue() {
+      const max = Math.max(...data.revenueSeries.map((row) => row.revenue));
+      renderBars("revenueBars", data.revenueSeries, "revenue", max);
+    }
+
+    function renderEvents(filter = "all") {
+      const visible = data.events.filter((event) => {
+        if (filter === "all") return true;
+        if (filter === "mixed") return event.sentiment === "mixed" || event.sentiment === "neutral";
+        return event.sentiment === filter;
+      });
+      document.getElementById("eventGrid").innerHTML = visible.map((event) => `
+        <article class="event-card">
+          <div class="event-top">
+            <div>
+              <div class="event-date">${event.date} · ${event.category}</div>
+              <h3>${event.title}</h3>
+            </div>
+            <span class="badge ${event.sentiment}">${sentimentLabel(event.sentiment)}</span>
+          </div>
+          <p>${event.summary}</p>
+          <div class="badge ${event.sentiment}">${event.tag}</div>
+          <p class="take">${event.take}</p>
+          <div class="link-row">${sourceLinks(event.sources)}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderTheses() {
+      document.getElementById("bullishList").innerHTML = data.bullish.map((item) => `
+        <article class="thesis">
+          <h3 class="green">${item.title}</h3>
+          <p>${item.detail}</p>
+          <div class="link-row">${sourceLinks(item.sources)}</div>
+        </article>
+      `).join("");
+
+      document.getElementById("bearishList").innerHTML = data.bearish.map((item) => `
+        <article class="thesis">
+          <h3 class="red">${item.title}</h3>
+          <p>${item.detail}</p>
+          <div class="link-row">${sourceLinks(item.sources)}</div>
+        </article>
+      `).join("");
+    }
+
+    function dots(value) {
+      return Array.from({ length: 5 }, (_, index) => `<span class="dot ${index < value ? "on" : ""}"></span>`).join("");
+    }
+
+    function renderRisks() {
+      document.getElementById("riskList").innerHTML = data.risks.map((item) => `
+        <article class="risk-item">
+          <div class="risk-head">
+            <h3>${item.risk}</h3>
+            <span class="badge bearish">${item.level}</span>
+          </div>
+          <div class="risk-meter"><span>Probability</span><div class="dots">${dots(item.probability)}</div></div>
+          <div class="risk-meter"><span>Impact</span><div class="dots">${dots(item.impact)}</div></div>
+          <p>${item.watch}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderWatchlist() {
+      document.getElementById("watchList").innerHTML = data.watchlist.map((item) => `
+        <article class="watch-item">
+          <div class="watch-date">${item.date}</div>
+          <h3>${item.item}</h3>
+          <p>${item.why}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderMix() {
+      const panels = [
+        { title: "Technology Revenue Mix", rows: data.mix.technology },
+        { title: "Platform Revenue Mix", rows: data.mix.platform }
+      ];
+      document.getElementById("mixBox").innerHTML = panels.map((panel) => `
+        <div class="mix-card">
+          <h3 class="compact-title">${panel.title}</h3>
+          <div class="mix-list">
+            ${panel.rows.map((row) => `
+              <div class="bar-row">
+                <span>${row.name}</span>
+                <div class="track"><div class="fill" style="--w:${row.value}%"></div></div>
+                <strong>${row.value}%</strong>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderSources() {
+      document.getElementById("sourceList").innerHTML = data.sources.map((source) => `
+        <article class="source-item">
+          <div>
+            <strong>${source.name}</strong>
+            <span>${source.type} · ${source.id}</span>
+          </div>
+          <a class="source-link" href="${source.url}" target="_blank" rel="noreferrer">Open</a>
+        </article>
+      `).join("");
+    }
+
+    function bindFilters() {
+      document.querySelectorAll(".filter-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".filter-btn").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          renderEvents(button.dataset.filter);
+        });
+      });
+    }
+
+    renderStatus();
+    renderKpis();
+    renderSummary();
+    renderPriceChart();
+    renderRevenue();
+    renderEvents();
+    renderTheses();
+    renderRisks();
+    renderWatchlist();
+    renderMix();
+    renderSources();
+    bindFilters();
+  </script>
+</body>
+</html>
