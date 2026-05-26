@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TSMC Public Monitor V2</title>
+  <style>
+    :root {
+      --bg: #101112;
+      --panel: #181a1c;
+      --panel-2: #202326;
+      --line: #34373a;
+      --ink: #f4f0e8;
+      --muted: #aaa59a;
+      --green: #2bd17e;
+      --red: #ff6666;
+      --amber: #ffc857;
+      --cyan: #49c7d8;
+      --soft-green: rgba(43, 209, 126, .14);
+      --soft-red: rgba(255, 102, 102, .14);
+      --soft-amber: rgba(255, 200, 87, .14);
+      --shadow: 0 18px 44px rgba(0, 0, 0, .28);
+      font-family: "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 200, 87, .06), transparent 24rem),
+        radial-gradient(circle at 90% 8%, rgba(73, 199, 216, .14), transparent 18rem),
+        var(--bg);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .page {
+      width: min(1440px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 44px;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(360px, .75fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .hero,
+    .panel,
+    .metric {
+      border: 1px solid var(--line);
+      background: rgba(24, 26, 28, .92);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 22px;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 14px var(--green);
+    }
+
+    h1 {
+      margin: 10px 0 10px;
+      font-size: clamp(30px, 4vw, 58px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .brief {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 920px;
+    }
+
+    .status {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: rgba(24, 26, 28, .84);
+      box-shadow: var(--shadow);
+    }
+
+    .status-item {
+      min-height: 92px;
+      padding: 13px;
+      background: var(--panel-2);
+      border: 1px solid #2b2e31;
+    }
+
+    .label {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 1.35;
+    }
+
+    .value {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 850;
+      line-height: 1.05;
+    }
+
+    .sub {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      min-height: 124px;
+      padding: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 3px;
+      background: var(--accent, var(--cyan));
+    }
+
+    .green { color: var(--green); }
+    .red { color: var(--red); }
+    .amber { color: var(--amber); }
+    .cyan { color: var(--cyan); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(360px, .85fr);
+      gap: 16px;
+    }
+
+    section { margin-bottom: 16px; }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 17px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .caption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .summary,
+    .charts,
+    .events,
+    .two-col,
+    .list,
+    .sources,
+    .mix {
+      padding: 16px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      padding: 14px;
+      border: 1px solid #2d3034;
+      background: var(--panel-2);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .card p {
+      margin: 0;
+      color: #ded8cf;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    svg {
+      width: 100%;
+      height: 180px;
+      display: block;
+      border: 1px solid #303438;
+      background: linear-gradient(180deg, rgba(73, 199, 216, .07), transparent);
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 86px minmax(0, 1fr) 118px;
+      align-items: center;
+      gap: 10px;
+      min-height: 34px;
+      color: #e9e2d8;
+      font-size: 13px;
+    }
+
+    .bar-row strong {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .track {
+      height: 10px;
+      background: #2c3033;
+      overflow: hidden;
+    }
+
+    .fill {
+      width: var(--w);
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+    }
+
+    .filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      background: #1f2225;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    button.active,
+    button:hover {
+      color: var(--ink);
+      border-color: var(--amber);
+      background: rgba(255, 200, 87, .12);
+    }
+
+    .events {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .event {
+      min-height: 214px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .event-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .date {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .bullish {
+      color: var(--green);
+      background: var(--soft-green);
+      border-color: rgba(43, 209, 126, .35);
+    }
+
+    .bearish {
+      color: var(--red);
+      background: var(--soft-red);
+      border-color: rgba(255, 102, 102, .35);
+    }
+
+    .mixed,
+    .neutral {
+      color: var(--amber);
+      background: var(--soft-amber);
+      border-color: rgba(255, 200, 87, .35);
+    }
+
+    .take {
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid #303438;
+      color: var(--muted);
+    }
+
+    .links {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      min-height: 24px;
+      align-items: center;
+      max-width: 100%;
+      padding: 2px 7px;
+      border: 1px solid #3a3e42;
+      background: rgba(255, 255, 255, .03);
+      color: #d9d2c8;
+      font-size: 11px;
+      line-height: 1.35;
+      white-space: normal;
+    }
+
+    .source-link:hover {
+      border-color: var(--cyan);
+      color: white;
+    }
+
+    .two-col,
+    .mix {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .risk-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .meter {
+      display: grid;
+      grid-template-columns: 86px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      margin: 6px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .meter-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .meter-dots span {
+      width: 16px;
+      height: 8px;
+      background: #34383b;
+    }
+
+    .meter-dots span.on { background: var(--amber); }
+
+    .sources {
+      display: grid;
+      gap: 10px;
+    }
+
+    .source-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .footer {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1180px) {
+      .top,
+      .layout,
+      .charts {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 20px, 680px); padding-top: 12px; }
+      .status,
+      .metrics,
+      .summary,
+      .events,
+      .two-col,
+      .mix {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .source-row { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 68px minmax(0, 1fr) 104px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="top">
+      <div class="hero">
+        <div class="eyebrow"><span class="dot"></span><span>Data-driven V2</span><span id="windowLabel"></span></div>
+        <h1>TSMC Public Monitor</h1>
+        <p class="brief" id="brief">Loading data...</p>
+      </div>
+      <div class="status" id="status"></div>
+    </header>
+
+    <div class="metrics" id="metrics"></div>
+
+    <main class="layout">
+      <div>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>今日摘要</h2>
+              <div class="caption">由 data/data.json 驅動，可由 GitHub Actions 每日更新。</div>
+            </div>
+            <span class="badge mixed" id="stance"></span>
+          </div>
+          <div class="summary" id="summary"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>市場與營收</h2>
+              <div class="caption">股價優先使用 Yahoo Finance 自動更新資料；若無，使用上一版公開資料。</div>
+            </div>
+          </div>
+          <div class="charts">
+            <div class="card">
+              <h3>2330.TW 價格走勢</h3>
+              <svg id="priceChart" viewBox="0 0 520 180" role="img" aria-label="台積電價格走勢"></svg>
+            </div>
+            <div class="card">
+              <h3>月營收</h3>
+              <div id="revenueBars"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>事件卡片</h2>
+              <div class="caption">官方公告、公開新聞與 Google Sheet 手動事件會合併到這裡。</div>
+            </div>
+            <div class="filters">
+              <button class="active" data-filter="all">全部</button>
+              <button data-filter="bullish">利多</button>
+              <button data-filter="bearish">利空</button>
+              <button data-filter="mixed">中性/混合</button>
+            </div>
+          </div>
+          <div class="events" id="events"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>利多利空分類</h2>
+              <div class="caption">投資辯論用的正反論點。</div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div>
+              <h2 class="green">利多</h2>
+              <div class="list" id="bullish"></div>
+            </div>
+            <div>
+              <h2 class="red">利空 / 壓力</h2>
+              <div class="list" id="bearish"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>業務組合</h2>
+              <div class="caption">來自最近一期官方財報/管理報告。</div>
+            </div>
+          </div>
+          <div class="mix" id="mix"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>風險雷達</h2>
+              <div class="caption">Probability / Impact 以 1-5 排序。</div>
+            </div>
+          </div>
+          <div class="list" id="risks"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>追蹤清單</h2>
+              <div class="caption">可由 Google Sheet 後台覆寫。</div>
+            </div>
+          </div>
+          <div class="list" id="watchlist"></div>
+        </section>
+      </aside>
+    </main>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>來源連結</h2>
+          <div class="caption">每筆來源保留公開網址與類型。</div>
+        </div>
+      </div>
+      <div class="sources" id="sources"></div>
+    </section>
+
+    <p class="footer" id="footer"></p>
+  </div>
+
+  <script src="data/data.js"></script>
+  <script>
+    async function loadData() {
+      if (window.TSMC_DASHBOARD_DATA) return window.TSMC_DASHBOARD_DATA;
+      const response = await fetch("data/data.json", { cache: "no-store" });
+      if (!response.ok) throw new Error("Cannot load data/data.json");
+      return response.json();
+    }
+
+    const sentimentText = {
+      bullish: "利多",
+      bearish: "利空",
+      mixed: "混合",
+      neutral: "中性"
+    };
+
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+    function asArray(value) {
+      if (!value) return [];
+      return Array.isArray(value) ? value : [value];
+    }
+
+    function fmt(value, suffix = "") {
+      if (value === undefined || value === null || value === "") return "N/A";
+      return `${value}${suffix}`;
+    }
+
+    function sourceLinks(sourceMap, ids) {
+      return asArray(ids)
+        .map((id) => sourceMap.get(id))
+        .filter(Boolean)
+        .map((source) => `<a class="source-link" href="${source.url}" target="_blank" rel="noreferrer">${source.name}</a>`)
+        .join("");
+    }
+
+    function getSourceIds(item) {
+      return item.source_ids || item.source_id || item.sources || [];
+    }
+
+    function metric(label, value, sub, tone) {
+      const color = {
+        green: "var(--green)",
+        red: "var(--red)",
+        amber: "var(--amber)",
+        cyan: "var(--cyan)"
+      }[tone] || "var(--cyan)";
+      return `
+        <article class="metric" style="--accent:${color}">
+          <p class="label">${label}</p>
+          <p class="value ${tone || ""}">${value}</p>
+          <div class="sub">${sub || ""}</div>
+        </article>
+      `;
+    }
+
+    function renderLineChart(points) {
+      const svg = byId("priceChart");
+      const clean = points.filter((point) => Number.isFinite(Number(point.close)));
+      if (!clean.length) {
+        svg.innerHTML = `<text x="24" y="90" fill="#aaa59a" font-size="14">No price data</text>`;
+        return;
+      }
+
+      const values = clean.map((point) => Number(point.close));
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const low = min === max ? min - 1 : min;
+      const high = min === max ? max + 1 : max;
+      const width = 520;
+      const height = 180;
+      const pad = 30;
+      const step = clean.length > 1 ? (width - pad * 2) / (clean.length - 1) : 0;
+      const mapped = clean.map((point, index) => {
+        const x = pad + step * index;
+        const y = height - pad - ((Number(point.close) - low) / (high - low)) * (height - pad * 2);
+        const label = (point.date || point.datetime || "").slice(5, 10);
+        return { x, y, close: Number(point.close), label };
+      });
+      const line = mapped.map((point) => `${point.x},${point.y}`).join(" ");
+      const area = `${pad},${height - pad} ${line} ${width - pad},${height - pad}`;
+      svg.innerHTML = `
+        <polyline points="${area}" fill="rgba(73,199,216,.16)" stroke="none"></polyline>
+        <polyline points="${line}" fill="none" stroke="var(--cyan)" stroke-width="3"></polyline>
+        ${mapped.map((point) => `
+          <circle cx="${point.x}" cy="${point.y}" r="4" fill="var(--amber)"></circle>
+          <text x="${point.x}" y="${height - 8}" text-anchor="middle" fill="#aaa59a" font-size="11">${point.label}</text>
+          <text x="${point.x}" y="${point.y - 10}" text-anchor="middle" fill="#f4f0e8" font-size="11">${point.close}</text>
+        `).join("")}
+      `;
+    }
+
+    function renderBars(target, rows, valueKey, suffix = "") {
+      const max = Math.max(...rows.map((row) => Number(row[valueKey]) || 0), 1);
+      byId(target).innerHTML = rows.map((row) => {
+        const value = Number(row[valueKey]) || 0;
+        const label = row.month || row.name || row.date || "";
+        const yoy = row.yoy_percent !== undefined ? ` <span class="green">YoY ${row.yoy_percent}%</span>` : "";
+        return `
+          <div class="bar-row">
+            <span>${label}</span>
+            <div class="track"><div class="fill" style="--w:${Math.max(3, Math.round(value / max * 100))}%"></div></div>
+            <strong>${value.toFixed(value > 100 ? 1 : 0)}${suffix}${yoy}</strong>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderEvents(data, sourceMap, filter = "all") {
+      const events = (data.events || []).filter((event) => {
+        if (filter === "all") return true;
+        if (filter === "mixed") return event.sentiment === "mixed" || event.sentiment === "neutral";
+        return event.sentiment === filter;
+      });
+      byId("events").innerHTML = events.map((event) => `
+        <article class="card event">
+          <div class="event-top">
+            <div>
+              <div class="date">${event.date || ""} · ${event.category || ""}</div>
+              <h3>${event.title || ""}</h3>
+            </div>
+            <span class="badge ${event.sentiment || "neutral"}">${sentimentText[event.sentiment] || event.sentiment || "中性"}</span>
+          </div>
+          <p>${event.summary || ""}</p>
+          <span class="badge ${event.sentiment || "neutral"}">${event.dashboard_tag || event.tag || event.importance || "Watch"}</span>
+          <p class="take">${event.analyst_take || event.take || ""}</p>
+          <div class="links">${sourceLinks(sourceMap, getSourceIds(event))}</div>
+        </article>
+      `).join("");
+    }
+
+    function meter(value) {
+      return `<div class="meter-dots">${Array.from({ length: 5 }, (_, index) => `<span class="${index < Number(value || 0) ? "on" : ""}"></span>`).join("")}</div>`;
+    }
+
+    function render(data) {
+      const sourceMap = new Map((data.sources || []).map((source) => [source.id, source]));
+      const metadata = data.metadata || {};
+      const market = data.market_snapshot || {};
+      const financials = data.financials || {};
+      const revenue = financials.monthly_revenue || {};
+      const quarter = financials.quarterly_results || {};
+      const guidance = financials.guidance || {};
+      const yahoo = market.yahoo_finance || {};
+      const yahooDaily = yahoo.daily || {};
+      const yahooIntraday = yahoo.intraday || {};
+      const officialClose = market.last_official_close || {};
+      const intraday = market.intraday_snapshot || {};
+      const latestPrice = yahooIntraday.regular_market_price || intraday.price || officialClose.close;
+      const previousClose = yahooIntraday.previous_close || intraday.previous_close || officialClose.close;
+      const priceTone = latestPrice && previousClose && latestPrice >= previousClose ? "green" : "red";
+
+      byId("windowLabel").textContent = `${metadata.monitoring_window?.start || ""} to ${metadata.monitoring_window?.end || ""}`;
+      byId("brief").textContent = data.analyst_view?.morning_brief || "Public information monitoring dashboard.";
+      byId("stance").textContent = data.analyst_view?.stance || "Monitor";
+      byId("footer").textContent = `Data updated: ${metadata.generated_at || "N/A"} · Canonical file: data/data.json · Browser file: data/data.js`;
+
+      byId("status").innerHTML = [
+        ["Analyst Stance", data.analyst_view?.stance || "N/A", data.analyst_view?.confidence || ""],
+        ["Next Catalyst", "5 月營收", "Google Sheet 可調整追蹤清單"],
+        ["Pipeline", "GitHub Actions", metadata.data_pipeline ? "每日自動更新資料檔" : "尚未啟用自動抓取"],
+        ["Main Risk", (data.risk_register || [])[0]?.risk || "N/A", (data.risk_register || [])[0]?.watch || ""]
+      ].map((item) => `
+        <article class="status-item">
+          <p class="label">${item[0]}</p>
+          <p class="value">${item[1]}</p>
+          <div class="sub">${item[2]}</div>
+        </article>
+      `).join("");
+
+      byId("metrics").innerHTML = [
+        metric("最新價格", fmt(latestPrice, " TWD"), `Previous: ${fmt(previousClose)} · Yahoo/TWSE fallback`, priceTone),
+        metric("4 月營收", fmt(revenue.revenue_twd_billion, " NT$ bn"), `YoY ${fmt(revenue.yoy_percent, "%")} · MoM ${fmt(revenue.mom_percent, "%")}`, "cyan"),
+        metric("1Q26 EPS", fmt(quarter.eps_twd, " NT$"), `毛利率 ${fmt(quarter.gross_margin_percent, "%")}`, "green"),
+        metric("HPC 占比", fmt((financials.business_mix?.platform_revenue_percent || []).find((row) => row.name === "HPC")?.value, "%"), "1Q26 platform revenue", "amber"),
+        metric("Q2 指引", `${fmt(guidance.revenue_usd_billion_low)}-${fmt(guidance.revenue_usd_billion_high)}`, "USD bn", "green"),
+        metric("資料來源", (data.sources || []).length, "official/news/stock sources", "cyan")
+      ].join("");
+
+      byId("summary").innerHTML = (data.analyst_view?.summary || []).map((text, index) => `
+        <article class="card">
+          <h3 class="amber">重點 ${index + 1}</h3>
+          <p>${text}</p>
+        </article>
+      `).join("");
+
+      const pricePoints = yahooDaily.points?.length ? yahooDaily.points : (market.weekly_prices || []);
+      renderLineChart(pricePoints);
+      renderBars("revenueBars", revenue.monthly_series_twd_billion || [], "revenue", "");
+
+      renderEvents(data, sourceMap);
+      document.querySelectorAll("button[data-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll("button[data-filter]").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          renderEvents(data, sourceMap, button.dataset.filter);
+        });
+      });
+
+      byId("bullish").innerHTML = (data.bullish_points || []).map((item) => `
+        <article class="card">
+          <h3 class="green">${item.title}</h3>
+          <p>${item.detail}</p>
+          <div class="links">${sourceLinks(sourceMap, getSourceIds(item))}</div>
+        </article>
+      `).join("");
+
+      byId("bearish").innerHTML = (data.bearish_points || []).map((item) => `
+        <article class="card">
+          <h3 class="red">${item.title}</h3>
+          <p>${item.detail}</p>
+          <div class="links">${sourceLinks(sourceMap, getSourceIds(item))}</div>
+        </article>
+      `).join("");
+
+      const techMix = financials.business_mix?.technology_revenue_percent || [];
+      const platformMix = financials.business_mix?.platform_revenue_percent || [];
+      byId("mix").innerHTML = [
+        ["Technology", techMix],
+        ["Platform", platformMix]
+      ].map(([title, rows]) => `
+        <article class="card">
+          <h3>${title}</h3>
+          ${rows.map((row) => `
+            <div class="bar-row">
+              <span>${row.name}</span>
+              <div class="track"><div class="fill" style="--w:${row.value}%"></div></div>
+              <strong>${row.value}%</strong>
+            </div>
+          `).join("")}
+        </article>
+      `).join("");
+
+      byId("risks").innerHTML = (data.risk_register || []).map((risk) => `
+        <article class="card">
+          <div class="risk-head">
+            <h3>${risk.risk}</h3>
+            <span class="badge bearish">${risk.level}</span>
+          </div>
+          <div class="meter"><span>Probability</span>${meter(risk.probability)}</div>
+          <div class="meter"><span>Impact</span>${meter(risk.impact)}</div>
+          <p>${risk.watch || ""}</p>
+        </article>
+      `).join("");
+
+      byId("watchlist").innerHTML = (data.watchlist || []).map((item) => `
+        <article class="card">
+          <div class="date">${item.date}</div>
+          <h3>${item.item}</h3>
+          <p>${item.why_it_matters || item.why || ""}</p>
+        </article>
+      `).join("");
+
+      byId("sources").innerHTML = (data.sources || []).map((source) => `
+        <article class="card source-row">
+          <div>
+            <h3>${source.name}</h3>
+            <p>${source.type} · ${source.id}</p>
+          </div>
+          <a class="source-link" href="${source.url}" target="_blank" rel="noreferrer">Open</a>
+        </article>
+      `).join("");
+    }
+
+    loadData()
+      .then(render)
+      .catch((error) => {
+        byId("brief").textContent = `資料載入失敗：${error.message}`;
+        console.error(error);
+      });
+  </script>
+</body>
+</html>
