@@ -4,7 +4,7 @@
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-05-26T15:36:50+08:00",
+    "generated_at": "2026-05-26T15:37:58+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -12,14 +12,14 @@
     },
     "coverage_note": "最近一週內若無新的月營收、財報或法說會公告，採用最近一期官方公開資料並以 latest_available 標示。所有資料均來自公開來源。",
     "data_pipeline": {
-      "canonical_json": "data\\data.json",
-      "browser_data_js": "data\\data.js",
+      "canonical_json": "data/data.json",
+      "browser_data_js": "data/data.js",
       "google_sheet_events_configured": false,
       "google_sheet_watchlist_configured": false,
       "yahoo_ticker": "2330.TW"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-05-26T15:36:52+08:00",
+      "ran_at": "2026-05-26T15:37:58+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
         "Google Sheet events merged: 0",
@@ -93,7 +93,7 @@
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-05-26T15:36:52+08:00",
+      "as_of": "2026-05-26T15:37:58+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
@@ -132,7 +132,7 @@
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-26T15:36:51+08:00"
+        "retrieved_at": "2026-05-26T15:37:58+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
@@ -416,7 +416,7 @@
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-26T15:36:52+08:00"
+        "retrieved_at": "2026-05-26T15:37:58+08:00"
       }
     }
   },
