@@ -4,7 +4,7 @@ window.TSMC_DASHBOARD_DATA = {
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-05-26T20:47:12+08:00",
+    "generated_at": "2026-05-26T20:58:58+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -19,10 +19,10 @@ window.TSMC_DASHBOARD_DATA = {
       "yahoo_ticker": "2330.TW"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-05-26T20:47:14+08:00",
+      "ran_at": "2026-05-26T20:59:00+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
-        "Google Sheet events merged: 1",
+        "Google Sheet events merged: 0",
         "Google Sheet watchlist rows: 2"
       ]
     }
@@ -93,7 +93,7 @@ window.TSMC_DASHBOARD_DATA = {
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-05-26T20:47:12+08:00",
+      "as_of": "2026-05-26T20:58:58+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
@@ -132,7 +132,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-26T20:47:12+08:00"
+        "retrieved_at": "2026-05-26T20:58:58+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
@@ -416,7 +416,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-26T20:47:12+08:00"
+        "retrieved_at": "2026-05-26T20:58:58+08:00"
       }
     }
   },
