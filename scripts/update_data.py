@@ -111,11 +111,34 @@ def add_source(data: dict[str, Any], name: str, url: str, source_type: str) -> s
     return source_id
 
 
-def merge_sheet_events(data: dict[str, Any], rows: list[dict[str, str]]) -> int:
-    if not rows:
-        return 0
+def is_google_sheet_event(event: dict[str, Any], sheet_source_ids: set[str]) -> bool:
+    event_id = str(event.get("id", ""))
+    source_ids = event.get("source_ids", [])
+    if event_id.startswith("SHEET_EVENT_"):
+        return True
+    if isinstance(source_ids, list) and sheet_source_ids.intersection(str(item) for item in source_ids):
+        return True
+    return False
 
-    events = data.setdefault("events", [])
+
+def merge_sheet_events(data: dict[str, Any], rows: list[dict[str, str]]) -> int:
+    sheet_source_ids = {
+        source.get("id", "")
+        for source in data.setdefault("sources", [])
+        if source.get("type") == "google_sheet_manual"
+    }
+    data["events"] = [
+        event
+        for event in data.setdefault("events", [])
+        if not is_google_sheet_event(event, sheet_source_ids)
+    ]
+    data["sources"] = [
+        source
+        for source in data.setdefault("sources", [])
+        if source.get("type") != "google_sheet_manual"
+    ]
+
+    events = data["events"]
     existing = {event.get("id"): event for event in events if event.get("id")}
     merged = 0
 
