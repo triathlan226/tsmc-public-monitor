@@ -4,7 +4,7 @@ window.TSMC_DASHBOARD_DATA = {
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-05-26T15:37:58+08:00",
+    "generated_at": "2026-05-26T20:47:12+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -14,16 +14,16 @@ window.TSMC_DASHBOARD_DATA = {
     "data_pipeline": {
       "canonical_json": "data/data.json",
       "browser_data_js": "data/data.js",
-      "google_sheet_events_configured": false,
-      "google_sheet_watchlist_configured": false,
+      "google_sheet_events_configured": true,
+      "google_sheet_watchlist_configured": true,
       "yahoo_ticker": "2330.TW"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-05-26T15:37:58+08:00",
+      "ran_at": "2026-05-26T20:47:14+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
-        "Google Sheet events merged: 0",
-        "Google Sheet watchlist rows: 0"
+        "Google Sheet events merged: 1",
+        "Google Sheet watchlist rows: 2"
       ]
     }
   },
@@ -93,7 +93,7 @@ window.TSMC_DASHBOARD_DATA = {
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-05-26T15:37:58+08:00",
+      "as_of": "2026-05-26T20:47:12+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
@@ -132,7 +132,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-26T15:37:58+08:00"
+        "retrieved_at": "2026-05-26T20:47:12+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
@@ -416,7 +416,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-26T15:37:58+08:00"
+        "retrieved_at": "2026-05-26T20:47:12+08:00"
       }
     }
   },
@@ -647,6 +647,20 @@ window.TSMC_DASHBOARD_DATA = {
     ]
   },
   "events": [
+    {
+      "id": "SHEET_EVENT_e80230304e",
+      "date": "2026-05-26",
+      "category": "重要新聞",
+      "title": "範例：台積電追蹤事件",
+      "summary": "這是一筆範例資料，正式使用時可刪除。",
+      "sentiment": "neutral",
+      "importance": "medium",
+      "dashboard_tag": "Manual",
+      "analyst_take": "分析師觀點填在這裡。",
+      "source_ids": [
+        "SRC_SHEET_49293f6431"
+      ]
+    },
     {
       "id": "EVT_20260526_INTRADAY",
       "date": "2026-05-26",
@@ -889,32 +903,14 @@ window.TSMC_DASHBOARD_DATA = {
     {
       "date": "2026-06-10",
       "item": "TSMC Monthly Sales - May 2026",
-      "why_it_matters": "驗證 AI/HPC 與 2nm/3nm 需求是否延續，並檢查 4 月後營收動能。",
-      "expected_source_id": "SRC_TSMC_FINANCIAL_CALENDAR"
-    },
-    {
-      "date": "2026-07-10",
-      "item": "TSMC Monthly Sales - June 2026",
-      "why_it_matters": "搭配 Q2 指引 US$39.0-40.2bn，判斷季度達標機率。",
-      "expected_source_id": "SRC_TSMC_FINANCIAL_CALENDAR"
-    },
-    {
-      "date": "2026-07-16",
-      "item": "推估 2Q26 法說會窗口",
-      "why_it_matters": "重點追問 CoWoS 產能、N2/A16 ramp、海外廠毛利率稀釋與全年 capex。",
+      "why_it_matters": "驗證 AI/HPC 與先進製程需求是否延續。",
       "expected_source_id": "SRC_TSMC_FINANCIAL_CALENDAR"
     },
     {
       "date": "rolling",
       "item": "CoWoS / HBM / ABF 供應鏈",
-      "why_it_matters": "先進封裝仍是 AI 出貨瓶頸，供需缺口直接影響 ASP 與客戶分配。",
+      "why_it_matters": "先進封裝仍是 AI 出貨瓶頸，需追蹤供需缺口。",
       "expected_source_id": "SRC_REUTERS_TECH_SYMPOSIUM"
-    },
-    {
-      "date": "rolling",
-      "item": "Arizona 建廠與政策新聞",
-      "why_it_matters": "美國產能是供應安全加分項，但也是成本與執行風險來源。",
-      "expected_source_id": "SRC_TSMC_BOARD_20260512"
     }
   ],
   "sources": [
@@ -1042,6 +1038,13 @@ window.TSMC_DASHBOARD_DATA = {
       "name": "Tom's Hardware - TSMC allocates $20 billion to Arizona expansion",
       "type": "public_news",
       "url": "https://www.tomshardware.com/tech-industry/semiconductors/tsmc-allocates-usd20-billion-to-arizona-expansion-project-faces-water-and-labor-shortages-complicated-by-visa-rules",
+      "retrieved_at": "2026-05-26"
+    },
+    {
+      "id": "SRC_SHEET_49293f6431",
+      "name": "Example source",
+      "type": "google_sheet_manual",
+      "url": "https://example.com",
       "retrieved_at": "2026-05-26"
     }
   ]
