@@ -607,10 +607,14 @@
   <script src="data/data.js"></script>
   <script>
     async function loadData() {
+      try {
+        const response = await fetch(`data/data.json?ts=${Date.now()}`, { cache: "no-store" });
+        if (response.ok) return response.json();
+      } catch (error) {
+        // file:// previews cannot fetch JSON, so keep data.js as the local fallback.
+      }
       if (window.TSMC_DASHBOARD_DATA) return window.TSMC_DASHBOARD_DATA;
-      const response = await fetch("data/data.json", { cache: "no-store" });
-      if (!response.ok) throw new Error("Cannot load data/data.json");
-      return response.json();
+      throw new Error("Cannot load dashboard data");
     }
 
     const sentimentText = {
