@@ -29,6 +29,7 @@ jobs:
           YAHOO_TICKER: 2330.TW
           GOOGLE_SHEET_EVENTS_CSV_URL: ${{ secrets.GOOGLE_SHEET_EVENTS_CSV_URL }}
           GOOGLE_SHEET_WATCHLIST_CSV_URL: ${{ secrets.GOOGLE_SHEET_WATCHLIST_CSV_URL }}
+          GOOGLE_SHEET_MOPS_CSV_URL: ${{ secrets.GOOGLE_SHEET_MOPS_CSV_URL }}
         run: |
           python scripts/update_data.py \
             --input data/data.json \

@@ -167,6 +167,16 @@ def is_google_sheet_event(event: dict[str, Any], sheet_source_ids: set[str]) -> 
     return False
 
 
+def is_google_sheet_mops_event(event: dict[str, Any], sheet_source_ids: set[str]) -> bool:
+    event_id = str(event.get("id", ""))
+    source_ids = event.get("source_ids", [])
+    if event_id.startswith("SHEET_MOPS_"):
+        return True
+    if isinstance(source_ids, list) and sheet_source_ids.intersection(str(item) for item in source_ids):
+        return True
+    return False
+
+
 def merge_sheet_events(data: dict[str, Any], rows: list[dict[str, str]]) -> int:
     sheet_source_ids = {
         source.get("id", "")
@@ -222,6 +232,89 @@ def merge_sheet_events(data: dict[str, Any], rows: list[dict[str, str]]) -> int:
         else:
             events.insert(0, event)
         merged += 1
+
+    events.sort(key=lambda item: item.get("date", ""), reverse=True)
+    return merged
+
+
+def merge_sheet_mops_events(data: dict[str, Any], rows: list[dict[str, str]]) -> int:
+    sheet_source_ids = {
+        source.get("id", "")
+        for source in data.setdefault("sources", [])
+        if source.get("type") == "google_sheet_mops"
+    }
+    data["events"] = [
+        event
+        for event in data.setdefault("events", [])
+        if not is_google_sheet_mops_event(event, sheet_source_ids)
+    ]
+    data["sources"] = [
+        source
+        for source in data.setdefault("sources", [])
+        if source.get("type") != "google_sheet_mops"
+    ]
+
+    events = data["events"]
+    existing = {event.get("id"): event for event in events if event.get("id")}
+    mops_items: list[dict[str, str]] = []
+    merged = 0
+
+    for index, row in enumerate(rows, start=1):
+        if row.get("enabled", "TRUE").strip().lower() in {"false", "0", "no", "n"}:
+            continue
+
+        title = row.get("title", "")
+        date = row.get("date", "")
+        if not title or not date:
+            continue
+
+        source_url = row.get("source_url", "") or "https://mops.twse.com.tw/mops/web/t05st01"
+        source_name = row.get("source_name", "") or "MOPS 人工登錄重大訊息"
+        source_id = add_source(data, source_name, source_url, "google_sheet_mops")
+        event_id = row.get("id") or stable_id("SHEET_MOPS", date, row.get("time", ""), title, str(index))
+
+        item = {
+            "date": date,
+            "time": row.get("time", ""),
+            "company": row.get("company", "2330 台積電"),
+            "title": title,
+            "summary": row.get("summary", ""),
+            "source_id": source_id,
+            "source_url": source_url,
+        }
+        mops_items.append(item)
+
+        event = {
+            "id": event_id,
+            "date": date,
+            "category": row.get("category", "MOPS 重大訊息"),
+            "title": title,
+            "summary": row.get("summary", ""),
+            "sentiment": row.get("sentiment", "neutral"),
+            "importance": row.get("importance", "medium"),
+            "dashboard_tag": row.get("dashboard_tag", row.get("tag", "MOPS")),
+            "analyst_take": row.get("analyst_take", row.get("take", "")),
+            "source_ids": [source_id],
+        }
+
+        if event_id in existing:
+            existing[event_id].update(event)
+        else:
+            events.insert(0, event)
+        merged += 1
+
+    if mops_items:
+        mops_items.sort(key=lambda item: f"{item.get('date', '')} {item.get('time', '')}", reverse=True)
+        data["mops_material_info"] = {
+            "status": "ok",
+            "stock_code": "2330",
+            "items": mops_items[:12],
+            "source_id": "SRC_MOPS_T05ST01",
+            "source_url": "https://mops.twse.com.tw/mops/web/t05st01",
+            "retrieved_at": now_taipei(),
+            "entry_mode": "google_sheet_manual",
+            "error": "",
+        }
 
     events.sort(key=lambda item: item.get("date", ""), reverse=True)
     return merged
@@ -646,6 +739,7 @@ def main() -> int:
     parser.add_argument("--twse-code", default=os.getenv("TWSE_STOCK_CODE", DEFAULT_TWSE_CODE))
     parser.add_argument("--sheet-events-csv-url", default=os.getenv("GOOGLE_SHEET_EVENTS_CSV_URL", ""))
     parser.add_argument("--sheet-watchlist-csv-url", default=os.getenv("GOOGLE_SHEET_WATCHLIST_CSV_URL", ""))
+    parser.add_argument("--sheet-mops-csv-url", default=os.getenv("GOOGLE_SHEET_MOPS_CSV_URL", ""))
     args = parser.parse_args()
 
     input_path = Path(args.input)
@@ -657,6 +751,7 @@ def main() -> int:
         "browser_data_js": args.output_js,
         "google_sheet_events_configured": bool(args.sheet_events_csv_url),
         "google_sheet_watchlist_configured": bool(args.sheet_watchlist_csv_url),
+        "google_sheet_mops_configured": bool(args.sheet_mops_csv_url),
         "yahoo_ticker": args.ticker,
         "twse_stock_code": args.twse_code,
     }
@@ -692,6 +787,12 @@ def main() -> int:
             run_log.append(f"Google Sheet events merged: {event_count}")
         except (urllib.error.URLError, TimeoutError, csv.Error) as exc:
             run_log.append(f"Google Sheet events skipped: {exc}")
+
+        try:
+            mops_count = merge_sheet_mops_events(data, csv_rows_from_url(args.sheet_mops_csv_url))
+            run_log.append(f"Google Sheet MOPS events merged: {mops_count}")
+        except (urllib.error.URLError, TimeoutError, csv.Error) as exc:
+            run_log.append(f"Google Sheet MOPS events skipped: {exc}")
 
         try:
             watch_count = replace_watchlist_from_sheet(data, csv_rows_from_url(args.sheet_watchlist_csv_url))
