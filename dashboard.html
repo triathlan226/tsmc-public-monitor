@@ -87,12 +87,105 @@
       letter-spacing: 0;
     }
 
+    .company-name-zh {
+      margin: 0 0 8px;
+      color: #f4f0e8;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 850;
+      line-height: 1.25;
+    }
+
     .brief {
       margin: 0;
       color: var(--muted);
       font-size: 16px;
       line-height: 1.7;
       max-width: 920px;
+    }
+
+    .company-profile {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 10px;
+      margin-top: 18px;
+      max-width: 980px;
+    }
+
+    .company-profile-card {
+      min-height: 126px;
+      padding: 13px;
+      border: 1px solid #2d3034;
+      background: rgba(255, 255, 255, .03);
+    }
+
+    .company-profile-card h2 {
+      margin: 0 0 9px;
+      color: var(--amber);
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .company-profile-card p {
+      margin: 0;
+      color: #ded8cf;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .company-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .company-facts span {
+      min-height: 38px;
+      padding: 7px 8px;
+      border: 1px solid #303438;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .company-facts strong {
+      display: block;
+      margin-top: 2px;
+      color: #f4f0e8;
+      font-size: 13px;
+    }
+
+    .driver-list {
+      display: grid;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .driver-row {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      color: #ded8cf;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .driver-row strong {
+      color: var(--green);
+      font-size: 12px;
+    }
+
+    .driver-row.down strong {
+      color: var(--red);
+    }
+
+    .company-source {
+      display: inline-flex;
+      margin-top: 10px;
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 800;
     }
 
     .status {
@@ -666,7 +759,9 @@
       .summary,
       .events,
       .two-col,
-      .mix {
+      .mix,
+      .company-profile,
+      .company-facts {
         grid-template-columns: 1fr;
       }
 
@@ -699,8 +794,30 @@
     <header class="top">
       <div class="hero">
         <div class="eyebrow"><span class="dot"></span><span>Data-driven V2</span><span id="windowLabel"></span></div>
-        <h1>TSMC Public Monitor</h1>
+        <h1>台積電 TSMC Public Monitor</h1>
+        <p class="company-name-zh">台灣積體電路製造股份有限公司</p>
         <p class="brief" id="brief">Loading data...</p>
+        <div class="company-profile">
+          <article class="company-profile-card">
+            <h2>公司一眼看懂</h2>
+            <p>台積電是半導體專業晶圓代工公司，不賣自有品牌晶片，主要替全球 IC 設計與系統客戶製造晶片。投資重點是先進製程、先進封裝、產能利用率與毛利率。</p>
+            <div class="company-facts">
+              <span>股票代號<strong>2330.TW / TSM</strong></span>
+              <span>商業模式<strong>Dedicated Foundry</strong></span>
+              <span>成立時間<strong>1987</strong></span>
+              <span>總部<strong>台灣新竹</strong></span>
+            </div>
+            <a class="company-source" href="https://investor.tsmc.com/english/fundamentals" target="_blank" rel="noreferrer">TSMC official company profile</a>
+          </article>
+          <article class="company-profile-card">
+            <h2>股價為什麼會動</h2>
+            <p>股價通常反映市場對未來獲利與風險折現的看法，重點不是單一新聞，而是需求、產能、毛利率與估值預期是否同向。</p>
+            <div class="driver-list">
+              <div class="driver-row"><strong>上漲</strong><span>AI/HPC 訂單強、CoWoS 供給開出、2nm/A16 進度順、營收與毛利率優於預期。</span></div>
+              <div class="driver-row down"><strong>下跌</strong><span>AI capex 放緩、海外廠成本稀釋、匯率不利、出口管制/地緣政治升溫，或估值過高修正。</span></div>
+            </div>
+          </article>
+        </div>
       </div>
       <div class="status" id="status"></div>
     </header>
