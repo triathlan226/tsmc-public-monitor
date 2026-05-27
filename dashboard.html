@@ -251,6 +251,10 @@
       line-height: 1.25;
     }
 
+    .watch-detail .wide {
+      grid-column: 1 / -1;
+    }
+
     .charts {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -428,7 +432,7 @@
 
     .meter {
       display: grid;
-      grid-template-columns: 86px minmax(0, 1fr);
+      grid-template-columns: 86px minmax(0, 1fr) 36px;
       gap: 8px;
       align-items: center;
       margin: 6px 0;
@@ -448,6 +452,41 @@
     }
 
     .meter-dots span.on { background: var(--amber); }
+
+    .risk-score {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr) 52px;
+      gap: 8px;
+      align-items: center;
+      margin: 10px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .risk-score strong {
+      color: #f4f0e8;
+      font-size: 16px;
+    }
+
+    .risk-score-bar {
+      height: 8px;
+      background: #34383b;
+      overflow: hidden;
+    }
+
+    .risk-score-bar span {
+      display: block;
+      width: var(--w);
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--red));
+    }
+
+    .risk-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
 
     .sources {
       display: grid;
@@ -599,7 +638,7 @@
           <div class="panel-head">
             <div>
               <h2>風險雷達</h2>
-              <div class="caption">Probability / Impact 以 1-5 排序。</div>
+              <div class="caption">分數 = Probability x Impact，滿分 25，分數越高越需要早會優先討論。</div>
             </div>
           </div>
           <div class="list" id="risks"></div>
@@ -662,6 +701,15 @@
     function fmt(value, suffix = "") {
       if (value === undefined || value === null || value === "") return "N/A";
       return `${value}${suffix}`;
+    }
+
+    function compact(value, suffix = "") {
+      const number = Number(value);
+      if (!Number.isFinite(number)) return "N/A";
+      if (Math.abs(number) >= 1_000_000_000) return `${(number / 1_000_000_000).toFixed(2)}bn${suffix}`;
+      if (Math.abs(number) >= 1_000_000) return `${(number / 1_000_000).toFixed(1)}mn${suffix}`;
+      if (Math.abs(number) >= 1_000) return `${(number / 1_000).toFixed(1)}k${suffix}`;
+      return `${number}${suffix}`;
     }
 
     function sourceLinks(sourceMap, ids) {
@@ -787,6 +835,27 @@
       const latestPrice = yahooIntraday.regular_market_price || intraday.price || officialClose.close;
       const previousClose = yahooIntraday.previous_close || intraday.previous_close || officialClose.close;
       const priceTone = latestPrice && previousClose && latestPrice >= previousClose ? "green" : "red";
+      const pricePoints = yahooDaily.points?.length ? yahooDaily.points : (market.weekly_prices || []);
+      const validVolumes = pricePoints
+        .map((point) => Number(point.volume || point.volume_shares))
+        .filter((value) => Number.isFinite(value) && value > 0);
+      const latestVolume = validVolumes.at(-1);
+      const averageVolume = validVolumes.length
+        ? validVolumes.reduce((sum, value) => sum + value, 0) / validVolumes.length
+        : null;
+      const volumeRatio = latestVolume && averageVolume ? latestVolume / averageVolume : null;
+      const techMix = financials.business_mix?.technology_revenue_percent || [];
+      const platformMix = financials.business_mix?.platform_revenue_percent || [];
+      const geographyMix = financials.business_mix?.geography_revenue_percent || [];
+      const capacity = data.technology_and_capacity || {};
+      const advancedProcess = capacity.advanced_process || [];
+      const packaging = capacity.cowos_and_packaging || [];
+      const overseasFabs = capacity.overseas_fabs || [];
+      const riskRows = data.risk_register || [];
+      const mixValue = (rows, name) => rows.find((row) => row.name === name)?.value;
+      const findByText = (rows, text) => rows.find((row) => Object.values(row).join(" ").includes(text)) || {};
+      const riskByText = (text) => riskRows.find((risk) => (risk.risk || "").includes(text) || (risk.watch || "").includes(text)) || {};
+      const scoreRisk = (risk) => Number(risk.probability || 0) * Number(risk.impact || 0);
       const pctDistance = (value, base) => {
         const numberValue = Number(value);
         const numberBase = Number(base);
@@ -794,20 +863,137 @@
         const pct = (numberValue / numberBase - 1) * 100;
         return `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
       };
+      const detailGrid = (rows) => `
+        <div class="watch-detail">
+          ${rows.map((row) => `
+            <span class="${row.wide ? "wide" : ""}">${row.label}<strong class="${row.tone || ""}">${row.value}</strong></span>
+          `).join("")}
+        </div>
+      `;
       const watchlistDetail = (item) => {
         const title = item.item || "";
-        if (!title.includes("52") || !title.includes("週高低")) return "";
+        const n2 = findByText(advancedProcess, "2nm");
+        const a16 = findByText(advancedProcess, "A16");
+        const cowosYield = findByText(packaging, "98%");
+        const cowosCapacity = findByText(packaging, "CAGR");
+        const arizona = findByText(overseasFabs, "Arizona");
+        const geoRisk = riskByText("地緣政治");
 
-        return `
-          <div class="watch-detail" aria-label="52 week high low detail">
-            <span>現價<strong>${fmt(latestPrice, " TWD")}</strong></span>
-            <span>52 週高<strong>${fmt(market.one_year_high, " TWD")}</strong></span>
-            <span>距高點<strong class="${Number(latestPrice) >= Number(market.one_year_high) ? "green" : "amber"}">${pctDistance(latestPrice, market.one_year_high)}</strong></span>
-            <span>52 週低<strong>${fmt(market.one_year_low, " TWD")}</strong></span>
-            <span>距低點<strong class="${Number(latestPrice) >= Number(market.one_year_low) ? "green" : "red"}">${pctDistance(latestPrice, market.one_year_low)}</strong></span>
-            <span>資料來源<strong>Yahoo Finance / TWSE</strong></span>
-          </div>
-        `;
+        if (title.includes("Monthly Sales") || title.includes("月營收")) {
+          return detailGrid([
+            { label: "最近月營收", value: fmt(revenue.revenue_twd_billion, " NT$bn"), tone: "cyan" },
+            { label: "YoY", value: fmt(revenue.yoy_percent, "%"), tone: "green" },
+            { label: "MoM", value: fmt(revenue.mom_percent, "%"), tone: Number(revenue.mom_percent) >= 0 ? "green" : "red" },
+            { label: "YTD YoY", value: fmt(revenue.ytd_yoy_percent, "%"), tone: "green" },
+            { label: "下一次檢查", value: item.date || "N/A", wide: true }
+          ]);
+        }
+
+        if (title.includes("法說會")) {
+          return detailGrid([
+            { label: "Q2 營收指引", value: `${fmt(guidance.revenue_usd_billion_low)}-${fmt(guidance.revenue_usd_billion_high)} USD bn`, tone: "green" },
+            { label: "Q2 毛利率指引", value: `${fmt(guidance.gross_margin_percent_low)}-${fmt(guidance.gross_margin_percent_high)}%` },
+            { label: "匯率假設", value: fmt(guidance.exchange_rate_assumption_usd_twd, " USD/TWD") },
+            { label: "追問重點", value: "CoWoS / N2 / 海外廠", wide: true }
+          ]);
+        }
+
+        if (title.includes("CoWoS") || title.includes("HBM") || title.includes("ABF")) {
+          return detailGrid([
+            { label: "CoWoS 良率", value: cowosYield.status || "N/A", tone: "green" },
+            { label: "產能趨勢", value: "2022-2027 CAGR >80%", tone: "green" },
+            { label: "下一代封裝", value: "14-reticle / 2028" },
+            { label: "分析師判讀", value: cowosCapacity.impact || "AI 封裝瓶頸改善", wide: true }
+          ]);
+        }
+
+        if (title.includes("2nm") || title.includes("A16")) {
+          return detailGrid([
+            { label: "先進節點營收", value: fmt(financials.business_mix?.advanced_7nm_and_below_percent, "%"), tone: "green" },
+            { label: "N2 狀態", value: n2.status || "N/A" },
+            { label: "2nm/A16 產能", value: "2026-2028 CAGR ~70%", tone: "green" },
+            { label: "客戶證據", value: a16.impact || n2.evidence || "AMD Venice 2nm ramp", wide: true }
+          ]);
+        }
+
+        if (title.includes("Arizona")) {
+          return detailGrid([
+            { label: "Arizona 狀態", value: arizona.status || "N/A" },
+            { label: "增資上限", value: "US$20bn", tone: "amber" },
+            { label: "第二廠節奏", value: "2026 H2 機台移入" },
+            { label: "主要風險", value: "成本 / 水 / 勞動力 / 簽證", wide: true }
+          ]);
+        }
+
+        if (title.includes("毛利率")) {
+          return detailGrid([
+            { label: "1Q26 毛利率", value: fmt(quarter.gross_margin_percent, "%"), tone: "green" },
+            { label: "Q2 毛利率指引", value: `${fmt(guidance.gross_margin_percent_low)}-${fmt(guidance.gross_margin_percent_high)}%` },
+            { label: "Q2 營益率指引", value: `${fmt(guidance.operating_margin_percent_low)}-${fmt(guidance.operating_margin_percent_high)}%` },
+            { label: "壓力來源", value: "海外 fab / N2 ramp / 折舊 / 匯率", wide: true }
+          ]);
+        }
+
+        if (title.includes("AI/HPC")) {
+          return detailGrid([
+            { label: "HPC 營收占比", value: fmt(mixValue(platformMix, "HPC"), "%"), tone: "green" },
+            { label: "北美營收占比", value: fmt(mixValue(geographyMix, "North America"), "%") },
+            { label: "Q2 營收指引", value: `${fmt(guidance.revenue_usd_billion_low)}-${fmt(guidance.revenue_usd_billion_high)} USD bn`, tone: "green" },
+            { label: "觀察重點", value: "NVIDIA / AMD / ASIC 訂單與 CoWoS 排程", wide: true }
+          ]);
+        }
+
+        if (title.includes("匯率")) {
+          return detailGrid([
+            { label: "法說匯率假設", value: fmt(guidance.exchange_rate_assumption_usd_twd, " USD/TWD"), tone: "amber" },
+            { label: "1Q26 毛利率", value: fmt(quarter.gross_margin_percent, "%") },
+            { label: "Q2 毛利率指引", value: `${fmt(guidance.gross_margin_percent_low)}-${fmt(guidance.gross_margin_percent_high)}%` },
+            { label: "敏感項", value: "營收換算 / 毛利率 / 美元成本", wide: true }
+          ]);
+        }
+
+        if (title.includes("52") && title.includes("週高低")) {
+          return detailGrid([
+            { label: "現價", value: fmt(latestPrice, " TWD") },
+            { label: "52 週高", value: fmt(market.one_year_high, " TWD") },
+            { label: "距高點", value: pctDistance(latestPrice, market.one_year_high), tone: Number(latestPrice) >= Number(market.one_year_high) ? "green" : "amber" },
+            { label: "52 週低", value: fmt(market.one_year_low, " TWD") },
+            { label: "距低點", value: pctDistance(latestPrice, market.one_year_low), tone: Number(latestPrice) >= Number(market.one_year_low) ? "green" : "red" },
+            { label: "資料來源", value: "Yahoo Finance / TWSE" }
+          ]);
+        }
+
+        if (title.includes("估值") || title.includes("PE") || title.includes("PB")) {
+          return detailGrid([
+            { label: "Trailing PE", value: fmt(market.pe_ratio, "x"), tone: "amber" },
+            { label: "現價", value: fmt(latestPrice, " TWD") },
+            { label: "1Q26 EPS", value: fmt(quarter.eps_twd, " NT$") },
+            { label: "待補資料", value: "Forward PE / PB 需接 consensus 或手動欄位", wide: true }
+          ]);
+        }
+
+        if (title.includes("外資") || title.includes("成交量")) {
+          return detailGrid([
+            { label: "最近成交量", value: compact(latestVolume, " shares") },
+            { label: "5日均量", value: compact(averageVolume, " shares") },
+            { label: "量能比", value: volumeRatio ? `${volumeRatio.toFixed(2)}x` : "N/A", tone: volumeRatio > 1.2 ? "amber" : "cyan" },
+            { label: "外資買賣超", value: "尚未接 TWSE 法人資料", wide: true }
+          ]);
+        }
+
+        if (title.includes("地緣政治") || title.includes("出口管制")) {
+          return detailGrid([
+            { label: "風險分數", value: `${scoreRisk(geoRisk)}/25`, tone: "red" },
+            { label: "機率 / 衝擊", value: `${fmt(geoRisk.probability)}/5 · ${fmt(geoRisk.impact)}/5` },
+            { label: "風險等級", value: geoRisk.level || "N/A" },
+            { label: "觀察項", value: geoRisk.watch || "出口管制、兩岸風險與供應鏈調整", wide: true }
+          ]);
+        }
+
+        return detailGrid([
+          { label: "追蹤狀態", value: "Google Sheet row" },
+          { label: "資料來源", value: item.expected_source_id || "N/A" }
+        ]);
       };
 
       byId("windowLabel").textContent = `${metadata.monitoring_window?.start || ""} to ${metadata.monitoring_window?.end || ""}`;
@@ -844,7 +1030,6 @@
         </article>
       `).join("");
 
-      const pricePoints = yahooDaily.points?.length ? yahooDaily.points : (market.weekly_prices || []);
       renderLineChart(pricePoints);
       renderBars("revenueBars", revenue.monthly_series_twd_billion || [], "revenue", "");
 
@@ -873,8 +1058,6 @@
         </article>
       `).join("");
 
-      const techMix = financials.business_mix?.technology_revenue_percent || [];
-      const platformMix = financials.business_mix?.platform_revenue_percent || [];
       byId("mix").innerHTML = [
         ["Technology", techMix],
         ["Platform", platformMix]
@@ -891,17 +1074,29 @@
         </article>
       `).join("");
 
-      byId("risks").innerHTML = (data.risk_register || []).map((risk) => `
+      byId("risks").innerHTML = [...riskRows]
+        .sort((a, b) => scoreRisk(b) - scoreRisk(a))
+        .map((risk) => {
+          const score = scoreRisk(risk);
+          const scorePct = Math.min(100, Math.round(score / 25 * 100));
+          return `
         <article class="card">
           <div class="risk-head">
             <h3>${risk.risk}</h3>
             <span class="badge bearish">${risk.level}</span>
           </div>
-          <div class="meter"><span>Probability</span>${meter(risk.probability)}</div>
-          <div class="meter"><span>Impact</span>${meter(risk.impact)}</div>
+          <div class="risk-score">
+            <span>Score</span>
+            <div class="risk-score-bar"><span style="--w:${scorePct}%"></span></div>
+            <strong>${score}/25</strong>
+          </div>
+          <div class="meter"><span>Probability</span>${meter(risk.probability)}<strong>${fmt(risk.probability)}/5</strong></div>
+          <div class="meter"><span>Impact</span>${meter(risk.impact)}<strong>${fmt(risk.impact)}/5</strong></div>
           <p>${risk.watch || ""}</p>
+          <div class="risk-note">用途：用「發生機率 x 影響程度」排序早會要先追的風險。</div>
         </article>
-      `).join("");
+      `;
+        }).join("");
 
       byId("watchlist").innerHTML = (data.watchlist || []).map((item) => `
         <article class="card">
@@ -909,6 +1104,7 @@
           <h3>${item.item}</h3>
           <p>${item.why_it_matters || item.why || ""}</p>
           ${watchlistDetail(item)}
+          <div class="links">${sourceLinks(sourceMap, item.expected_source_id || getSourceIds(item))}</div>
         </article>
       `).join("");
 
