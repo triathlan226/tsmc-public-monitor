@@ -166,6 +166,16 @@
       display: grid;
       grid-template-columns: minmax(0, 1.45fr) minmax(360px, .85fr);
       gap: 16px;
+      align-items: start;
+    }
+
+    aside {
+      position: sticky;
+      top: 16px;
+      max-height: calc(100vh - 32px);
+      overflow: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #45494d transparent;
     }
 
     section { margin-bottom: 16px; }
@@ -253,6 +263,135 @@
 
     .watch-detail .wide {
       grid-column: 1 / -1;
+    }
+
+    .watch-shell {
+      padding: 12px;
+    }
+
+    .watch-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .watch-tabs button {
+      justify-content: center;
+      height: 32px;
+      padding: 0 8px;
+      font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .watch-tabs button.active {
+      border-color: var(--cyan);
+      color: white;
+      background: rgba(73, 199, 216, .16);
+    }
+
+    .watch-list {
+      padding: 0;
+      max-height: min(640px, calc(100vh - 230px));
+      overflow: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #45494d transparent;
+    }
+
+    .watch-card {
+      border: 1px solid #2d3034;
+      background: var(--panel-2);
+    }
+
+    .watch-card + .watch-card {
+      margin-top: 8px;
+    }
+
+    .watch-card summary {
+      display: grid;
+      grid-template-columns: 68px minmax(0, 1fr) 24px;
+      gap: 10px;
+      align-items: start;
+      min-height: 70px;
+      padding: 11px 12px;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .watch-card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .watch-card[open] summary {
+      border-bottom: 1px solid #303438;
+    }
+
+    .watch-date {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      line-height: 1.35;
+    }
+
+    .watch-title {
+      min-width: 0;
+    }
+
+    .watch-category {
+      display: inline-flex;
+      align-items: center;
+      min-height: 19px;
+      padding: 1px 6px;
+      border: 1px solid #3a3e42;
+      color: var(--amber);
+      font-size: 10px;
+      font-weight: 850;
+      line-height: 1.2;
+    }
+
+    .watch-title h3 {
+      margin: 5px 0 3px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .watch-title p {
+      display: -webkit-box;
+      margin: 0;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .watch-arrow {
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1;
+      text-align: right;
+    }
+
+    .watch-arrow::before {
+      content: "+";
+    }
+
+    .watch-card[open] .watch-arrow::before {
+      content: "−";
+    }
+
+    .watch-body {
+      padding: 12px;
+    }
+
+    .watch-body .watch-detail {
+      margin-top: 0;
+    }
+
+    .watch-body .links {
+      margin-top: 10px;
     }
 
     .charts {
@@ -539,6 +678,19 @@
       .source-row { grid-template-columns: 1fr; }
       .bar-row { grid-template-columns: 68px minmax(0, 1fr) 104px; }
       .watch-detail { grid-template-columns: 1fr; }
+      aside {
+        position: static;
+        max-height: none;
+        overflow: visible;
+      }
+      .watch-tabs { grid-template-columns: 1fr; }
+      .watch-list {
+        max-height: none;
+        overflow: visible;
+      }
+      .watch-card summary {
+        grid-template-columns: 58px minmax(0, 1fr) 20px;
+      }
     }
   </style>
 </head>
@@ -637,21 +789,24 @@
         <section class="panel">
           <div class="panel-head">
             <div>
-              <h2>風險雷達</h2>
-              <div class="caption">分數 = Probability x Impact，滿分 25，分數越高越需要早會優先討論。</div>
+              <h2>追蹤清單</h2>
+              <div class="caption">Google Sheet 後台覆寫，依投資主題分組。</div>
             </div>
           </div>
-          <div class="list" id="risks"></div>
+          <div class="watch-shell">
+            <div class="watch-tabs" id="watchTabs"></div>
+            <div class="watch-list" id="watchlist"></div>
+          </div>
         </section>
 
         <section class="panel">
           <div class="panel-head">
             <div>
-              <h2>追蹤清單</h2>
-              <div class="caption">可由 Google Sheet 後台覆寫。</div>
+              <h2>風險雷達</h2>
+              <div class="caption">分數 = Probability x Impact，滿分 25，分數越高越需要早會優先討論。</div>
             </div>
           </div>
-          <div class="list" id="watchlist"></div>
+          <div class="list" id="risks"></div>
         </section>
       </aside>
     </main>
@@ -995,6 +1150,60 @@
           { label: "資料來源", value: item.expected_source_id || "N/A" }
         ]);
       };
+      const watchCategory = (item) => {
+        const title = item.item || "";
+        if (title.includes("Monthly Sales") || title.includes("月營收") || title.includes("法說會")) {
+          return { id: "calendar", label: "營收法說" };
+        }
+        if (title.includes("CoWoS") || title.includes("HBM") || title.includes("ABF") || title.includes("2nm") || title.includes("A16") || title.includes("Arizona")) {
+          return { id: "tech", label: "製程產能" };
+        }
+        if (title.includes("毛利率") || title.includes("匯率") || title.includes("AI/HPC")) {
+          return { id: "fundamental", label: "財務需求" };
+        }
+        if (title.includes("52") || title.includes("估值") || title.includes("PE") || title.includes("PB") || title.includes("外資") || title.includes("成交量")) {
+          return { id: "market", label: "市場籌碼" };
+        }
+        if (title.includes("地緣政治") || title.includes("出口管制")) {
+          return { id: "risk", label: "政策風險" };
+        }
+        return { id: "other", label: "其他" };
+      };
+      const watchGroups = [
+        { id: "all", label: "全部" },
+        { id: "calendar", label: "營收法說" },
+        { id: "tech", label: "製程產能" },
+        { id: "fundamental", label: "財務需求" },
+        { id: "market", label: "市場籌碼" },
+        { id: "risk", label: "政策風險" }
+      ];
+      const renderWatchlist = (filter = "all") => {
+        const items = data.watchlist || [];
+        const filtered = filter === "all"
+          ? items
+          : items.filter((item) => watchCategory(item).id === filter);
+
+        byId("watchlist").innerHTML = filtered.map((item, index) => {
+          const category = watchCategory(item);
+          return `
+            <details class="watch-card" ${index === 0 ? "open" : ""}>
+              <summary>
+                <div class="watch-date">${item.date || ""}</div>
+                <div class="watch-title">
+                  <span class="watch-category">${category.label}</span>
+                  <h3>${item.item}</h3>
+                  <p>${item.why_it_matters || item.why || ""}</p>
+                </div>
+                <span class="watch-arrow" aria-hidden="true"></span>
+              </summary>
+              <div class="watch-body">
+                ${watchlistDetail(item)}
+                <div class="links">${sourceLinks(sourceMap, item.expected_source_id || getSourceIds(item))}</div>
+              </div>
+            </details>
+          `;
+        }).join("");
+      };
 
       byId("windowLabel").textContent = `${metadata.monitoring_window?.start || ""} to ${metadata.monitoring_window?.end || ""}`;
       byId("brief").textContent = data.analyst_view?.morning_brief || "Public information monitoring dashboard.";
@@ -1098,15 +1307,20 @@
       `;
         }).join("");
 
-      byId("watchlist").innerHTML = (data.watchlist || []).map((item) => `
-        <article class="card">
-          <div class="date">${item.date}</div>
-          <h3>${item.item}</h3>
-          <p>${item.why_it_matters || item.why || ""}</p>
-          ${watchlistDetail(item)}
-          <div class="links">${sourceLinks(sourceMap, item.expected_source_id || getSourceIds(item))}</div>
-        </article>
-      `).join("");
+      byId("watchTabs").innerHTML = watchGroups.map((group) => {
+        const count = group.id === "all"
+          ? (data.watchlist || []).length
+          : (data.watchlist || []).filter((item) => watchCategory(item).id === group.id).length;
+        return `<button class="${group.id === "all" ? "active" : ""}" data-watch-filter="${group.id}">${group.label} ${count}</button>`;
+      }).join("");
+      renderWatchlist();
+      document.querySelectorAll("button[data-watch-filter]").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll("button[data-watch-filter]").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          renderWatchlist(button.dataset.watchFilter);
+        });
+      });
 
       byId("sources").innerHTML = (data.sources || []).map((source) => `
         <article class="card source-row">
