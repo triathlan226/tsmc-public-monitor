@@ -155,31 +155,6 @@
       font-size: 13px;
     }
 
-    .driver-list {
-      display: grid;
-      gap: 7px;
-      margin-top: 10px;
-    }
-
-    .driver-row {
-      display: grid;
-      grid-template-columns: 42px minmax(0, 1fr);
-      gap: 8px;
-      align-items: start;
-      color: #ded8cf;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .driver-row strong {
-      color: var(--green);
-      font-size: 12px;
-    }
-
-    .driver-row.down strong {
-      color: var(--red);
-    }
-
     .company-source {
       display: inline-flex;
       margin-top: 10px;
@@ -810,12 +785,15 @@
             <a class="company-source" href="https://investor.tsmc.com/english/fundamentals" target="_blank" rel="noreferrer">TSMC official company profile</a>
           </article>
           <article class="company-profile-card">
-            <h2>股價為什麼會動</h2>
-            <p>股價通常反映市場對未來獲利與風險折現的看法，重點不是單一新聞，而是需求、產能、毛利率與估值預期是否同向。</p>
-            <div class="driver-list">
-              <div class="driver-row"><strong>上漲</strong><span>AI/HPC 訂單強、CoWoS 供給開出、2nm/A16 進度順、營收與毛利率優於預期。</span></div>
-              <div class="driver-row down"><strong>下跌</strong><span>AI capex 放緩、海外廠成本稀釋、匯率不利、出口管制/地緣政治升溫，或估值過高修正。</span></div>
+            <h2>公開財報快照</h2>
+            <p>以下數字來自台積電公開財報、管理報告與法說會指引，用來讓投資人先掌握營收結構與獲利水準。</p>
+            <div class="company-facts">
+              <span>HPC 營收占比<strong id="profileHpc">N/A</strong></span>
+              <span>先進製程占比<strong id="profileAdvanced">N/A</strong></span>
+              <span>毛利率<strong id="profileGrossMargin">N/A</strong></span>
+              <span>Q2 營收指引<strong id="profileGuidance">N/A</strong></span>
             </div>
+            <a class="company-source" href="https://investor.tsmc.com/chinese/quarterly-results" target="_blank" rel="noreferrer">TSMC quarterly results</a>
           </article>
         </div>
       </div>
@@ -1326,6 +1304,10 @@
       byId("brief").textContent = data.analyst_view?.morning_brief || "Public information monitoring dashboard.";
       byId("stance").textContent = data.analyst_view?.stance || "Monitor";
       byId("footer").textContent = `Data updated: ${metadata.generated_at || "N/A"} · Canonical file: data/data.json · Browser file: data/data.js`;
+      byId("profileHpc").textContent = fmt(mixValue(platformMix, "HPC"), "%");
+      byId("profileAdvanced").textContent = fmt(financials.business_mix?.advanced_7nm_and_below_percent, "%");
+      byId("profileGrossMargin").textContent = fmt(quarter.gross_margin_percent, "%");
+      byId("profileGuidance").textContent = `${fmt(guidance.revenue_usd_billion_low)}-${fmt(guidance.revenue_usd_billion_high)} USD bn`;
 
       byId("status").innerHTML = [
         ["Analyst Stance", data.analyst_view?.stance || "N/A", data.analyst_view?.confidence || ""],
