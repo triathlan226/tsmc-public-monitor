@@ -226,6 +226,31 @@
       line-height: 1.6;
     }
 
+    .watch-detail {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .watch-detail span {
+      min-height: 46px;
+      padding: 8px;
+      border: 1px solid #35393d;
+      background: rgba(255, 255, 255, .03);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .watch-detail strong {
+      display: block;
+      margin-top: 3px;
+      color: #f4f0e8;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
     .charts {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -474,6 +499,7 @@
 
       .source-row { grid-template-columns: 1fr; }
       .bar-row { grid-template-columns: 68px minmax(0, 1fr) 104px; }
+      .watch-detail { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -761,6 +787,28 @@
       const latestPrice = yahooIntraday.regular_market_price || intraday.price || officialClose.close;
       const previousClose = yahooIntraday.previous_close || intraday.previous_close || officialClose.close;
       const priceTone = latestPrice && previousClose && latestPrice >= previousClose ? "green" : "red";
+      const pctDistance = (value, base) => {
+        const numberValue = Number(value);
+        const numberBase = Number(base);
+        if (!Number.isFinite(numberValue) || !Number.isFinite(numberBase) || numberBase === 0) return "N/A";
+        const pct = (numberValue / numberBase - 1) * 100;
+        return `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
+      };
+      const watchlistDetail = (item) => {
+        const title = item.item || "";
+        if (!title.includes("52") || !title.includes("週高低")) return "";
+
+        return `
+          <div class="watch-detail" aria-label="52 week high low detail">
+            <span>現價<strong>${fmt(latestPrice, " TWD")}</strong></span>
+            <span>52 週高<strong>${fmt(market.one_year_high, " TWD")}</strong></span>
+            <span>距高點<strong class="${Number(latestPrice) >= Number(market.one_year_high) ? "green" : "amber"}">${pctDistance(latestPrice, market.one_year_high)}</strong></span>
+            <span>52 週低<strong>${fmt(market.one_year_low, " TWD")}</strong></span>
+            <span>距低點<strong class="${Number(latestPrice) >= Number(market.one_year_low) ? "green" : "red"}">${pctDistance(latestPrice, market.one_year_low)}</strong></span>
+            <span>資料來源<strong>Yahoo Finance / TWSE</strong></span>
+          </div>
+        `;
+      };
 
       byId("windowLabel").textContent = `${metadata.monitoring_window?.start || ""} to ${metadata.monitoring_window?.end || ""}`;
       byId("brief").textContent = data.analyst_view?.morning_brief || "Public information monitoring dashboard.";
@@ -860,6 +908,7 @@
           <div class="date">${item.date}</div>
           <h3>${item.item}</h3>
           <p>${item.why_it_matters || item.why || ""}</p>
+          ${watchlistDetail(item)}
         </article>
       `).join("");
 
