@@ -516,6 +516,38 @@
       gap: 12px;
     }
 
+    .market-intel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .intel-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .intel-cell {
+      min-height: 52px;
+      padding: 9px;
+      border: 1px solid #35393d;
+      background: rgba(255, 255, 255, .03);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .intel-cell strong {
+      display: block;
+      margin-top: 4px;
+      color: #f4f0e8;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
     svg {
       width: 100%;
       height: 180px;
@@ -821,6 +853,8 @@
       .summary,
       .events,
       .two-col,
+      .market-intel,
+      .intel-grid,
       .mix,
       .company-profile,
       .company-facts {
@@ -924,6 +958,19 @@
               <h3>月營收</h3>
               <div id="revenueBars"></div>
             </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>法人與重大訊息</h2>
+              <div class="caption">TWSE 法人買賣超與 MOPS 重大訊息公開資料狀態。</div>
+            </div>
+          </div>
+          <div class="market-intel">
+            <article class="card" id="institutionalCard"></article>
+            <article class="card" id="mopsCard"></article>
           </div>
         </section>
 
@@ -1067,6 +1114,20 @@
       return `${number}${suffix}`;
     }
 
+    function signedCompact(value, suffix = "") {
+      const number = Number(value);
+      if (!Number.isFinite(number)) return "N/A";
+      const sign = number > 0 ? "+" : "";
+      return `${sign}${compact(number, suffix)}`;
+    }
+
+    function displayDate(value) {
+      if (!value) return "N/A";
+      const text = String(value);
+      if (/^\d{8}$/.test(text)) return `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}`;
+      return text.slice(0, 10);
+    }
+
     function sourceLinks(sourceMap, ids) {
       return asArray(ids)
         .map((id) => sourceMap.get(id))
@@ -1182,6 +1243,7 @@
       const sourceMap = new Map((data.sources || []).map((source) => [source.id, source]));
       const metadata = data.metadata || {};
       const market = data.market_snapshot || {};
+      const mops = data.mops_material_info || {};
       const financials = data.financials || {};
       const revenue = financials.monthly_revenue || {};
       const quarter = financials.quarterly_results || {};
@@ -1195,6 +1257,9 @@
       const previousClose = yahooIntraday.previous_close || intraday.previous_close || officialClose.close;
       const priceTone = latestPrice && previousClose && latestPrice >= previousClose ? "green" : "red";
       const pricePoints = yahooDaily.points?.length ? yahooDaily.points : (market.weekly_prices || []);
+      const latestPricePoint = (yahooIntraday.points || []).at?.(-1) || (yahooDaily.points || []).at?.(-1) || {};
+      const latestPriceDate = latestPricePoint.datetime || intraday.date || yahooIntraday.retrieved_at || yahooDaily.retrieved_at || market.as_of;
+      const institutional = market.institutional_trading || {};
       const validVolumes = pricePoints
         .map((point) => Number(point.volume || point.volume_shares))
         .filter((value) => Number.isFinite(value) && value > 0);
@@ -1336,7 +1401,9 @@
             { label: "最近成交量", value: compact(latestVolume, " shares") },
             { label: "5日均量", value: compact(averageVolume, " shares") },
             { label: "量能比", value: volumeRatio ? `${volumeRatio.toFixed(2)}x` : "N/A", tone: volumeRatio > 1.2 ? "amber" : "cyan" },
-            { label: "外資買賣超", value: "尚未接 TWSE 法人資料", wide: true }
+            { label: "外資買賣超", value: signedCompact(institutional.foreign_investors?.net, " shares"), tone: Number(institutional.foreign_investors?.net) >= 0 ? "green" : "red" },
+            { label: "三大法人合計", value: signedCompact(institutional.total_net, " shares"), tone: Number(institutional.total_net) >= 0 ? "green" : "red" },
+            { label: "資料日期", value: displayDate(institutional.as_of), wide: true }
           ]);
         }
 
@@ -1445,7 +1512,7 @@
       `).join("");
 
       byId("metrics").innerHTML = [
-        metric("最新價格", fmt(latestPrice, " TWD"), `Previous: ${fmt(previousClose)} ${sourceBadge("Yahoo Finance")}`, priceTone),
+        metric("最新價格", fmt(latestPrice, " TWD"), `日期 ${displayDate(latestPriceDate)} · Previous: ${fmt(previousClose)} ${sourceBadge("Yahoo Finance")}`, priceTone),
         metric("4 月營收", fmt(revenue.revenue_twd_billion, " NT$ bn"), `YoY ${fmt(revenue.yoy_percent, "%")} · MoM ${fmt(revenue.mom_percent, "%")} ${sourceBadge("TSMC IR")}`, "cyan"),
         metric("1Q26 EPS", fmt(quarter.eps_twd, " NT$"), `毛利率 ${fmt(quarter.gross_margin_percent, "%")} ${sourceBadge("TSMC IR")}`, "green"),
         metric("HPC 占比", fmt((financials.business_mix?.platform_revenue_percent || []).find((row) => row.name === "HPC")?.value, "%"), `1Q26 platform revenue ${sourceBadge("Mgmt Report")}`, "amber"),
@@ -1462,6 +1529,35 @@
 
       renderLineChart(pricePoints);
       renderBars("revenueBars", revenue.monthly_series_twd_billion || [], "revenue", "");
+
+      byId("institutionalCard").innerHTML = `
+        <h3>TWSE 三大法人買賣超 ${sourceBadge("TWSE T86")}</h3>
+        <p>${institutional.title || "等待 TWSE T86 更新"} · 資料日期 ${displayDate(institutional.as_of)}</p>
+        <div class="intel-grid">
+          <span class="intel-cell">外資<strong class="${Number(institutional.foreign_investors?.net) >= 0 ? "green" : "red"}">${signedCompact(institutional.foreign_investors?.net, " shares")}</strong></span>
+          <span class="intel-cell">投信<strong class="${Number(institutional.investment_trust?.net) >= 0 ? "green" : "red"}">${signedCompact(institutional.investment_trust?.net, " shares")}</strong></span>
+          <span class="intel-cell">自營商<strong class="${Number(institutional.dealers?.net) >= 0 ? "green" : "red"}">${signedCompact(institutional.dealers?.net, " shares")}</strong></span>
+          <span class="intel-cell">三大法人合計<strong class="${Number(institutional.total_net) >= 0 ? "green" : "red"}">${signedCompact(institutional.total_net, " shares")}</strong></span>
+        </div>
+        <div class="links">${sourceLinks(sourceMap, institutional.source_id || "SRC_TWSE_T86")}</div>
+      `;
+
+      const mopsReady = mops.status === "ok" && (mops.items || []).length;
+      byId("mopsCard").innerHTML = `
+        <h3>MOPS 重大訊息 ${sourceBadge("MOPS")}</h3>
+        <p>${mopsReady ? "已取得最近重大訊息。" : "MOPS 官方查詢目前擋住自動化請求，保留官方入口供人工查核。"}</p>
+        ${mopsReady ? `
+          <div class="list">
+            ${(mops.items || []).slice(0, 3).map((item) => `
+              <article class="card">
+                <div class="date">${item.date || ""} ${item.time || ""}</div>
+                <h3>${item.title || "重大訊息"}</h3>
+              </article>
+            `).join("")}
+          </div>
+        ` : `<div class="risk-note">${mops.error || "No MOPS rows parsed"}</div>`}
+        <div class="links">${sourceLinks(sourceMap, mops.source_id || "SRC_MOPS_T05ST01")}</div>
+      `;
 
       renderEvents(data, sourceMap);
       document.querySelectorAll("button[data-filter]").forEach((button) => {
@@ -1508,8 +1604,8 @@
         ["Yahoo Finance 股價", Boolean(yahooDaily.points?.length || yahooIntraday.points?.length), "價格、5日走勢、成交量"],
         ["TSMC IR 財報/法說", Boolean(quarter.eps_twd && guidance.revenue_usd_billion_low), "EPS、毛利率、Q2 指引"],
         ["Google Sheet 後台", Boolean((data.watchlist || []).length), "手動事件、追蹤清單"],
-        ["TWSE 法人買賣超", false, "待接外資、投信、自營商"],
-        ["MOPS 重大訊息", false, "待接公開資訊觀測站"],
+        ["TWSE 法人買賣超", Boolean(institutional.total_net !== undefined && institutional.total_net !== null), "外資、投信、自營商"],
+        ["MOPS 重大訊息", mops.status === "ok", mops.status === "ok" ? "最近重大訊息" : "官方查詢擋住自動化，保留入口"],
         ["股利/除息/殖利率", false, "待接 TSMC IR 或 MOPS"],
         ["ESG/用電/用水", false, "待接永續報告資料"],
         ["ADR vs 台股溢折價", false, "待接 TSM 與 2330.TW 比價"]

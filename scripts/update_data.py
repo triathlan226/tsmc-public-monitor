@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import html
 import json
 import os
 import re
@@ -18,7 +19,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -29,6 +30,7 @@ except ImportError:  # pragma: no cover - Python 3.8 fallback
 
 
 DEFAULT_TICKER = "2330.TW"
+DEFAULT_TWSE_CODE = "2330"
 TAIPEI_TZ = ZoneInfo("Asia/Taipei") if ZoneInfo else timezone.utc
 
 
@@ -109,6 +111,38 @@ def add_source(data: dict[str, Any], name: str, url: str, source_type: str) -> s
         }
     )
     return source_id
+
+
+def upsert_source(data: dict[str, Any], source_id: str, name: str, url: str, source_type: str) -> str:
+    sources = data.setdefault("sources", [])
+    today = datetime.now(TAIPEI_TZ).date().isoformat()
+    for source in sources:
+        if source.get("id") == source_id:
+            source.update({"name": name, "type": source_type, "url": url, "retrieved_at": today})
+            return source_id
+
+    sources.append(
+        {
+            "id": source_id,
+            "name": name,
+            "type": source_type,
+            "url": url,
+            "retrieved_at": today,
+        }
+    )
+    return source_id
+
+
+def parse_int(value: Any) -> int | None:
+    if value is None:
+        return None
+    text = str(value).strip().replace(",", "")
+    if not text:
+        return None
+    try:
+        return int(float(text))
+    except ValueError:
+        return None
 
 
 def is_google_sheet_event(event: dict[str, Any], sheet_source_ids: set[str]) -> bool:
@@ -259,6 +293,197 @@ def update_yahoo_market_snapshot(data: dict[str, Any], symbol: str) -> str:
     return symbol
 
 
+def twse_t86_url(date_text: str) -> str:
+    return (
+        "https://www.twse.com.tw/rwd/zh/fund/T86?"
+        f"date={date_text}&selectType=ALLBUT0999&response=json"
+    )
+
+
+def update_twse_institutional_trading(data: dict[str, Any], stock_code: str) -> str:
+    """Fetch latest TWSE three-major-institution trading data for one stock."""
+
+    source_url = "https://www.twse.com.tw/zh/trading/foreign/t86.html"
+    upsert_source(
+        data,
+        "SRC_TWSE_T86",
+        "TWSE 三大法人買賣超日報",
+        source_url,
+        "public_stock_price",
+    )
+
+    today = datetime.now(TAIPEI_TZ).date()
+    errors: list[str] = []
+    for offset in range(0, 10):
+        target_date = today - timedelta(days=offset)
+        date_text = target_date.strftime("%Y%m%d")
+        url = twse_t86_url(date_text)
+        try:
+            payload = json.loads(http_get_text(url))
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
+            errors.append(f"{date_text}: {exc}")
+            continue
+
+        if payload.get("stat") != "OK" or not payload.get("data"):
+            errors.append(f"{date_text}: {payload.get('stat', 'no data')}")
+            continue
+
+        fields = payload.get("fields", [])
+        for row in payload.get("data", []):
+            if not row or str(row[0]).strip() != stock_code:
+                continue
+
+            def by_field(name: str) -> int | None:
+                try:
+                    return parse_int(row[fields.index(name)])
+                except (ValueError, IndexError):
+                    return None
+
+            market_snapshot = data.setdefault("market_snapshot", {})
+            market_snapshot["institutional_trading"] = {
+                "as_of": payload.get("date") or date_text,
+                "title": payload.get("title", ""),
+                "stock_code": stock_code,
+                "stock_name": str(row[1]).strip() if len(row) > 1 else "",
+                "unit": "shares",
+                "foreign_investors": {
+                    "buy": by_field("外陸資買進股數(不含外資自營商)"),
+                    "sell": by_field("外陸資賣出股數(不含外資自營商)"),
+                    "net": by_field("外陸資買賣超股數(不含外資自營商)"),
+                },
+                "investment_trust": {
+                    "buy": by_field("投信買進股數"),
+                    "sell": by_field("投信賣出股數"),
+                    "net": by_field("投信買賣超股數"),
+                },
+                "dealers": {
+                    "net": by_field("自營商買賣超股數"),
+                },
+                "total_net": by_field("三大法人買賣超股數"),
+                "source_id": "SRC_TWSE_T86",
+                "source_url": url,
+                "retrieved_at": now_taipei(),
+            }
+            return date_text
+
+    raise RuntimeError(f"No TWSE T86 row for {stock_code}; " + " | ".join(errors[:3]))
+
+
+def strip_tags(value: str) -> str:
+    value = re.sub(r"<br\s*/?>", "\n", value, flags=re.I)
+    value = re.sub(r"<[^>]+>", " ", value)
+    value = html.unescape(value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def parse_mops_material_rows(text: str, limit: int = 8) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for row_html in re.findall(r"<tr[^>]*>(.*?)</tr>", text, flags=re.I | re.S):
+        cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row_html, flags=re.I | re.S)
+        clean = [strip_tags(cell) for cell in cells]
+        if len(clean) < 4 or not any("2330" in cell for cell in clean):
+            continue
+        if any("公司代號" in cell or "主旨" in cell for cell in clean):
+            continue
+        rows.append(
+            {
+                "date": clean[0],
+                "time": clean[1] if len(clean) > 1 else "",
+                "company": " ".join(clean[2:4]) if len(clean) > 3 else "2330 台積電",
+                "title": clean[4] if len(clean) > 4 else clean[-1],
+                "raw": " | ".join(clean),
+                "source_id": "SRC_MOPS_T05ST01",
+            }
+        )
+        if len(rows) >= limit:
+            break
+    return rows
+
+
+def update_mops_material_info(data: dict[str, Any], stock_code: str) -> str:
+    """Best-effort MOPS material information query.
+
+    MOPS may reject automated form requests. The dashboard keeps the official
+    source and fetch status so users can see whether the public source is live.
+    """
+
+    source_url = "https://mops.twse.com.tw/mops/web/t05st01"
+    upsert_source(
+        data,
+        "SRC_MOPS_T05ST01",
+        "MOPS 歷史重大訊息",
+        source_url,
+        "official_mops",
+    )
+
+    now = datetime.now(TAIPEI_TZ)
+    opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor())
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; tsmc-public-monitor/1.0)",
+        "Referer": source_url,
+    }
+    try:
+        opener.open(urllib.request.Request("https://mops.twse.com.tw/mops/web/index", headers=headers), timeout=20)
+        opener.open(urllib.request.Request(source_url, headers=headers), timeout=20)
+    except (urllib.error.URLError, TimeoutError):
+        pass
+
+    all_rows: list[dict[str, str]] = []
+    errors: list[str] = []
+    for offset in range(0, 3):
+        month_date = (now.replace(day=1) - timedelta(days=offset * 31)).replace(day=1)
+        roc_year = month_date.year - 1911
+        body = urllib.parse.urlencode(
+            {
+                "encodeURIComponent": "1",
+                "step": "1",
+                "firstin": "1",
+                "off": "1",
+                "keyword4": "",
+                "code1": "",
+                "TYPEK2": "",
+                "checkbtn": "",
+                "queryName": "co_id",
+                "inpuType": "co_id",
+                "TYPEK": "all",
+                "co_id": stock_code,
+                "year": str(roc_year),
+                "month": f"{month_date.month:02d}",
+            }
+        ).encode("utf-8")
+        request = urllib.request.Request(
+            "https://mops.twse.com.tw/mops/web/ajax_t05st01",
+            data=body,
+            headers={**headers, "Content-Type": "application/x-www-form-urlencoded"},
+        )
+        try:
+            text = opener.open(request, timeout=20).read().decode("utf-8", errors="replace")
+        except (urllib.error.URLError, TimeoutError) as exc:
+            errors.append(f"{roc_year}/{month_date.month:02d}: {exc}")
+            continue
+
+        if "SECURITY REASONS" in text or "安全性考量" in text:
+            errors.append(f"{roc_year}/{month_date.month:02d}: MOPS security block")
+            continue
+
+        all_rows.extend(parse_mops_material_rows(text))
+        if all_rows:
+            break
+
+    data["mops_material_info"] = {
+        "status": "ok" if all_rows else "unavailable",
+        "stock_code": stock_code,
+        "items": all_rows[:8],
+        "source_id": "SRC_MOPS_T05ST01",
+        "source_url": source_url,
+        "retrieved_at": now_taipei(),
+        "error": "" if all_rows else " | ".join(errors[:3]) or "No MOPS rows parsed",
+    }
+    if not all_rows:
+        raise RuntimeError(data["mops_material_info"]["error"])
+    return str(len(all_rows))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="data/data.json")
@@ -266,6 +491,7 @@ def main() -> int:
     parser.add_argument("--output-js", default="data/data.js")
     parser.add_argument("--no-fetch", action="store_true", help="Skip network fetches and only rewrite output files.")
     parser.add_argument("--ticker", default=os.getenv("YAHOO_TICKER", DEFAULT_TICKER))
+    parser.add_argument("--twse-code", default=os.getenv("TWSE_STOCK_CODE", DEFAULT_TWSE_CODE))
     parser.add_argument("--sheet-events-csv-url", default=os.getenv("GOOGLE_SHEET_EVENTS_CSV_URL", ""))
     parser.add_argument("--sheet-watchlist-csv-url", default=os.getenv("GOOGLE_SHEET_WATCHLIST_CSV_URL", ""))
     args = parser.parse_args()
@@ -280,6 +506,7 @@ def main() -> int:
         "google_sheet_events_configured": bool(args.sheet_events_csv_url),
         "google_sheet_watchlist_configured": bool(args.sheet_watchlist_csv_url),
         "yahoo_ticker": args.ticker,
+        "twse_stock_code": args.twse_code,
     }
 
     run_log: list[str] = []
@@ -289,6 +516,18 @@ def main() -> int:
             run_log.append(f"Yahoo Finance updated for {args.ticker}")
         except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as exc:
             run_log.append(f"Yahoo Finance skipped: {exc}")
+
+        try:
+            update_twse_institutional_trading(data, args.twse_code)
+            run_log.append(f"TWSE T86 institutional trading updated for {args.twse_code}")
+        except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as exc:
+            run_log.append(f"TWSE T86 skipped: {exc}")
+
+        try:
+            count = update_mops_material_info(data, args.twse_code)
+            run_log.append(f"MOPS material info rows: {count}")
+        except (urllib.error.URLError, TimeoutError, RuntimeError) as exc:
+            run_log.append(f"MOPS material info skipped: {exc}")
 
         try:
             event_count = merge_sheet_events(data, csv_rows_from_url(args.sheet_events_csv_url))
