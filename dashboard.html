@@ -548,6 +548,67 @@
       line-height: 1.25;
     }
 
+    .mini-bars {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 4px;
+      align-items: end;
+      min-height: 128px;
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #303438;
+    }
+
+    .mini-bar {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-width: 0;
+      height: 118px;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .mini-bar span {
+      display: block;
+      min-height: 6px;
+      background: linear-gradient(180deg, var(--cyan), rgba(73, 199, 216, .28));
+      border: 1px solid rgba(73, 199, 216, .35);
+    }
+
+    .mini-bar.negative span {
+      background: linear-gradient(180deg, var(--red), rgba(255, 102, 102, .22));
+      border-color: rgba(255, 102, 102, .35);
+    }
+
+    .freshness-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .freshness-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #303438;
+      background: rgba(255, 255, 255, .025);
+    }
+
+    .freshness-row strong {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .freshness-row small {
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
     svg {
       width: 100%;
       height: 180px;
@@ -1024,8 +1085,8 @@
         <section class="panel">
           <div class="panel-head">
             <div>
-              <h2>資料完整度</h2>
-              <div class="caption">清楚標示已自動抓取與尚未接入的公開資料。</div>
+              <h2>資料新鮮度</h2>
+              <div class="caption">先看資料是否今天更新、最近交易日更新，或仍需人工確認。</div>
             </div>
           </div>
           <div class="health-list" id="dataHealth"></div>
@@ -1128,6 +1189,25 @@
       return text.slice(0, 10);
     }
 
+    function dateAgeText(value) {
+      if (!value) return "尚無日期";
+      const normalized = displayDate(value);
+      const stamp = new Date(`${normalized}T00:00:00+08:00`);
+      if (Number.isNaN(stamp.getTime())) return normalized;
+      const today = new Date();
+      const todayTaipei = new Date(today.toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
+      todayTaipei.setHours(0, 0, 0, 0);
+      const diff = Math.round((todayTaipei - stamp) / 86400000);
+      if (diff <= 0) return `${normalized} · 今日`;
+      if (diff === 1) return `${normalized} · 1 天前`;
+      return `${normalized} · ${diff} 天前`;
+    }
+
+    function freshnessBadge(isReady, isStale = false) {
+      if (!isReady) return `<span class="badge mixed">待接</span>`;
+      return `<span class="badge ${isStale ? "mixed" : "bullish"}">${isStale ? "需確認" : "已更新"}</span>`;
+    }
+
     function sourceLinks(sourceMap, ids) {
       return asArray(ids)
         .map((id) => sourceMap.get(id))
@@ -1212,6 +1292,55 @@
       }).join("");
     }
 
+    function renderRevenueTrend(revenue) {
+      const rows = revenue.monthly_series_twd_billion || [];
+      if (!rows.length) {
+        byId("revenueBars").innerHTML = `<p>No monthly revenue data</p>`;
+        return;
+      }
+      const latest = rows.at(-1) || {};
+      const last3 = rows.slice(-3);
+      const avg3 = last3.reduce((sum, row) => sum + Number(row.revenue || 0), 0) / Math.max(1, last3.length);
+      const max = Math.max(...rows.map((row) => Number(row.revenue) || 0), 1);
+      byId("revenueBars").innerHTML = `
+        <div class="intel-grid">
+          <span class="intel-cell">最新月份<strong>${latest.month || "N/A"}</strong></span>
+          <span class="intel-cell">最新營收<strong class="cyan">${fmt(latest.revenue, " NT$bn")}</strong></span>
+          <span class="intel-cell">YoY<strong class="${Number(latest.yoy_percent) >= 0 ? "green" : "red"}">${fmt(latest.yoy_percent, "%")}</strong></span>
+          <span class="intel-cell">近 3 月均值<strong>${fmt(avg3, " NT$bn")}</strong></span>
+        </div>
+        <div class="mini-bars">
+          ${rows.map((row) => {
+            const value = Number(row.revenue) || 0;
+            return `
+              <div class="mini-bar" title="${row.month}: ${fmt(value, " NT$bn")} / YoY ${fmt(row.yoy_percent, "%")}">
+                <span style="height:${Math.max(8, Math.round(value / max * 100))}%"></span>
+                <em>${String(row.month || "").slice(2)}</em>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function renderInstitutionalMiniBars(rows) {
+      const latest = rows.slice(0, 10).reverse();
+      const max = Math.max(...latest.map((row) => Math.abs(Number(row.foreign_investors?.net) || 0)), 1);
+      return `
+        <div class="mini-bars">
+          ${latest.map((row) => {
+            const value = Number(row.foreign_investors?.net) || 0;
+            return `
+              <div class="mini-bar ${value < 0 ? "negative" : ""}" title="${displayDate(row.as_of)} 外資 ${signedCompact(value, " shares")}">
+                <span style="height:${Math.max(8, Math.round(Math.abs(value) / max * 100))}%"></span>
+                <em>${displayDate(row.as_of).slice(5)}</em>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
     function renderEvents(data, sourceMap, filter = "all") {
       const events = (data.events || []).filter((event) => {
         if (filter === "all") return true;
@@ -1260,6 +1389,8 @@
       const latestPricePoint = (yahooIntraday.points || []).at?.(-1) || (yahooDaily.points || []).at?.(-1) || {};
       const latestPriceDate = latestPricePoint.datetime || intraday.date || yahooIntraday.retrieved_at || yahooDaily.retrieved_at || market.as_of;
       const institutional = market.institutional_trading || {};
+      const institutionalHistory = market.institutional_trading_history || [];
+      const institutionalSummary = market.institutional_trading_summary || {};
       const validVolumes = pricePoints
         .map((point) => Number(point.volume || point.volume_shares))
         .filter((value) => Number.isFinite(value) && value > 0);
@@ -1402,7 +1533,8 @@
             { label: "5日均量", value: compact(averageVolume, " shares") },
             { label: "量能比", value: volumeRatio ? `${volumeRatio.toFixed(2)}x` : "N/A", tone: volumeRatio > 1.2 ? "amber" : "cyan" },
             { label: "外資買賣超", value: signedCompact(institutional.foreign_investors?.net, " shares"), tone: Number(institutional.foreign_investors?.net) >= 0 ? "green" : "red" },
-            { label: "三大法人合計", value: signedCompact(institutional.total_net, " shares"), tone: Number(institutional.total_net) >= 0 ? "green" : "red" },
+            { label: "外資 5/20 日", value: `${signedCompact(institutionalSummary.foreign_5d_net, " shares")} / ${signedCompact(institutionalSummary.foreign_20d_net, " shares")}`, tone: Number(institutionalSummary.foreign_5d_net) >= 0 ? "green" : "red" },
+            { label: "三大法人 5/20 日", value: `${signedCompact(institutionalSummary.total_5d_net, " shares")} / ${signedCompact(institutionalSummary.total_20d_net, " shares")}`, tone: Number(institutionalSummary.total_5d_net) >= 0 ? "green" : "red" },
             { label: "資料日期", value: displayDate(institutional.as_of), wide: true }
           ]);
         }
@@ -1513,7 +1645,7 @@
 
       byId("metrics").innerHTML = [
         metric("最新價格", fmt(latestPrice, " TWD"), `日期 ${displayDate(latestPriceDate)} · Previous: ${fmt(previousClose)} ${sourceBadge("Yahoo Finance")}`, priceTone),
-        metric("4 月營收", fmt(revenue.revenue_twd_billion, " NT$ bn"), `YoY ${fmt(revenue.yoy_percent, "%")} · MoM ${fmt(revenue.mom_percent, "%")} ${sourceBadge("TSMC IR")}`, "cyan"),
+        metric(`${displayDate(revenue.latest_month).slice(0, 7)} 營收`, fmt(revenue.revenue_twd_billion, " NT$ bn"), `YoY ${fmt(revenue.yoy_percent, "%")} · 24M trend ${sourceBadge("TSMC IR")}`, "cyan"),
         metric("1Q26 EPS", fmt(quarter.eps_twd, " NT$"), `毛利率 ${fmt(quarter.gross_margin_percent, "%")} ${sourceBadge("TSMC IR")}`, "green"),
         metric("HPC 占比", fmt((financials.business_mix?.platform_revenue_percent || []).find((row) => row.name === "HPC")?.value, "%"), `1Q26 platform revenue ${sourceBadge("Mgmt Report")}`, "amber"),
         metric("Q2 指引", `${fmt(guidance.revenue_usd_billion_low)}-${fmt(guidance.revenue_usd_billion_high)}`, `USD bn ${sourceBadge("Earnings Call")}`, "green"),
@@ -1528,7 +1660,7 @@
       `).join("");
 
       renderLineChart(pricePoints);
-      renderBars("revenueBars", revenue.monthly_series_twd_billion || [], "revenue", "");
+      renderRevenueTrend(revenue);
 
       byId("institutionalCard").innerHTML = `
         <h3>TWSE 三大法人買賣超 ${sourceBadge("TWSE T86")}</h3>
@@ -1538,7 +1670,13 @@
           <span class="intel-cell">投信<strong class="${Number(institutional.investment_trust?.net) >= 0 ? "green" : "red"}">${signedCompact(institutional.investment_trust?.net, " shares")}</strong></span>
           <span class="intel-cell">自營商<strong class="${Number(institutional.dealers?.net) >= 0 ? "green" : "red"}">${signedCompact(institutional.dealers?.net, " shares")}</strong></span>
           <span class="intel-cell">三大法人合計<strong class="${Number(institutional.total_net) >= 0 ? "green" : "red"}">${signedCompact(institutional.total_net, " shares")}</strong></span>
+          <span class="intel-cell">外資 5 日<strong class="${Number(institutionalSummary.foreign_5d_net) >= 0 ? "green" : "red"}">${signedCompact(institutionalSummary.foreign_5d_net, " shares")}</strong></span>
+          <span class="intel-cell">外資 20 日<strong class="${Number(institutionalSummary.foreign_20d_net) >= 0 ? "green" : "red"}">${signedCompact(institutionalSummary.foreign_20d_net, " shares")}</strong></span>
+          <span class="intel-cell">三大法人 5 日<strong class="${Number(institutionalSummary.total_5d_net) >= 0 ? "green" : "red"}">${signedCompact(institutionalSummary.total_5d_net, " shares")}</strong></span>
+          <span class="intel-cell">三大法人 20 日<strong class="${Number(institutionalSummary.total_20d_net) >= 0 ? "green" : "red"}">${signedCompact(institutionalSummary.total_20d_net, " shares")}</strong></span>
         </div>
+        <p class="caption">外資連續${institutionalSummary.foreign_streak?.direction === "buy" ? "買超" : institutionalSummary.foreign_streak?.direction === "sell" ? "賣超" : "持平"} ${institutionalSummary.foreign_streak?.days || 0} 個交易日；下方為近 10 筆外資買賣超。</p>
+        ${renderInstitutionalMiniBars(institutionalHistory)}
         <div class="links">${sourceLinks(sourceMap, institutional.source_id || "SRC_TWSE_T86")}</div>
       `;
 
@@ -1600,22 +1738,52 @@
         </article>
       `).join("");
 
-      const dataHealth = [
-        ["Yahoo Finance 股價", Boolean(yahooDaily.points?.length || yahooIntraday.points?.length), "價格、5日走勢、成交量"],
-        ["TSMC IR 財報/法說", Boolean(quarter.eps_twd && guidance.revenue_usd_billion_low), "EPS、毛利率、Q2 指引"],
-        ["Google Sheet 後台", Boolean((data.watchlist || []).length), "手動事件、追蹤清單"],
-        ["TWSE 法人買賣超", Boolean(institutional.total_net !== undefined && institutional.total_net !== null), "外資、投信、自營商"],
-        ["MOPS 重大訊息", mops.status === "ok", mops.status === "ok" ? "最近重大訊息" : "官方查詢擋住自動化，保留入口"],
-        ["股利/除息/殖利率", false, "待接 TSMC IR 或 MOPS"],
-        ["ESG/用電/用水", false, "待接永續報告資料"],
-        ["ADR vs 台股溢折價", false, "待接 TSM 與 2330.TW 比價"]
+      const freshnessRows = [
+        {
+          name: "Yahoo Finance 股價",
+          ready: Boolean(yahooDaily.points?.length || yahooIntraday.points?.length),
+          date: latestPriceDate,
+          note: `最新價格 ${fmt(latestPrice, " TWD")}，含成交量`
+        },
+        {
+          name: "TWSE 法人買賣超",
+          ready: Boolean(institutionalHistory.length),
+          date: institutionalSummary.latest_date || institutional.as_of,
+          note: `${institutionalHistory.length || 0} 個交易日；外資 5 日 ${signedCompact(institutionalSummary.foreign_5d_net, " shares")}`
+        },
+        {
+          name: "TSMC 月營收",
+          ready: Boolean((revenue.monthly_series_twd_billion || []).length >= 24),
+          date: `${revenue.latest_month || ""}-01`,
+          note: `${revenue.history_months || (revenue.monthly_series_twd_billion || []).length} 個月；最新 YoY ${fmt(revenue.yoy_percent, "%")}`
+        },
+        {
+          name: "TSMC IR 財報/法說",
+          ready: Boolean(quarter.eps_twd && guidance.revenue_usd_billion_low),
+          date: quarter.release_date || metadata.generated_at,
+          note: `EPS ${fmt(quarter.eps_twd, " NT$")}；Q2 指引 ${fmt(guidance.revenue_usd_billion_low)}-${fmt(guidance.revenue_usd_billion_high)} USD bn`
+        },
+        {
+          name: "Google Sheet 後台",
+          ready: Boolean((data.watchlist || []).length),
+          date: metadata.generated_at,
+          note: `追蹤清單 ${(data.watchlist || []).length} 項，手動事件由 CSV 發布`
+        },
+        {
+          name: "MOPS 重大訊息",
+          ready: mops.status === "ok",
+          date: mops.retrieved_at,
+          note: mops.status === "ok" ? "最近重大訊息已解析" : "官方查詢擋住自動化，保留入口"
+        }
       ];
-      byId("dataHealth").innerHTML = dataHealth.map(([name, ready, note]) => `
-        <div class="health-row">
-          <span><strong>${name}</strong><br>${note}</span>
-          <span class="badge ${ready ? "bullish" : "mixed"}">${ready ? "已接" : "待接"}</span>
-        </div>
-      `).join("");
+      byId("dataHealth").innerHTML = `<div class="freshness-grid">${
+        freshnessRows.map((row) => `
+          <div class="freshness-row">
+            <span><strong>${row.name}</strong><small>${dateAgeText(row.date)}<br>${row.note}</small></span>
+            ${freshnessBadge(row.ready)}
+          </div>
+        `).join("")
+      }</div>`;
 
       byId("riskTop3").innerHTML = [...riskRows]
         .sort((a, b) => scoreRisk(b) - scoreRisk(a))

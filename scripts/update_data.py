@@ -145,6 +145,18 @@ def parse_int(value: Any) -> int | None:
         return None
 
 
+def parse_float(value: Any) -> float | None:
+    if value is None:
+        return None
+    text = str(value).strip().replace(",", "").replace("%", "")
+    if not text:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
 def is_google_sheet_event(event: dict[str, Any], sheet_source_ids: set[str]) -> bool:
     event_id = str(event.get("id", ""))
     source_ids = event.get("source_ids", [])
@@ -300,6 +312,75 @@ def twse_t86_url(date_text: str) -> str:
     )
 
 
+def parse_twse_t86_stock_row(payload: dict[str, Any], stock_code: str, source_url: str) -> dict[str, Any] | None:
+    fields = payload.get("fields", [])
+    for row in payload.get("data", []):
+        if not row or str(row[0]).strip() != stock_code:
+            continue
+
+        def by_field(name: str) -> int | None:
+            try:
+                return parse_int(row[fields.index(name)])
+            except (ValueError, IndexError):
+                return None
+
+        return {
+            "as_of": payload.get("date", ""),
+            "title": payload.get("title", ""),
+            "stock_code": stock_code,
+            "stock_name": str(row[1]).strip() if len(row) > 1 else "",
+            "unit": "shares",
+            "foreign_investors": {
+                "buy": by_field("外陸資買進股數(不含外資自營商)"),
+                "sell": by_field("外陸資賣出股數(不含外資自營商)"),
+                "net": by_field("外陸資買賣超股數(不含外資自營商)"),
+            },
+            "investment_trust": {
+                "buy": by_field("投信買進股數"),
+                "sell": by_field("投信賣出股數"),
+                "net": by_field("投信買賣超股數"),
+            },
+            "dealers": {
+                "net": by_field("自營商買賣超股數"),
+            },
+            "total_net": by_field("三大法人買賣超股數"),
+            "source_id": "SRC_TWSE_T86",
+            "source_url": source_url,
+            "retrieved_at": now_taipei(),
+        }
+    return None
+
+
+def institutional_sum(rows: list[dict[str, Any]], key: str, days: int) -> int | None:
+    values: list[int] = []
+    for row in rows[:days]:
+        if key == "foreign":
+            value = row.get("foreign_investors", {}).get("net")
+        elif key == "trust":
+            value = row.get("investment_trust", {}).get("net")
+        elif key == "dealer":
+            value = row.get("dealers", {}).get("net")
+        else:
+            value = row.get("total_net")
+        if value is not None:
+            values.append(int(value))
+    return sum(values) if values else None
+
+
+def foreign_streak(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    if not rows or rows[0].get("foreign_investors", {}).get("net") in (None, 0):
+        return {"direction": "flat", "days": 0}
+    first = int(rows[0]["foreign_investors"]["net"])
+    sign = 1 if first > 0 else -1
+    days = 0
+    for row in rows:
+        value = row.get("foreign_investors", {}).get("net")
+        if value is None or int(value) * sign <= 0:
+            break
+        days += 1
+    return {"direction": "buy" if sign > 0 else "sell", "days": days}
+
+
 def update_twse_institutional_trading(data: dict[str, Any], stock_code: str) -> str:
     """Fetch latest TWSE three-major-institution trading data for one stock."""
 
@@ -314,7 +395,8 @@ def update_twse_institutional_trading(data: dict[str, Any], stock_code: str) -> 
 
     today = datetime.now(TAIPEI_TZ).date()
     errors: list[str] = []
-    for offset in range(0, 10):
+    history: list[dict[str, Any]] = []
+    for offset in range(0, 45):
         target_date = today - timedelta(days=offset)
         date_text = target_date.strftime("%Y%m%d")
         url = twse_t86_url(date_text)
@@ -328,45 +410,115 @@ def update_twse_institutional_trading(data: dict[str, Any], stock_code: str) -> 
             errors.append(f"{date_text}: {payload.get('stat', 'no data')}")
             continue
 
-        fields = payload.get("fields", [])
-        for row in payload.get("data", []):
-            if not row or str(row[0]).strip() != stock_code:
-                continue
+        parsed = parse_twse_t86_stock_row(payload, stock_code, url)
+        if not parsed:
+            errors.append(f"{date_text}: no row for {stock_code}")
+            continue
+        parsed["as_of"] = parsed.get("as_of") or date_text
+        history.append(parsed)
+        if len(history) >= 20:
+            break
 
-            def by_field(name: str) -> int | None:
-                try:
-                    return parse_int(row[fields.index(name)])
-                except (ValueError, IndexError):
-                    return None
-
-            market_snapshot = data.setdefault("market_snapshot", {})
-            market_snapshot["institutional_trading"] = {
-                "as_of": payload.get("date") or date_text,
-                "title": payload.get("title", ""),
-                "stock_code": stock_code,
-                "stock_name": str(row[1]).strip() if len(row) > 1 else "",
-                "unit": "shares",
-                "foreign_investors": {
-                    "buy": by_field("外陸資買進股數(不含外資自營商)"),
-                    "sell": by_field("外陸資賣出股數(不含外資自營商)"),
-                    "net": by_field("外陸資買賣超股數(不含外資自營商)"),
-                },
-                "investment_trust": {
-                    "buy": by_field("投信買進股數"),
-                    "sell": by_field("投信賣出股數"),
-                    "net": by_field("投信買賣超股數"),
-                },
-                "dealers": {
-                    "net": by_field("自營商買賣超股數"),
-                },
-                "total_net": by_field("三大法人買賣超股數"),
-                "source_id": "SRC_TWSE_T86",
-                "source_url": url,
-                "retrieved_at": now_taipei(),
-            }
-            return date_text
+    if history:
+        market_snapshot = data.setdefault("market_snapshot", {})
+        market_snapshot["institutional_trading"] = history[0]
+        market_snapshot["institutional_trading_history"] = history
+        market_snapshot["institutional_trading_summary"] = {
+            "source_id": "SRC_TWSE_T86",
+            "latest_date": history[0].get("as_of"),
+            "trading_days": len(history),
+            "foreign_5d_net": institutional_sum(history, "foreign", 5),
+            "foreign_20d_net": institutional_sum(history, "foreign", 20),
+            "trust_5d_net": institutional_sum(history, "trust", 5),
+            "trust_20d_net": institutional_sum(history, "trust", 20),
+            "dealer_5d_net": institutional_sum(history, "dealer", 5),
+            "dealer_20d_net": institutional_sum(history, "dealer", 20),
+            "total_5d_net": institutional_sum(history, "total", 5),
+            "total_20d_net": institutional_sum(history, "total", 20),
+            "foreign_streak": foreign_streak(history),
+            "retrieved_at": now_taipei(),
+        }
+        return str(history[0].get("as_of") or "")
 
     raise RuntimeError(f"No TWSE T86 row for {stock_code}; " + " | ".join(errors[:3]))
+
+
+def tsmc_monthly_revenue_url(year: int) -> str:
+    return f"https://investor.tsmc.com/english/monthly-revenue/{year}"
+
+
+def parse_tsmc_monthly_revenue_page(text: str, year: int) -> list[dict[str, Any]]:
+    month_map = {
+        "Jan.": 1,
+        "Feb.": 2,
+        "Mar.": 3,
+        "Apr.": 4,
+        "May": 5,
+        "Jun.": 6,
+        "Jul.": 7,
+        "Aug.": 8,
+        "Sept.": 9,
+        "Oct.": 10,
+        "Nov.": 11,
+        "Dec.": 12,
+    }
+    plain = strip_tags(text)
+    rows: list[dict[str, Any]] = []
+    for month_name, month_number in month_map.items():
+        pattern = rf"\b{re.escape(month_name)}\s+([0-9,]+)\s+(-?[0-9]+(?:\.[0-9]+)?)%"
+        match = re.search(pattern, plain)
+        if not match:
+            continue
+        revenue_million = parse_int(match.group(1))
+        yoy = parse_float(match.group(2))
+        if revenue_million is None:
+            continue
+        rows.append(
+            {
+                "month": f"{year}-{month_number:02d}",
+                "revenue": round(revenue_million / 1000, 3),
+                "revenue_twd_million": revenue_million,
+                "yoy_percent": yoy,
+                "source_id": "SRC_TSMC_MONTHLY_REVENUE",
+            }
+        )
+    return rows
+
+
+def update_tsmc_monthly_revenue_history(data: dict[str, Any], months: int = 24) -> int:
+    upsert_source(
+        data,
+        "SRC_TSMC_MONTHLY_REVENUE",
+        "TSMC Investor Relations - Monthly Revenue",
+        "https://investor.tsmc.com/english/monthly-revenue",
+        "official",
+    )
+    current_year = datetime.now(TAIPEI_TZ).year
+    rows: list[dict[str, Any]] = []
+    for year in range(current_year, current_year - 4, -1):
+        text = http_get_text(tsmc_monthly_revenue_url(year))
+        rows.extend(parse_tsmc_monthly_revenue_page(text, year))
+
+    rows = sorted(rows, key=lambda row: row["month"])
+    for index, row in enumerate(rows):
+        if index > 0 and row.get("revenue") is not None and rows[index - 1].get("revenue"):
+            previous = float(rows[index - 1]["revenue"])
+            row["mom_percent"] = round((float(row["revenue"]) / previous - 1) * 100, 1)
+
+    latest_rows = rows[-months:]
+    if not latest_rows:
+        raise RuntimeError("No TSMC monthly revenue rows parsed")
+
+    revenue = data.setdefault("financials", {}).setdefault("monthly_revenue", {})
+    revenue["monthly_series_twd_billion"] = latest_rows
+    revenue["history_months"] = len(latest_rows)
+    revenue["latest_month"] = latest_rows[-1]["month"]
+    revenue["revenue_twd_billion"] = latest_rows[-1]["revenue"]
+    revenue["yoy_percent"] = latest_rows[-1].get("yoy_percent")
+    revenue["mom_percent"] = latest_rows[-1].get("mom_percent")
+    revenue["source_ids"] = list(dict.fromkeys([*revenue.get("source_ids", []), "SRC_TSMC_MONTHLY_REVENUE"]))
+    revenue["retrieved_at"] = now_taipei()
+    return len(latest_rows)
 
 
 def strip_tags(value: str) -> str:
@@ -519,9 +671,15 @@ def main() -> int:
 
         try:
             update_twse_institutional_trading(data, args.twse_code)
-            run_log.append(f"TWSE T86 institutional trading updated for {args.twse_code}")
+            run_log.append(f"TWSE T86 institutional trading history updated for {args.twse_code}")
         except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as exc:
             run_log.append(f"TWSE T86 skipped: {exc}")
+
+        try:
+            month_count = update_tsmc_monthly_revenue_history(data)
+            run_log.append(f"TSMC monthly revenue history rows: {month_count}")
+        except (urllib.error.URLError, TimeoutError, RuntimeError) as exc:
+            run_log.append(f"TSMC monthly revenue history skipped: {exc}")
 
         try:
             count = update_mops_material_info(data, args.twse_code)
