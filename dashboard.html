@@ -43,6 +43,23 @@
       padding: 24px 0 44px;
     }
 
+    .update-badge {
+      position: fixed;
+      top: 10px;
+      right: 12px;
+      z-index: 20;
+      max-width: min(360px, calc(100% - 24px));
+      padding: 8px 10px;
+      border: 1px solid #3a3e42;
+      background: rgba(16, 17, 18, .92);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.35;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
     .top {
       display: grid;
       grid-template-columns: minmax(0, 1.25fr) minmax(360px, .75fr);
@@ -203,6 +220,20 @@
       line-height: 1.45;
     }
 
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 18px;
+      margin-left: 4px;
+      padding: 1px 6px;
+      border: 1px solid #3a3e42;
+      color: var(--cyan);
+      font-size: 10px;
+      font-weight: 850;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
     .metrics {
       display: grid;
       grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -335,6 +366,23 @@
 
     .watch-shell {
       padding: 12px;
+    }
+
+    .watch-search {
+      width: 100%;
+      height: 36px;
+      margin-bottom: 10px;
+      padding: 0 10px;
+      border: 1px solid #35393d;
+      background: #151719;
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .watch-search:focus {
+      border-color: var(--cyan);
     }
 
     .watch-tabs {
@@ -695,6 +743,45 @@
       line-height: 1.5;
     }
 
+    .risk-top {
+      display: grid;
+      gap: 8px;
+      padding: 12px 12px 0;
+    }
+
+    .risk-top-row,
+    .health-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 9px;
+      border: 1px solid #303438;
+      background: rgba(255, 255, 255, .03);
+      color: #ded8cf;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .risk-top-row strong,
+    .health-row strong {
+      color: #f4f0e8;
+    }
+
+    .health-list {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .health-row {
+      grid-template-columns: minmax(0, 1fr) 72px;
+    }
+
+    .health-row .badge {
+      justify-content: center;
+    }
+
     .sources {
       display: grid;
       gap: 10px;
@@ -748,6 +835,11 @@
       .source-row { grid-template-columns: 1fr; }
       .bar-row { grid-template-columns: 68px minmax(0, 1fr) 104px; }
       .watch-detail { grid-template-columns: 1fr; }
+      .update-badge {
+        position: static;
+        margin-bottom: 10px;
+        max-width: none;
+      }
       aside {
         position: static;
         max-height: none;
@@ -766,6 +858,7 @@
 </head>
 <body>
   <div class="page">
+    <div class="update-badge" id="lastUpdatedBadge">Data updated: loading...</div>
     <header class="top">
       <div class="hero">
         <div class="eyebrow"><span class="dot"></span><span>Data-driven V2</span><span id="windowLabel"></span></div>
@@ -884,11 +977,22 @@
         <section class="panel">
           <div class="panel-head">
             <div>
+              <h2>資料完整度</h2>
+              <div class="caption">清楚標示已自動抓取與尚未接入的公開資料。</div>
+            </div>
+          </div>
+          <div class="health-list" id="dataHealth"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
               <h2>追蹤清單</h2>
               <div class="caption">Google Sheet 後台覆寫，依投資主題分組。</div>
             </div>
           </div>
           <div class="watch-shell">
+            <input class="watch-search" id="watchSearch" type="search" placeholder="搜尋 CoWoS、52週高低、法人、匯率">
             <div class="watch-tabs" id="watchTabs"></div>
             <div class="watch-list" id="watchlist"></div>
           </div>
@@ -901,6 +1005,7 @@
               <div class="caption">分數 = Probability x Impact，滿分 25，分數越高越需要早會優先討論。</div>
             </div>
           </div>
+          <div class="risk-top" id="riskTop3"></div>
           <div class="list" id="risks"></div>
         </section>
       </aside>
@@ -968,6 +1073,10 @@
         .filter(Boolean)
         .map((source) => `<a class="source-link" href="${source.url}" target="_blank" rel="noreferrer">${source.name}</a>`)
         .join("");
+    }
+
+    function sourceBadge(label) {
+      return `<span class="source-chip">${label}</span>`;
     }
 
     function getSourceIds(item) {
@@ -1272,13 +1381,20 @@
         { id: "market", label: "市場籌碼" },
         { id: "risk", label: "政策風險" }
       ];
+      let activeWatchFilter = "all";
+      let activeWatchQuery = "";
       const renderWatchlist = (filter = "all") => {
+        activeWatchFilter = filter;
         const items = data.watchlist || [];
+        const query = activeWatchQuery.trim().toLowerCase();
         const filtered = filter === "all"
           ? items
           : items.filter((item) => watchCategory(item).id === filter);
+        const searched = query
+          ? filtered.filter((item) => `${item.date || ""} ${item.item || ""} ${item.why_it_matters || item.why || ""}`.toLowerCase().includes(query))
+          : filtered;
 
-        byId("watchlist").innerHTML = filtered.map((item, index) => {
+        byId("watchlist").innerHTML = searched.length ? searched.map((item, index) => {
           const category = watchCategory(item);
           return `
             <details class="watch-card" ${index === 0 ? "open" : ""}>
@@ -1297,13 +1413,19 @@
               </div>
             </details>
           `;
-        }).join("");
+        }).join("") : `
+          <article class="card">
+            <h3>沒有符合的追蹤項目</h3>
+            <p>換一個關鍵字，或切回「全部」。</p>
+          </article>
+        `;
       };
 
       byId("windowLabel").textContent = `${metadata.monitoring_window?.start || ""} to ${metadata.monitoring_window?.end || ""}`;
       byId("brief").textContent = data.analyst_view?.morning_brief || "Public information monitoring dashboard.";
       byId("stance").textContent = data.analyst_view?.stance || "Monitor";
       byId("footer").textContent = `Data updated: ${metadata.generated_at || "N/A"} · Canonical file: data/data.json · Browser file: data/data.js`;
+      byId("lastUpdatedBadge").textContent = `最後更新：${metadata.generated_at || yahoo.as_of || "N/A"} · GitHub Actions / data.json`;
       byId("profileHpc").textContent = fmt(mixValue(platformMix, "HPC"), "%");
       byId("profileAdvanced").textContent = fmt(financials.business_mix?.advanced_7nm_and_below_percent, "%");
       byId("profileGrossMargin").textContent = fmt(quarter.gross_margin_percent, "%");
@@ -1323,11 +1445,11 @@
       `).join("");
 
       byId("metrics").innerHTML = [
-        metric("最新價格", fmt(latestPrice, " TWD"), `Previous: ${fmt(previousClose)} · Yahoo/TWSE fallback`, priceTone),
-        metric("4 月營收", fmt(revenue.revenue_twd_billion, " NT$ bn"), `YoY ${fmt(revenue.yoy_percent, "%")} · MoM ${fmt(revenue.mom_percent, "%")}`, "cyan"),
-        metric("1Q26 EPS", fmt(quarter.eps_twd, " NT$"), `毛利率 ${fmt(quarter.gross_margin_percent, "%")}`, "green"),
-        metric("HPC 占比", fmt((financials.business_mix?.platform_revenue_percent || []).find((row) => row.name === "HPC")?.value, "%"), "1Q26 platform revenue", "amber"),
-        metric("Q2 指引", `${fmt(guidance.revenue_usd_billion_low)}-${fmt(guidance.revenue_usd_billion_high)}`, "USD bn", "green"),
+        metric("最新價格", fmt(latestPrice, " TWD"), `Previous: ${fmt(previousClose)} ${sourceBadge("Yahoo Finance")}`, priceTone),
+        metric("4 月營收", fmt(revenue.revenue_twd_billion, " NT$ bn"), `YoY ${fmt(revenue.yoy_percent, "%")} · MoM ${fmt(revenue.mom_percent, "%")} ${sourceBadge("TSMC IR")}`, "cyan"),
+        metric("1Q26 EPS", fmt(quarter.eps_twd, " NT$"), `毛利率 ${fmt(quarter.gross_margin_percent, "%")} ${sourceBadge("TSMC IR")}`, "green"),
+        metric("HPC 占比", fmt((financials.business_mix?.platform_revenue_percent || []).find((row) => row.name === "HPC")?.value, "%"), `1Q26 platform revenue ${sourceBadge("Mgmt Report")}`, "amber"),
+        metric("Q2 指引", `${fmt(guidance.revenue_usd_billion_low)}-${fmt(guidance.revenue_usd_billion_high)}`, `USD bn ${sourceBadge("Earnings Call")}`, "green"),
         metric("資料來源", (data.sources || []).length, "official/news/stock sources", "cyan")
       ].join("");
 
@@ -1382,6 +1504,33 @@
         </article>
       `).join("");
 
+      const dataHealth = [
+        ["Yahoo Finance 股價", Boolean(yahooDaily.points?.length || yahooIntraday.points?.length), "價格、5日走勢、成交量"],
+        ["TSMC IR 財報/法說", Boolean(quarter.eps_twd && guidance.revenue_usd_billion_low), "EPS、毛利率、Q2 指引"],
+        ["Google Sheet 後台", Boolean((data.watchlist || []).length), "手動事件、追蹤清單"],
+        ["TWSE 法人買賣超", false, "待接外資、投信、自營商"],
+        ["MOPS 重大訊息", false, "待接公開資訊觀測站"],
+        ["股利/除息/殖利率", false, "待接 TSMC IR 或 MOPS"],
+        ["ESG/用電/用水", false, "待接永續報告資料"],
+        ["ADR vs 台股溢折價", false, "待接 TSM 與 2330.TW 比價"]
+      ];
+      byId("dataHealth").innerHTML = dataHealth.map(([name, ready, note]) => `
+        <div class="health-row">
+          <span><strong>${name}</strong><br>${note}</span>
+          <span class="badge ${ready ? "bullish" : "mixed"}">${ready ? "已接" : "待接"}</span>
+        </div>
+      `).join("");
+
+      byId("riskTop3").innerHTML = [...riskRows]
+        .sort((a, b) => scoreRisk(b) - scoreRisk(a))
+        .slice(0, 3)
+        .map((risk) => `
+          <div class="risk-top-row">
+            <span><strong>${risk.risk}</strong><br>${risk.watch || ""}</span>
+            <span class="badge bearish">${scoreRisk(risk)}/25</span>
+          </div>
+        `).join("");
+
       byId("risks").innerHTML = [...riskRows]
         .sort((a, b) => scoreRisk(b) - scoreRisk(a))
         .map((risk) => {
@@ -1413,6 +1562,10 @@
         return `<button class="${group.id === "all" ? "active" : ""}" data-watch-filter="${group.id}">${group.label} ${count}</button>`;
       }).join("");
       renderWatchlist();
+      byId("watchSearch").addEventListener("input", (event) => {
+        activeWatchQuery = event.target.value || "";
+        renderWatchlist(activeWatchFilter);
+      });
       document.querySelectorAll("button[data-watch-filter]").forEach((button) => {
         button.addEventListener("click", () => {
           document.querySelectorAll("button[data-watch-filter]").forEach((item) => item.classList.remove("active"));
