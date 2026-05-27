@@ -4,7 +4,7 @@
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-05-27T06:58:16+08:00",
+    "generated_at": "2026-05-27T08:18:11+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -19,11 +19,11 @@
       "yahoo_ticker": "2330.TW"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-05-27T06:58:18+08:00",
+      "ran_at": "2026-05-27T08:18:13+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
         "Google Sheet events merged: 0",
-        "Google Sheet watchlist rows: 2"
+        "Google Sheet watchlist rows: 12"
       ]
     }
   },
@@ -93,7 +93,7 @@
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-05-27T06:58:16+08:00",
+      "as_of": "2026-05-27T08:18:11+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
@@ -132,7 +132,7 @@
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-27T06:58:16+08:00"
+        "retrieved_at": "2026-05-27T08:18:11+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
@@ -147,7 +147,7 @@
           {
             "datetime": "2026-05-26T09:00:00+08:00",
             "close": 2315.0,
-            "volume": 1065000
+            "volume": 0
           },
           {
             "datetime": "2026-05-26T09:05:00+08:00",
@@ -416,7 +416,7 @@
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-27T06:58:16+08:00"
+        "retrieved_at": "2026-05-27T08:18:11+08:00"
       }
     }
   },
@@ -889,14 +889,74 @@
     {
       "date": "2026-06-10",
       "item": "TSMC Monthly Sales - May 2026",
-      "why_it_matters": "驗證 AI/HPC 與先進製程需求是否延續。",
+      "why_it_matters": "確認 AI/HPC 與先進製程需求是否延續，並檢查月營收動能。",
       "expected_source_id": "SRC_TSMC_FINANCIAL_CALENDAR"
+    },
+    {
+      "date": "2026-07-16",
+      "item": "推估 2Q26 法說會窗口",
+      "why_it_matters": "追問 CoWoS 產能、N2/A16 ramp、海外廠毛利率稀釋與全年 capex。",
+      "expected_source_id": "SRC_TSMC_Q1_CALL"
     },
     {
       "date": "rolling",
       "item": "CoWoS / HBM / ABF 供應鏈",
-      "why_it_matters": "先進封裝仍是 AI 出貨瓶頸，需追蹤供需缺口。",
+      "why_it_matters": "先進封裝仍是 AI 出貨瓶頸，需追蹤供需缺口與客戶分配。",
       "expected_source_id": "SRC_REUTERS_TECH_SYMPOSIUM"
+    },
+    {
+      "date": "rolling",
+      "item": "2nm / A16 量產進度",
+      "why_it_matters": "先進製程是中長期 ASP 與市占核心，需追蹤良率、客戶 tape-out 與量產節奏。",
+      "expected_source_id": "SRC_TSMC_A13_SYMPOSIUM"
+    },
+    {
+      "date": "rolling",
+      "item": "Arizona 海外設廠成本與良率",
+      "why_it_matters": "海外產能是供應安全加分項，但成本、良率與人力是毛利率風險。",
+      "expected_source_id": "SRC_TSMC_BOARD_20260512"
+    },
+    {
+      "date": "rolling",
+      "item": "毛利率是否受海外廠稀釋",
+      "why_it_matters": "海外 fab、N2 ramp、匯率與折舊會影響毛利率區間。",
+      "expected_source_id": "SRC_TSMC_Q1_EARNINGS_WITH_GUIDANCE"
+    },
+    {
+      "date": "rolling",
+      "item": "AI/HPC 客戶需求：NVIDIA、AMD、Broadcom、ASIC",
+      "why_it_matters": "AI capex 與主要客戶訂單變化會直接影響先進製程與 CoWoS 能見度。",
+      "expected_source_id": "SRC_TSMC_Q1_MANAGEMENT_REPORT"
+    },
+    {
+      "date": "rolling",
+      "item": "台幣匯率對毛利率影響",
+      "why_it_matters": "USD/TWD 假設會影響營收換算與毛利率，需要和法說會匯率假設比較。",
+      "expected_source_id": "SRC_TSMC_Q1_EARNINGS_WITH_GUIDANCE"
+    },
+    {
+      "date": "rolling",
+      "item": "2330.TW 股價是否接近 52 週高低",
+      "why_it_matters": "判斷股價位置、追高風險與技術面壓力。",
+      "expected_source_id": "SRC_TWSE_2330_PDF"
+    },
+    {
+      "date": "rolling",
+      "item": "估值是否過熱：PE / forward PE / PB",
+      "why_it_matters": "搭配獲利成長與 AI 需求，判斷估值是否已反映過多樂觀預期。",
+      "expected_source_id": "SRC_TWSE_2330_PDF"
+    },
+    {
+      "date": "rolling",
+      "item": "外資買賣超與成交量異常",
+      "why_it_matters": "量價與法人流向可作為短線情緒與籌碼風險提示。",
+      "expected_source_id": "SRC_TWSE_2330_PDF"
+    },
+    {
+      "date": "rolling",
+      "item": "地緣政治與出口管制風險",
+      "why_it_matters": "出口管制、兩岸風險與客戶供應鏈調整會影響市場風險溢價。",
+      "expected_source_id": "SRC_TAIPEI_TIMES_HUAWEI"
     }
   ],
   "sources": [
