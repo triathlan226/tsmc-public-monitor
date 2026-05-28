@@ -316,6 +316,74 @@
       gap: 12px;
     }
 
+    .morning-brief {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .brief-card {
+      min-height: 126px;
+      border-top: 3px solid var(--tone, var(--cyan));
+    }
+
+    .brief-card .brief-kicker {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    .brief-card .brief-value {
+      margin: 8px 0 6px;
+      color: #f4f0e8;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .brief-card .brief-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .event-note {
+      padding: 0 16px 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .watch-status {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .watch-status-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 9px 10px;
+      border: 1px solid #303438;
+      background: rgba(255, 255, 255, .025);
+    }
+
+    .watch-status-row strong {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .watch-status-row small {
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
     .card {
       padding: 14px;
       border: 1px solid #2d3034;
@@ -905,6 +973,10 @@
       .metrics {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
+
+      .morning-brief {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 760px) {
@@ -912,6 +984,7 @@
       .status,
       .metrics,
       .summary,
+      .morning-brief,
       .events,
       .two-col,
       .market-intel,
@@ -995,8 +1068,18 @@
         <section class="panel">
           <div class="panel-head">
             <div>
-              <h2>今日摘要</h2>
-              <div class="caption">由 data/data.json 驅動，可由 GitHub Actions 每日更新。</div>
+              <h2>今日先看</h2>
+              <div class="caption">每天早上先看這 5 格；沒有新事件時，也能知道資料有沒有更新、籌碼有沒有變化。</div>
+            </div>
+          </div>
+          <div class="morning-brief" id="morningBrief"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>深度摘要</h2>
+              <div class="caption">完整論點保留在這裡；早會可先看上方「今日先看」。</div>
             </div>
             <span class="badge mixed" id="stance"></span>
           </div>
@@ -1042,12 +1125,16 @@
               <div class="caption">官方公告、公開新聞與 Google Sheet 手動事件會合併到這裡。</div>
             </div>
             <div class="filters">
-              <button class="active" data-filter="all">全部</button>
+              <button class="active" data-filter="latest">最新 6 件</button>
+              <button data-filter="mops">MOPS</button>
+              <button data-filter="official">官方/財報</button>
+              <button data-filter="market">市場/籌碼</button>
               <button data-filter="bullish">利多</button>
               <button data-filter="bearish">利空</button>
-              <button data-filter="mixed">中性/混合</button>
+              <button data-filter="all">全部</button>
             </div>
           </div>
+          <div class="event-note" id="eventNote"></div>
           <div class="events" id="events"></div>
         </section>
 
@@ -1100,6 +1187,7 @@
             </div>
           </div>
           <div class="watch-shell">
+            <div class="watch-status" id="watchStatus"></div>
             <input class="watch-search" id="watchSearch" type="search" placeholder="搜尋 CoWoS、52週高低、法人、匯率">
             <div class="watch-tabs" id="watchTabs"></div>
             <div class="watch-list" id="watchlist"></div>
@@ -1341,12 +1429,30 @@
       `;
     }
 
-    function renderEvents(data, sourceMap, filter = "all") {
-      const events = (data.events || []).filter((event) => {
-        if (filter === "all") return true;
-        if (filter === "mixed") return event.sentiment === "mixed" || event.sentiment === "neutral";
-        return event.sentiment === filter;
-      });
+    function eventKind(event) {
+      const text = `${event.id || ""} ${event.category || ""} ${event.title || ""}`;
+      if ((event.id || "").startsWith("SHEET_MOPS_") || text.includes("MOPS")) return "mops";
+      if (/月營收|財報|法說|董事會|股利|除息|TSMC|台積公司/.test(text)) return "official";
+      if (/股價|法人|外資|市場|成交|華為|風險/.test(text)) return "market";
+      return "other";
+    }
+
+    function renderEvents(data, sourceMap, filter = "latest") {
+      let events = data.events || [];
+      if (filter === "latest") {
+        events = events.slice(0, 6);
+      } else if (filter === "all") {
+        events = events;
+      } else if (filter === "mops" || filter === "official" || filter === "market") {
+        events = events.filter((event) => eventKind(event) === filter).slice(0, 10);
+      } else if (filter === "mixed") {
+        events = events.filter((event) => event.sentiment === "mixed" || event.sentiment === "neutral").slice(0, 10);
+      } else {
+        events = events.filter((event) => event.sentiment === filter).slice(0, 10);
+      }
+      byId("eventNote").textContent = filter === "latest"
+        ? "預設只顯示最新 6 件，避免早會畫面被舊資料淹沒。需要查歷史時再切「全部」。"
+        : `目前篩選：${filter}，顯示 ${events.length} 件。`;
       byId("events").innerHTML = events.map((event) => `
         <article class="card event">
           <div class="event-top">
@@ -1362,6 +1468,12 @@
           <div class="links">${sourceLinks(sourceMap, getSourceIds(event))}</div>
         </article>
       `).join("");
+    }
+
+    function statusTone(value) {
+      if (value === "risk") return "bearish";
+      if (value === "watch") return "mixed";
+      return "bullish";
     }
 
     function meter(value) {
@@ -1399,6 +1511,12 @@
         ? validVolumes.reduce((sum, value) => sum + value, 0) / validVolumes.length
         : null;
       const volumeRatio = latestVolume && averageVolume ? latestVolume / averageVolume : null;
+      const latestEvent = (data.events || [])[0] || {};
+      const latestMopsItem = (mops.items || [])[0] || {};
+      const highDistance = pctDistance(latestPrice, market.one_year_high);
+      const lowDistance = pctDistance(latestPrice, market.one_year_low);
+      const latestEventDate = latestEvent.date || "N/A";
+      const hasFreshMops = mops.status === "ok" && (mops.items || []).length > 0;
       const techMix = financials.business_mix?.technology_revenue_percent || [];
       const platformMix = financials.business_mix?.platform_revenue_percent || [];
       const geographyMix = financials.business_mix?.geography_revenue_percent || [];
@@ -1582,6 +1700,32 @@
       ];
       let activeWatchFilter = "all";
       let activeWatchQuery = "";
+      const watchStatusRows = () => [
+        {
+          name: "法人",
+          state: institutionalHistory.length ? "已更新" : "待接",
+          note: `${displayDate(institutionalSummary.latest_date || institutional.as_of)} · 外資 5 日 ${signedCompact(institutionalSummary.foreign_5d_net, " shares")}`,
+          tone: Number(institutionalSummary.foreign_5d_net) < 0 ? "watch" : "ok"
+        },
+        {
+          name: "MOPS",
+          state: hasFreshMops ? "已更新" : "待確認",
+          note: hasFreshMops ? `${displayDate(latestMopsItem.date)} · ${latestMopsItem.title || ""}` : "尚無人工登錄事件",
+          tone: hasFreshMops ? "ok" : "watch"
+        },
+        {
+          name: "月營收",
+          state: "等待公告",
+          note: `${displayDate(revenue.latest_month).slice(0, 7)} · YoY ${fmt(revenue.yoy_percent, "%")}`,
+          tone: "ok"
+        },
+        {
+          name: "市場位置",
+          state: "觀察",
+          note: `距 52 週高 ${highDistance}；量能比 ${volumeRatio ? `${volumeRatio.toFixed(2)}x` : "N/A"}`,
+          tone: volumeRatio > 1.2 ? "watch" : "ok"
+        }
+      ];
       const renderWatchlist = (filter = "all") => {
         activeWatchFilter = filter;
         const items = data.watchlist || [];
@@ -1651,6 +1795,45 @@
         metric("Q2 指引", `${fmt(guidance.revenue_usd_billion_low)}-${fmt(guidance.revenue_usd_billion_high)}`, `USD bn ${sourceBadge("Earnings Call")}`, "green"),
         metric("資料來源", (data.sources || []).length, "official/news/stock sources", "cyan")
       ].join("");
+
+      byId("morningBrief").innerHTML = [
+        {
+          kicker: "價格位置",
+          value: `${fmt(latestPrice, " TWD")}`,
+          note: `距 52 週高 ${highDistance}；距 52 週低 ${lowDistance}。資料日 ${displayDate(latestPriceDate)}`,
+          tone: priceTone === "green" ? "var(--green)" : "var(--red)"
+        },
+        {
+          kicker: "法人籌碼",
+          value: signedCompact(institutionalSummary.foreign_5d_net, " shares"),
+          note: `外資 5 日；20 日 ${signedCompact(institutionalSummary.foreign_20d_net, " shares")}。最新 ${displayDate(institutionalSummary.latest_date || institutional.as_of)}`,
+          tone: Number(institutionalSummary.foreign_5d_net) >= 0 ? "var(--green)" : "var(--red)"
+        },
+        {
+          kicker: "MOPS 重大訊息",
+          value: hasFreshMops ? displayDate(latestMopsItem.date) : "無新資料",
+          note: hasFreshMops ? `${latestMopsItem.title || "最近重大訊息"}` : "Google Sheet mops_events 尚未有可顯示項目",
+          tone: hasFreshMops ? "var(--amber)" : "var(--muted)"
+        },
+        {
+          kicker: "月營收趨勢",
+          value: `${displayDate(revenue.latest_month).slice(0, 7)}`,
+          note: `營收 ${fmt(revenue.revenue_twd_billion, " NT$bn")}；YoY ${fmt(revenue.yoy_percent, "%")}。24 個月趨勢保留於下方`,
+          tone: Number(revenue.yoy_percent) >= 0 ? "var(--green)" : "var(--red)"
+        },
+        {
+          kicker: "最新事件",
+          value: displayDate(latestEventDate),
+          note: `${latestEvent.category || "事件"}：${latestEvent.title || "目前沒有事件"}`,
+          tone: "var(--cyan)"
+        }
+      ].map((item) => `
+        <article class="card brief-card" style="--tone:${item.tone}">
+          <div class="brief-kicker">${item.kicker}</div>
+          <div class="brief-value">${item.value}</div>
+          <div class="brief-note">${item.note}</div>
+        </article>
+      `).join("");
 
       byId("summary").innerHTML = (data.analyst_view?.summary || []).map((text, index) => `
         <article class="card">
@@ -1825,6 +2008,12 @@
           : (data.watchlist || []).filter((item) => watchCategory(item).id === group.id).length;
         return `<button class="${group.id === "all" ? "active" : ""}" data-watch-filter="${group.id}">${group.label} ${count}</button>`;
       }).join("");
+      byId("watchStatus").innerHTML = watchStatusRows().map((row) => `
+        <div class="watch-status-row">
+          <span><strong>${row.name}</strong><small>${row.note}</small></span>
+          <span class="badge ${statusTone(row.tone)}">${row.state}</span>
+        </div>
+      `).join("");
       renderWatchlist();
       byId("watchSearch").addEventListener("input", (event) => {
         activeWatchQuery = event.target.value || "";
