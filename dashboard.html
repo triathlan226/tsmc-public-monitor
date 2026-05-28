@@ -1513,8 +1513,6 @@
       const volumeRatio = latestVolume && averageVolume ? latestVolume / averageVolume : null;
       const latestEvent = (data.events || [])[0] || {};
       const latestMopsItem = (mops.items || [])[0] || {};
-      const highDistance = pctDistance(latestPrice, market.one_year_high);
-      const lowDistance = pctDistance(latestPrice, market.one_year_low);
       const latestEventDate = latestEvent.date || "N/A";
       const hasFreshMops = mops.status === "ok" && (mops.items || []).length > 0;
       const techMix = financials.business_mix?.technology_revenue_percent || [];
@@ -1536,6 +1534,8 @@
         const pct = (numberValue / numberBase - 1) * 100;
         return `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
       };
+      const highDistance = pctDistance(latestPrice, market.one_year_high);
+      const lowDistance = pctDistance(latestPrice, market.one_year_low);
       const detailGrid = (rows) => `
         <div class="watch-detail">
           ${rows.map((row) => `
