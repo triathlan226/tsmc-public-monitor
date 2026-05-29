@@ -1,0 +1,10 @@
+{
+  "name": "統一", "ticker": "1216", "market": "TWSE 上市",
+  "sector": "傳產 — 食品", "ai_concept": false, "ai_role": "食品飲料龍頭（內需）",
+  "price": {"close": 71.8, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 0.42, "change_2w_pct": -5.15, "change_4w_pct": 3.16},
+  "valuation": {"pe": 19.14, "pb": 2.78, "dividend_yield_pct": 4.24, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方"},
+  "earnings": {"eps_ttm": 3.70, "source": "股價÷本益比反推", "note": "本益比約19倍、殖利率4.2%，內需防禦"},
+  "assessment": {"signal": "非AI·內需", "notes": "內需食品龍頭，防禦性；EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；估值與EPS待補。非投資建議。"
+}

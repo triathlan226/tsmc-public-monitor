@@ -1,0 +1,50 @@
+{
+  "name": "台積電",
+  "name_en": "TSMC",
+  "ticker": "2330",
+  "market": "TWSE 上市",
+  "sector": "半導體 - 晶圓代工",
+  "ai_role": "全球AI晶片代工龍頭，輝達(NVIDIA)、超微等AI晶片皆由其先進製程(3nm/2nm/CoWoS先進封裝)生產",
+  "business": "全球最大專業積體電路製造服務公司，提供晶圓代工。AI浪潮下高效能運算(HPC)為最大成長動能。",
+  "as_of_date": "2026-05-28",
+  "currency": "TWD",
+  "price": {
+    "close": 2295,
+    "close_date": "2026-05-28",
+    "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 2.91,
+    "change_2w_pct": 1.10,
+    "change_4w_pct": 7.49,
+    "history_6m_monthclose": {"2025-12": 1550, "2026-02": 1995, "2026-04": 2135, "2026-05": 2295}
+  },
+  "valuation": {
+    "pe": 30.9,
+    "pe_band_comment": "近年本益比區間約15~31倍，目前接近區間上緣",
+    "pb": null,
+    "dividend_yield_pct": null,
+    "analyst_target": "外資喊2,330~2,400元天價目標"
+  },
+  "earnings": {
+    "eps_ttm": null,
+    "eps_2025": null,
+    "eps_2026e": 65.3,
+    "eps_growth_comment": "AI需求帶動獲利持續成長，EPS有跟上股價"
+  },
+  "fundamentals": {
+    "market_cap_twd": null,
+    "roe_pct": null,
+    "gross_margin_pct": null,
+    "revenue_yoy_pct": null
+  },
+  "assessment": {
+    "valuation_signal": "偏高但獲利支撐",
+    "is_dream_pe": false,
+    "notes": "本益比30倍偏高，但EPS確實隨AI需求成長，屬於「成長支撐型」而非純本夢比。買入區間建議參考本益比河流圖下緣。"
+  },
+  "sources": [
+    "https://statementdog.com/analysis/2330/pe",
+    "https://tw.stock.yahoo.com/quote/2330.TW",
+    "https://www.sinotrade.com.tw/richclub/hotstock/"
+  ],
+  "data_quality_note": "本檔為試點示範資料，數字為搜尋摘要結果，存在來源衝突，僅供流程示範，非投資建議，下單前務必至公開資訊觀測站(mops.twse.com.tw)與證交所核對。"
+}

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台股市值前20 · AI概念股分析儀表板（TWSE官方資料）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{--bg:#0f172a;--card:#1e293b;--card2:#273449;--text:#e2e8f0;--muted:#94a3b8;--accent:#38bdf8;--green:#34d399;--red:#f87171;--amber:#fbbf24;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Microsoft JhengHei","PingFang TC",system-ui,sans-serif;background:var(--bg);color:var(--text);padding:24px;line-height:1.6;}
+  h1{font-size:24px;margin-bottom:4px;}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:16px;}
+  .ok{background:#064e3b22;border:1px solid #065f46;color:#a7f3d0;padding:10px 16px;border-radius:10px;font-size:13px;margin-bottom:20px;}
+  .group-title{font-size:15px;color:var(--accent);margin:24px 0 12px;border-left:4px solid var(--accent);padding-left:10px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
+  .card{background:var(--card);border:1px solid #334155;border-radius:14px;padding:16px;cursor:pointer;transition:.15s;}
+  .card:hover{transform:translateY(-3px);border-color:var(--accent);}
+  .card .nm{font-size:17px;font-weight:700;}
+  .card .tk{color:var(--muted);font-size:12px;}
+  .card .role{font-size:12px;color:var(--muted);margin:8px 0;height:52px;overflow:hidden;}
+  .row{display:flex;justify-content:space-between;font-size:13px;margin-top:4px;}
+  .up{color:var(--green);}.down{color:var(--red);}
+  .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;margin-top:8px;}
+  .b-ok{background:#064e3b;color:var(--green);}
+  .b-warn{background:#7c2d12;color:var(--amber);}
+  .b-dream{background:#7f1d1d;color:var(--red);}
+  .b-na{background:#334155;color:var(--muted);}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 16px;z-index:10;}
+  .modal{background:var(--card);border-radius:16px;max-width:900px;width:100%;padding:24px;border:1px solid #334155;}
+  .modal h2{font-size:22px;}
+  .close{float:right;cursor:pointer;color:var(--muted);font-size:26px;line-height:1;}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:10px;margin:16px 0;}
+  .kpi{background:var(--card2);border-radius:10px;padding:10px 12px;}
+  .kpi .v{font-size:17px;font-weight:700;}
+  .kpi .l{font-size:11px;color:var(--muted);}
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;}
+  .chartbox{background:var(--card2);border-radius:10px;padding:14px;}
+  .chartbox h4{font-size:13px;margin-bottom:8px;color:var(--muted);}
+  .note{background:var(--card2);border-radius:10px;padding:14px;font-size:13px;margin-top:14px;}
+  .note b{color:var(--accent);}
+  @media(max-width:680px){.charts{grid-template-columns:1fr;}}
+  canvas{max-height:230px;}
+</style>
+</head>
+<body>
+<h1>台股市值前 20 · AI 概念股分析儀表板</h1>
+<div class="sub">股價·本益比·殖利率·股價淨值比 全部為證交所 TWSE 官方資料（2026-05/28，多數股價至 5/29）· 點公司卡片看圖表</div>
+<div class="ok">✅ 全部 20 家本益比、殖利率、股價淨值比皆來自<b>證交所官方 BWIBBU</b>；EPS 由「股價 ÷ 本益比」反推（近4季 TTM）。前 5 家另含 EPS 季度趨勢與半年走勢。本頁僅為分析方法示範，非投資建議。</div>
+
+<div id="groups"></div>
+
+<div class="overlay" id="overlay">
+  <div class="modal"><span class="close" onclick="closeModal()">×</span><div id="modalContent"></div></div>
+</div>
+
+<script>
+const DATA = [
+  {name:"台積電",ticker:"2330",group:"半導體 — 晶圓代工",ai:true,role:"全球AI晶片代工龍頭，先進製程與CoWoS封裝",
+   close:2295,c1w:2.91,c2w:1.10,c4w:7.49,pe:30.9,pb:null,yield:null,eps2025:null,eps2026e:65.3,epsQ1:null,
+   hist:{"2025-12":1550,"2026-02":1995,"2026-04":2135,"2026-05":2295},
+   may:[2275,2250,2250,2310,2290,2235,2255,2220,2270,2265,2240,2205,2185,2230,2255,2310,2270,2300,2295],
+   signal:"偏高但獲利支撐",badge:"b-warn",dream:false,
+   note:"半年由1,550漲至2,295。本益比約31倍偏高，但EPS隨AI需求成長，屬<b>成長支撐型</b>。"},
+  {name:"聯電",ticker:"2303",group:"半導體 — 晶圓代工",ai:true,role:"成熟製程晶圓代工，AI週邊/電源IC受惠",
+   close:144.5,c1w:26.75,c2w:31.36,c4w:77.96,pe:35.68,pb:4.39,yield:1.83,epsTTM:3.98,
+   may:[81.2,83.1,91.4,96.5,91.3,95,104.5,98.4,108,110,111,113,108,116,114,125,130.5,143.5,142,144.5],
+   signal:"本夢比風險高",badge:"b-dream",dream:true,
+   note:"<b>本益比一個月內從20倍飆到36倍</b>，股價漲約78%遠超獲利成長，EPS約3.98元、PB 4.39倍偏高，本夢比成分明顯，追高風險大。"},
+  {name:"聯發科",ticker:"2454",group:"半導體 — IC設計",ai:true,role:"手機SoC龍頭，切入AI ASIC客製晶片",
+   close:4310,c1w:11.66,c2w:32.21,c4w:65.13,pe:54.8,pb:null,yield:null,eps2025:66.16,eps2026e:70.5,epsQ1:15.17,
+   hist:{"2025-12":1430,"2026-02":1945,"2026-04":2610,"2026-05":4310},
+   may:[2870,3155,3430,3420,3630,3880,3700,3495,3405,3260,3400,3155,3230,3550,3860,4245,4265,4640,4410,4310],
+   signal:"急漲，本夢比風險高",badge:"b-dream",dream:true,
+   note:"<b>近一個月急漲、4週漲逾65%</b>。本益比50倍以上，最新一季EPS年減18%，獲利沒跟上股價，本夢比成分高。"},
+  {name:"日月光投控",ticker:"3711",group:"半導體 — 封測",ai:true,role:"AI晶片先進封裝測試大廠",
+   close:627,c1w:11.76,c2w:14.63,c4w:19.43,pe:58.22,pb:7.85,yield:1.05,epsTTM:10.77,
+   may:[525,520,524,540,516,537,555,548,548,547,510,472,476,510,561,617,611,642,627],
+   signal:"本益比偏高",badge:"b-warn",dream:true,
+   note:"先進封裝受惠AI。本益比約58倍、PB 7.85倍偏高，EPS約10.77元，估值已反映高度成長預期，追高需謹慎。"},
+  {name:"鴻海",ticker:"2317",group:"電子代工 — AI伺服器",ai:true,role:"全球最大EMS，輝達GB200/GB300機櫃組裝主力",
+   close:289,c1w:15.60,c2w:16.30,c4w:31.66,pe:18.0,pb:null,yield:3.5,eps2025:13.61,eps2026e:null,epsQ1:3.56,
+   hist:{"2025-12":230.5,"2026-02":243,"2026-04":219.5,"2026-05":289},
+   may:[227.5,239.5,252,253.5,250,252,250,251,244.5,248.5,248.5,245,240,247.5,250,261,259,264,263,289],
+   signal:"估值相對合理",badge:"b-ok",dream:false,
+   note:"本益比僅約18倍，遠低於其他AI股，EPS穩定成長、殖利率3.5%，<b>估值合理、獲利扎實</b>。5/29單日大漲。"},
+  {name:"廣達",ticker:"2382",group:"電子代工 — AI伺服器",ai:true,role:"AI伺服器供應商，AI營收佔比估逾80%",
+   close:339,c1w:7.28,c2w:10.78,c4w:8.48,pe:17.0,pb:null,yield:null,eps2025:19.45,eps2026e:23.5,epsQ1:5.5,
+   hist:{"2025-12":272,"2026-02":291.5,"2026-04":312.5,"2026-05":339},
+   may:[318,321,346.5,344,340.5,343.5,340,340.5,334.5,306,300,290,290,308,316,316.5,316.5,312,308.5,339],
+   signal:"估值偏低、獲利成長",badge:"b-ok",dream:false,
+   note:"本益比約17倍卻有AI高成長(2月營收年增43%)，<b>估值與獲利兼具</b>。留意代工毛利率偏低。"},
+  {name:"緯創",ticker:"3231",group:"電子代工 — AI伺服器",ai:true,role:"AI伺服器組裝（輝達GB系列）",
+   close:158.5,c1w:9.69,c2w:16.97,c4w:12.81,pe:14.49,pb:2.42,yield:3.81,epsTTM:9.97,
+   may:[140.5,142,146.5,146,146.5,139,141.5,140.5,138,135.5,135.5,132.5,132.5,140,144.5,149,146,145,144.5,158.5],
+   signal:"估值相對合理",badge:"b-ok",dream:false,
+   note:"AI伺服器代工，但<b>本益比僅約14.5倍、殖利率3.8%</b>，估值相對親民，EPS約9.97元。屬AI鏈中估值合理者。"},
+  {name:"緯穎",ticker:"6669",group:"電子代工 — AI伺服器",ai:true,role:"雲端CSP白牌AI伺服器",
+   close:5445,c1w:-1.45,c2w:6.45,c4w:12.04,pe:16.59,pb:6.56,yield:3.33,epsTTM:298.4,
+   may:[4860,4755,4970,4880,5200,5340,5790,5580,5435,5115,5090,4890,4910,5345,5525,5610,5280,5075,4950,5445],
+   signal:"本益比合理、PB偏高",badge:"b-ok",dream:false,
+   note:"資料中心AI伺服器，<b>本益比約16.6倍不算貴、殖利率3.3%</b>，EPS約298元（高價股）；惟PB 6.56倍偏高，留意波動。"},
+  {name:"智邦",ticker:"2345",group:"AI 網通",ai:true,role:"AI資料中心800G高速交換器",
+   close:2430,c1w:-1.62,c2w:-2.99,c4w:-2.99,pe:46.05,pb:20.84,yield:0.62,epsTTM:52.9,
+   may:[2505,2495,2485,2560,2375,2590,2525,2435,2675,2505,2495,2390,2355,2480,2470,2540,2620,2620,2435,2430],
+   signal:"本夢比風險高",badge:"b-dream",dream:true,
+   note:"AI交換器題材。<b>本益比約46倍、股價淨值比高達21倍</b>、殖利率僅0.6%，EPS約52.9元。估值極高，高度反映成長預期，本夢比明顯。"},
+  {name:"台達電",ticker:"2308",group:"電源管理 — AI供電散熱",ai:true,role:"AI伺服器電源與液冷散熱領導廠",
+   close:2445,c1w:16.71,c2w:17.83,c4w:12.93,pe:82.4,pb:null,yield:null,eps2025:23.14,eps2026e:23.2,epsQ1:7.91,
+   hist:{"2025-12":963,"2026-02":1430,"2026-04":2165,"2026-05":2445},
+   may:[2220,2165,2210,2280,2200,2245,2195,2165,2155,2075,2020,1915,1915,2030,2095,2290,2350,2520,2390,2445],
+   signal:"高本益比靠成長預期",badge:"b-dream",dream:true,
+   note:"<b>半年從963漲約154%</b>。本益比逾60倍屬歷史高位，雖Q1 EPS年增逾100%，但股價已大幅反映題材，本夢比成分高。"},
+  {name:"大立光",ticker:"3008",group:"光學",ai:true,role:"高階光學鏡頭（手機/車用），邊緣AI間接受惠",
+   close:3515,c1w:-0.71,c2w:2.03,c4w:36.50,pe:21.38,pb:2.43,yield:2.34,epsTTM:160.2,
+   may:[2575,2545,2520,2575,2570,2545,2795,2850,3135,3445,3290,3365,3200,3460,3540,3845,3665,3505,3425,3515],
+   signal:"近月大漲、估值尚合理",badge:"b-warn",dream:false,
+   note:"<b>近4週漲約37%</b>，但本益比約21倍、PB 2.4倍仍屬合理區間，EPS約160元。漲幅大但估值未明顯偏離，留意追高節奏。"},
+  {name:"富邦金",ticker:"2881",group:"金融",ai:false,role:"金控（壽險+銀行+證券）",
+   close:110.0,c1w:15.67,c2w:14.46,c4w:20.88,pe:14.19,pb:1.75,yield:3.86,epsTTM:7.75,
+   may:[91,92.2,92.8,94.5,96.7,95.5,93.7,94.7,94.6,96.1,95.2,97.2,95.8,96.1,95.1,97.7,103.5,110,110,110],
+   signal:"估值合理",badge:"b-ok",dream:false,
+   note:"金控龍頭。<b>本益比約14倍、PB 1.75倍、殖利率3.9%</b>。金融股主要看PB與殖利率，近月大漲後PB升高，需留意。"},
+  {name:"國泰金",ticker:"2882",group:"金融",ai:false,role:"金控（壽險+銀行）",
+   close:85.7,c1w:7.53,c2w:10.01,c4w:12.47,pe:12.83,pb:1.48,yield:4.13,epsTTM:6.61,
+   may:[76.2,77.2,78.7,79,80,78.4,76.4,77.3,76.7,77.9,76.8,77.8,77.9,78.7,79.7,81.5,83.1,85.4,84.8,85.7],
+   signal:"估值偏便宜",badge:"b-ok",dream:false,
+   note:"<b>本益比約12.8倍、PB 1.48倍、殖利率4.1%</b>，估值相對親民，是5家金控中PB較低者。"},
+  {name:"中信金",ticker:"2891",group:"金融",ai:false,role:"金控（銀行+壽險）",
+   close:60.5,c1w:5.03,c2w:10.40,c4w:14.37,pe:14.29,pb:2.12,yield:4.22,epsTTM:4.15,
+   may:[52.9,53.5,54.7,56.2,56.4,55.3,53.5,54.9,54.8,54.8,54.8,55.4,57.8,57.5,57.6,57.3,57.6,59.2,59.3,60.5],
+   signal:"估值合理、高殖利率",badge:"b-ok",dream:false,
+   note:"<b>本益比約14.3倍、PB 2.12倍、殖利率4.2%</b>。獲利穩定的金控，PB在同業偏高。"},
+  {name:"兆豐金",ticker:"2886",group:"金融",ai:false,role:"官股金控（以銀行為主）",
+   close:40.0,c1w:0.25,c2w:1.52,c4w:2.56,pe:16.18,pb:1.47,yield:4.40,epsTTM:2.46,
+   may:[39,39.1,39.55,39.65,40.2,40.1,39.2,39.55,39.3,39.4,39.55,40.65,40.3,40.2,39.9,39.5,39.4,39.45,39.8,40],
+   signal:"高殖利率存股型",badge:"b-ok",dream:false,
+   note:"官股金控。<b>殖利率約4.4%、PB 1.47倍</b>，股價波動小，典型存股標的。"},
+  {name:"玉山金",ticker:"2884",group:"金融",ai:false,role:"金控（以銀行為主）",
+   close:30.95,c1w:-1.12,c2w:-3.13,c4w:-1.12,pe:13.95,pb:1.74,yield:4.56,epsTTM:2.20,
+   may:[31.3,31.55,31.85,32.1,32.5,32.3,31.8,31.9,31.85,31.95,31.7,32,31.7,31.55,31.3,30.9,31.15,31.15,30.7,30.95],
+   signal:"高殖利率存股型",badge:"b-ok",dream:false,
+   note:"<b>殖利率約4.6%（5家金控最高）、本益比約14倍</b>，常配股配息，存股族偏好。"},
+  {name:"中華電",ticker:"2412",group:"電信",ai:false,role:"電信龍頭（防禦型）",
+   close:137.0,c1w:0.00,c2w:-0.72,c4w:1.11,pe:27.14,pb:2.67,yield:3.81,epsTTM:5.03,
+   may:[135.5,136,136,135.5,136.5,135.5,135.5,137.5,137.5,138,137,142.5,139,137.5,137,136.5,136,137,136.5,137],
+   signal:"防禦型、估值偏高",badge:"b-warn",dream:false,
+   note:"電信龍頭。<b>本益比約27倍偏高、殖利率3.8%</b>，股價牛皮、波動極低，屬防禦/存股型，買的是穩定而非成長。"},
+  {name:"統一",ticker:"1216",group:"傳產 — 食品/塑化/汽車",ai:false,role:"食品飲料龍頭（內需）",
+   close:71.8,c1w:0.42,c2w:-5.15,c4w:3.16,pe:19.14,pb:2.78,yield:4.24,epsTTM:3.70,
+   may:[69.6,69.1,68.7,69.4,73.2,73.9,73.1,75.2,74.8,75.7,74.7,74.8,73.4,73.1,71.5,71.2,70.8,70.2,70.8,71.8],
+   signal:"內需、估值合理",badge:"b-ok",dream:false,
+   note:"內需食品龍頭。<b>本益比約19倍、殖利率4.2%</b>，防禦性佳，獲利穩定。"},
+  {name:"台塑",ticker:"1301",group:"傳產 — 食品/塑化/汽車",ai:false,role:"塑化龍頭（景氣循環）",
+   close:47.45,c1w:4.86,c2w:3.83,c4w:-6.60,pe:null,pb:0.73,yield:1.11,epsTTM:null,
+   may:[50.8,51.3,50.7,49.55,48.55,49.25,47.65,46.9,46.1,45.7,45.9,45.95,45.4,45.75,45.25,44.8,44.75,45.45,45.05,47.45],
+   signal:"景氣循環低檔",badge:"b-warn",dream:false,
+   note:"塑化景氣循環股。<b>本益比官方顯示「-」（近四季獲利為虧損或極微）、股價淨值比僅0.73倍跌破淨值</b>、殖利率1.1%。屬景氣低檔特徵，獲利能否回升是關鍵。"},
+  {name:"和泰車",ticker:"2207",group:"傳產 — 食品/塑化/汽車",ai:false,role:"汽車（Toyota總代理）",
+   close:483,c1w:4.55,c2w:3.21,c4w:2.11,pe:13.36,pb:3.21,yield:4.39,epsTTM:34.1,
+   may:[473,478,474,487,487,475.5,470,473.5,468.5,468,461,468.5,466.5,466,462,460.5,462,466.5,456,483],
+   signal:"內需、估值合理",badge:"b-ok",dream:false,
+   note:"汽車總代理龍頭。<b>本益比約13倍、殖利率4.4%</b>，EPS約34元，內需績優股。"},
+];
+
+const order=["半導體 — 晶圓代工","半導體 — IC設計","半導體 — 封測","電子代工 — AI伺服器","AI 網通","電源管理 — AI供電散熱","光學","金融","電信","傳產 — 食品/塑化/汽車"];
+const groups={};
+DATA.forEach(d=>{(groups[d.group]=groups[d.group]||[]).push(d);});
+const gc=document.getElementById("groups");
+function pct(v){if(v==null)return "—";const s=v>0?"+":"";const c=v>0?"up":(v<0?"down":"");return `<span class="${c}">${s}${v.toFixed(1)}%</span>`;}
+order.forEach(g=>{
+  if(!groups[g])return;
+  const aiGroup=/半導體|電子代工|AI|電源|光學/.test(g);
+  const t=document.createElement("div");t.className="group-title";t.textContent=g+(aiGroup?"　🤖 AI概念":"");gc.appendChild(t);
+  const wrap=document.createElement("div");wrap.className="cards";
+  groups[g].forEach(d=>{
+    const idx=DATA.indexOf(d);
+    const c=document.createElement("div");c.className="card";c.onclick=()=>openModal(idx);
+    c.innerHTML=`<div class="nm">${d.name} <span class="tk">${d.ticker}</span></div>
+      <div class="role">${d.role}</div>
+      <div class="row"><span style="color:var(--muted)">收盤</span><span>${d.close} 元</span></div>
+      <div class="row"><span style="color:var(--muted)">近1週/4週</span><span>${pct(d.c1w)} / ${pct(d.c4w)}</span></div>
+      <div class="row"><span style="color:var(--muted)">本益比</span><span>${d.pe?d.pe+"x":"—(虧損)"}</span></div>
+      <span class="badge ${d.badge}">${d.signal}</span>`;
+    wrap.appendChild(c);
+  });
+  gc.appendChild(wrap);
+});
+
+let charts=[];
+const grid={grid:{color:"#33415544"},ticks:{color:"#94a3b8",font:{size:10}}};
+function openModal(i){
+  const d=DATA[i];
+  const eps=d.eps2026e??d.epsTTM;
+  document.getElementById("modalContent").innerHTML=`
+    <h2>${d.name} <span style="color:var(--muted);font-size:16px">${d.ticker}</span></h2>
+    <div style="color:var(--muted);font-size:13px;margin-top:4px">${d.group} · ${d.ai?"AI概念":"非AI"}</div>
+    <div class="kpis">
+      <div class="kpi"><div class="v">${d.close}</div><div class="l">收盤(元)</div></div>
+      <div class="kpi"><div class="v">${pct(d.c4w)}</div><div class="l">近4週</div></div>
+      <div class="kpi"><div class="v">${d.pe?d.pe+"x":"—"}</div><div class="l">本益比</div></div>
+      <div class="kpi"><div class="v">${eps??"—"}</div><div class="l">EPS(元)</div></div>
+      <div class="kpi"><div class="v">${d.pb?d.pb:"—"}</div><div class="l">股價淨值比</div></div>
+      <div class="kpi"><div class="v">${d.yield?d.yield+"%":"—"}</div><div class="l">殖利率</div></div>
+    </div>
+    <div class="charts">
+      ${d.hist?'<div class="chartbox"><h4>半年走勢（月收盤·官方）</h4><canvas id="histC"></canvas></div>':''}
+      <div class="chartbox"><h4>近一個月日線（5月·官方）</h4><canvas id="mayC"></canvas></div>
+      ${d.eps2025!=null?'<div class="chartbox"><h4>EPS 趨勢（元）</h4><canvas id="epsC"></canvas></div>':''}
+      ${d.pe?'<div class="chartbox"><h4>本益比 vs AI同業均值(約35x)</h4><canvas id="peC"></canvas></div>':''}
+    </div>
+    <div class="note"><b>判讀：</b>${d.note}<br><br>
+      <b>本夢比檢查：</b>${d.dream?'⚠️ 本益比/PB偏高且漲幅超過獲利成長 → 本夢比成分高，追高風險大':(d.pe?'✅ 本益比與基本面相對匹配 → 非純本夢比':'⚠️ 本益比無法計算（獲利為負），屬景氣循環/虧損階段，需觀察獲利轉正')}</div>`;
+  document.getElementById("overlay").style.display="flex";
+  charts.forEach(c=>c.destroy());charts=[];
+  if(d.hist){const hk=Object.keys(d.hist);
+    charts.push(new Chart(histC,{type:"line",data:{labels:hk,datasets:[{data:hk.map(k=>d.hist[k]),borderColor:"#38bdf8",backgroundColor:"#38bdf833",fill:true,tension:.3}]},options:{plugins:{legend:{display:false}},scales:{x:grid,y:grid}}}));}
+  charts.push(new Chart(mayC,{type:"line",data:{labels:d.may.map((_,j)=>j+1),datasets:[{data:d.may,borderColor:d.c4w>0?"#34d399":"#f87171",fill:false,tension:.2,pointRadius:0}]},options:{plugins:{legend:{display:false}},scales:{x:grid,y:grid}}}));
+  if(d.eps2025!=null){
+    const e=[["2025",d.eps2025],["2026E",d.eps2026e],["2026Q1",d.epsQ1]].filter(x=>x[1]!=null);
+    charts.push(new Chart(epsC,{type:"bar",data:{labels:e.map(x=>x[0]),datasets:[{data:e.map(x=>x[1]),backgroundColor:"#38bdf8"}]},options:{plugins:{legend:{display:false}},scales:{x:grid,y:grid}}}));
+  }
+  if(d.pe){
+    charts.push(new Chart(peC,{type:"bar",data:{labels:[d.name,"AI同業均值"],datasets:[{data:[d.pe,35],backgroundColor:[d.dream?"#f87171":"#34d399","#475569"]}]},options:{plugins:{legend:{display:false}},scales:{x:grid,y:grid}}}));
+  }
+}
+function closeModal(){document.getElementById("overlay").style.display="none";}
+document.getElementById("overlay").onclick=e=>{if(e.target.id==="overlay")closeModal();};
+</script>
+</body>
+</html>

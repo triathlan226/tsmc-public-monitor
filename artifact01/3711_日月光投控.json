@@ -1,0 +1,11 @@
+{
+  "name": "日月光投控", "ticker": "3711", "market": "TWSE 上市",
+  "sector": "半導體 — 封測", "ai_concept": true,
+  "ai_role": "AI晶片先進封裝與測試大廠",
+  "price": {"close": 627, "close_date": "2026-05-28", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 11.76, "change_2w_pct": 14.63, "change_4w_pct": 19.43},
+  "valuation": {"pe": 58.22, "pb": 7.85, "dividend_yield_pct": 1.05, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方"},
+  "earnings": {"eps_ttm": 10.77, "source": "股價÷本益比反推(財報基準115/1)", "note": "本益比約58倍、PB偏高，估值反映高成長預期"},
+  "assessment": {"signal": "基本面待補", "notes": "先進封裝受惠AI；本益比/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；本益比與EPS待補。非投資建議。"
+}

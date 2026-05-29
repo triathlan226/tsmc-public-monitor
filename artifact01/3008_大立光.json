@@ -1,0 +1,11 @@
+{
+  "name": "大立光", "ticker": "3008", "market": "TWSE 上市",
+  "sector": "光學", "ai_concept": true,
+  "ai_role": "高階光學鏡頭（手機/車用），邊緣AI裝置間接受惠",
+  "price": {"close": 3515, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": -0.71, "change_2w_pct": 2.03, "change_4w_pct": 36.50, "note": "近4週漲約37%"},
+  "valuation": {"pe": 21.38, "pb": 2.43, "dividend_yield_pct": 2.34, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方"},
+  "earnings": {"eps_ttm": 160.2, "source": "股價÷本益比反推(財報基準115/1)", "note": "近月大漲但本益比約21倍仍屬合理"},
+  "assessment": {"signal": "近月大漲·基本面待補", "notes": "本益比/EPS待補後再判斷追高風險。"},
+  "data_quality_note": "股價為TWSE官方資料；本益比與EPS待補。非投資建議。"
+}

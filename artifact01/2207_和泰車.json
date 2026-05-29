@@ -1,0 +1,10 @@
+{
+  "name": "和泰車", "ticker": "2207", "market": "TWSE 上市",
+  "sector": "傳產 — 汽車", "ai_concept": false, "ai_role": "汽車（Toyota總代理，內需龍頭）",
+  "price": {"close": 483, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 4.55, "change_2w_pct": 3.21, "change_4w_pct": 2.11},
+  "valuation": {"pe": 13.36, "pb": 3.21, "dividend_yield_pct": 4.39, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方"},
+  "earnings": {"eps_ttm": 34.1, "source": "股價÷本益比反推", "note": "本益比約13倍、殖利率4.4%，內需績優"},
+  "assessment": {"signal": "非AI·內需", "notes": "汽車總代理龍頭；EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；估值與EPS待補。非投資建議。"
+}

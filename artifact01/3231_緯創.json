@@ -1,0 +1,11 @@
+{
+  "name": "緯創", "ticker": "3231", "market": "TWSE 上市",
+  "sector": "電子代工 — AI伺服器", "ai_concept": true,
+  "ai_role": "AI伺服器組裝（輝達GB系列）",
+  "price": {"close": 158.5, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 9.69, "change_2w_pct": 16.97, "change_4w_pct": 12.81, "note": "5/29跳漲"},
+  "valuation": {"pe": 14.49, "pb": 2.42, "dividend_yield_pct": 3.81, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方"},
+  "earnings": {"eps_ttm": 9.97, "source": "股價÷本益比反推(財報基準115/1)", "note": "AI伺服器代工但本益比僅約14.5倍，估值相對合理"},
+  "assessment": {"signal": "基本面待補", "notes": "AI伺服器代工；本益比/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；本益比與EPS待補。非投資建議。"
+}

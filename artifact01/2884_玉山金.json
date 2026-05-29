@@ -1,0 +1,11 @@
+{
+  "name": "玉山金", "ticker": "2884", "market": "TWSE 上市",
+  "sector": "金融", "ai_concept": false, "ai_role": "金控（以銀行為主）",
+  "price": {"close": 30.95, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": -1.12, "change_2w_pct": -3.13, "change_4w_pct": -1.12},
+  "valuation": {"pe": 13.95, "pb": 1.74, "dividend_yield_pct": 4.56, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方",
+    "note": "殖利率約4.6%(5家金控最高)、本益比約14倍，常配股配息"},
+  "earnings": {"eps_ttm": 2.20, "source": "股價÷本益比反推", "note": "存股族偏好"},
+  "assessment": {"signal": "非AI·基本面待補", "notes": "殖利率/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；估值與EPS待補。非投資建議。"
+}

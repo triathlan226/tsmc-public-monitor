@@ -1,0 +1,11 @@
+{
+  "name": "智邦", "ticker": "2345", "market": "TWSE 上市",
+  "sector": "AI 網通", "ai_concept": true,
+  "ai_role": "AI資料中心800G高速乙太網路交換器",
+  "price": {"close": 2430, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": -1.62, "change_2w_pct": -2.99, "change_4w_pct": -2.99, "note": "近月高檔震盪"},
+  "valuation": {"pe": 46.05, "pb": 20.84, "dividend_yield_pct": 0.62, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方"},
+  "earnings": {"eps_ttm": 52.9, "source": "股價÷本益比反推(財報基準115/1)", "note": "本益比約46倍、PB高達21倍，估值極高，本夢比明顯"},
+  "assessment": {"signal": "基本面待補", "notes": "AI交換器題材；本益比/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；本益比與EPS待補。非投資建議。"
+}

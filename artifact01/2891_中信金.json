@@ -1,0 +1,11 @@
+{
+  "name": "中信金", "ticker": "2891", "market": "TWSE 上市",
+  "sector": "金融", "ai_concept": false, "ai_role": "金控（銀行+壽險）",
+  "price": {"close": 60.5, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 5.03, "change_2w_pct": 10.40, "change_4w_pct": 14.37},
+  "valuation": {"pe": 14.29, "pb": 2.12, "dividend_yield_pct": 4.22, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方",
+    "note": "本益比約14.3倍、PB 2.12倍(同業偏高)、殖利率4.2%"},
+  "earnings": {"eps_ttm": 4.15, "source": "股價÷本益比反推", "note": "獲利穩定"},
+  "assessment": {"signal": "非AI·基本面待補", "notes": "PB/殖利率/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；估值與EPS待補。非投資建議。"
+}

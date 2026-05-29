@@ -1,0 +1,51 @@
+{
+  "name": "鴻海",
+  "name_en": "Hon Hai / Foxconn",
+  "ticker": "2317",
+  "market": "TWSE 上市",
+  "sector": "電子代工(EMS) - AI伺服器組裝",
+  "ai_role": "全球最大電子代工廠，AI伺服器(含輝達GB200/GB300機櫃)組裝主要供應商，AI伺服器營收快速放大",
+  "business": "電子專業製造服務，從消費電子(iPhone組裝)跨入AI伺服器、電動車、數位健康等。",
+  "as_of_date": "2026-05-28",
+  "currency": "TWD",
+  "price": {
+    "close": 289,
+    "close_date": "2026-05-29",
+    "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 15.60,
+    "change_2w_pct": 16.30,
+    "change_4w_pct": 31.66,
+    "history_6m_monthclose": {"2025-12": 230.5, "2026-02": 243, "2026-04": 219.5, "2026-05": 289}
+  },
+  "valuation": {
+    "pe": 18.0,
+    "pe_band_comment": "本益比約17~19倍，估值河流圖顯示股價略偏高但屬合理範圍",
+    "pb": null,
+    "dividend_yield_pct": 3.5,
+    "analyst_target": null
+  },
+  "earnings": {
+    "eps_ttm": 14.14,
+    "eps_2025": 13.61,
+    "eps_q1_2026": 3.56,
+    "eps_2026e": null,
+    "eps_growth_comment": "2026Q1 EPS季增10%、年增17%，獲利成長動能良好"
+  },
+  "fundamentals": {
+    "market_cap_twd": null,
+    "roe_pct": null,
+    "gross_margin_pct": null,
+    "revenue_yoy_pct": null
+  },
+  "assessment": {
+    "valuation_signal": "估值相對合理",
+    "is_dream_pe": false,
+    "notes": "本益比僅約18倍，遠低於其他AI概念股，EPS穩定成長且配息殖利率3.5%，屬於估值合理、獲利扎實的標的。"
+  },
+  "sources": [
+    "https://statementdog.com/analysis/2317/pe",
+    "https://tw.stock.yahoo.com/quote/2317.TW/eps",
+    "https://goodinfo.tw/tw/ShowK_ChartFlow.asp?RPT_CAT=PER&STOCK_ID=2317"
+  ],
+  "data_quality_note": "本檔為試點示範資料，數字為搜尋摘要結果，僅供流程示範，非投資建議，下單前務必至公開資訊觀測站核對。"
+}

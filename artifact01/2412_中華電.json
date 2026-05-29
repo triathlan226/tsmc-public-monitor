@@ -1,0 +1,11 @@
+{
+  "name": "中華電", "ticker": "2412", "market": "TWSE 上市",
+  "sector": "電信", "ai_concept": false, "ai_role": "電信龍頭（防禦型）",
+  "price": {"close": 137.0, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 0.00, "change_2w_pct": -0.72, "change_4w_pct": 1.11, "note": "股價牛皮、波動低"},
+  "valuation": {"pe": 27.14, "pb": 2.67, "dividend_yield_pct": 3.81, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方",
+    "note": "本益比約27倍偏高但穩定，殖利率3.8%，防禦/存股型"},
+  "earnings": {"eps_ttm": 5.03, "source": "股價÷本益比反推", "note": "買的是穩定而非成長"},
+  "assessment": {"signal": "非AI·防禦型", "notes": "殖利率/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；估值與EPS待補。非投資建議。"
+}

@@ -1,0 +1,52 @@
+{
+  "name": "聯發科",
+  "name_en": "MediaTek",
+  "ticker": "2454",
+  "market": "TWSE 上市",
+  "sector": "半導體 - IC設計",
+  "ai_role": "全球前段IC設計廠，手機SoC龍頭並切入AI ASIC(客製化AI晶片)與邊緣AI運算",
+  "business": "手機晶片(天璣系列)、Wi-Fi、電源管理、ASIC設計服務，積極布局AI運算晶片。",
+  "as_of_date": "2026-05-28",
+  "currency": "TWD",
+  "price": {
+    "close": 4310,
+    "close_date": "2026-05-29",
+    "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 11.66,
+    "change_2w_pct": 32.21,
+    "change_4w_pct": 65.13,
+    "history_6m_monthclose": {"2025-12": 1430, "2026-02": 1945, "2026-04": 2610, "2026-05": 4310},
+    "note": "近一個月急漲，4週漲逾65%，追高風險顯著升高"
+  },
+  "valuation": {
+    "pe": 54.8,
+    "pe_band_comment": "本益比約51~74倍，河流圖顯示位於紅色(偏高)區間，估值偏貴",
+    "pb": null,
+    "dividend_yield_pct": null,
+    "analyst_target": null
+  },
+  "earnings": {
+    "eps_ttm": null,
+    "eps_2025": 66.16,
+    "eps_q1_2026": 15.17,
+    "eps_2026e": 70.5,
+    "eps_growth_comment": "2026Q1 EPS年減18%，獲利動能轉弱，但股價偏高 — 需留意估值與獲利落差"
+  },
+  "fundamentals": {
+    "market_cap_twd": null,
+    "roe_pct": null,
+    "gross_margin_pct": null,
+    "revenue_yoy_pct": null
+  },
+  "assessment": {
+    "valuation_signal": "偏高，留意本夢比風險",
+    "is_dream_pe": true,
+    "notes": "本益比50倍以上偏高，且最新一季EPS年減，獲利未明顯跟上股價，有本夢比(對AI ASIC題材的預期)成分，追高風險較高。"
+  },
+  "sources": [
+    "https://statementdog.com/analysis/2454/pe",
+    "https://www.findbillion.com/twstock/2454/eps",
+    "https://tw.stock.yahoo.com/quote/2454.TW"
+  ],
+  "data_quality_note": "本檔為試點示範資料，數字為搜尋摘要結果，本益比來源差異大，僅供流程示範，非投資建議，下單前務必至公開資訊觀測站核對。"
+}

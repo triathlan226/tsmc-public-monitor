@@ -1,0 +1,10 @@
+{
+  "name": "台塑", "ticker": "1301", "market": "TWSE 上市",
+  "sector": "傳產 — 塑化", "ai_concept": false, "ai_role": "塑化龍頭（景氣循環）",
+  "price": {"close": 47.45, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 4.86, "change_2w_pct": 3.83, "change_4w_pct": -6.60, "note": "景氣循環股"},
+  "valuation": {"pe": null, "pe_note": "官方顯示「-」(近四季獲利為虧損或極微)", "pb": 0.73, "dividend_yield_pct": 1.11, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方"},
+  "earnings": {"eps_ttm": null, "note": "EPS無法計算；股價淨值比僅0.73倍跌破淨值，屬景氣循環低檔，獲利能否回升是關鍵"},
+  "assessment": {"signal": "非AI·景氣循環", "notes": "獲利隨油價/景氣波動；EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；估值與EPS待補。非投資建議。"
+}

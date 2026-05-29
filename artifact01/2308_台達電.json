@@ -1,0 +1,52 @@
+{
+  "name": "台達電",
+  "name_en": "Delta Electronics",
+  "ticker": "2308",
+  "market": "TWSE 上市",
+  "sector": "電源管理 - AI伺服器供電與散熱",
+  "ai_role": "AI伺服器電源供應器與散熱解決方案領導廠，AI資料中心高功率供電(含液冷)直接受惠者",
+  "business": "電源與被動元件、自動化、電動車動力與散熱。AI資料中心電源與散熱為近期最強成長題材。",
+  "as_of_date": "2026-05-28",
+  "currency": "TWD",
+  "price": {
+    "close": 2445,
+    "close_date": "2026-05-29",
+    "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 16.71,
+    "change_2w_pct": 17.83,
+    "change_4w_pct": 12.93,
+    "history_6m_monthclose": {"2025-12": 963, "2026-02": 1430, "2026-04": 2165, "2026-05": 2445},
+    "note": "已驗證:去年12月底963元→現約2,445元,半年漲約154%,高本益比反映此段急漲"
+  },
+  "valuation": {
+    "pe": 82.4,
+    "pe_band_comment": "本益比約61~93倍，來源差異大，整體處於歷史高位",
+    "pb": null,
+    "dividend_yield_pct": null,
+    "analyst_target": null
+  },
+  "earnings": {
+    "eps_ttm": null,
+    "eps_2025": 23.14,
+    "eps_q1_2026": 7.91,
+    "eps_2026e": 23.2,
+    "eps_growth_comment": "2026Q1 EPS季增19%、年增101%，獲利大幅成長"
+  },
+  "fundamentals": {
+    "market_cap_twd": null,
+    "roe_pct": null,
+    "gross_margin_pct": null,
+    "revenue_yoy_pct": null
+  },
+  "assessment": {
+    "valuation_signal": "高本益比，靠成長預期支撐",
+    "is_dream_pe": true,
+    "notes": "本益比逾60倍屬歷史高位，雖最新一季EPS年增逾100%顯示獲利確有起色，但股價已大幅反映AI供電題材預期，本夢比成分高，追高需謹慎。"
+  },
+  "sources": [
+    "https://statementdog.com/analysis/2308/pe",
+    "https://www.findbillion.com/twstock/2308/eps",
+    "https://tw.stock.yahoo.com/quote/2308.TW"
+  ],
+  "data_quality_note": "本檔為試點示範資料，數字為搜尋摘要結果，股價與本益比存在明顯來源衝突，僅供流程示範，非投資建議，下單前務必至公開資訊觀測站核對。"
+}

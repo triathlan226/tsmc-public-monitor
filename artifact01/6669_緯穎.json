@@ -1,0 +1,11 @@
+{
+  "name": "緯穎", "ticker": "6669", "market": "TWSE 上市",
+  "sector": "電子代工 — AI伺服器", "ai_concept": true,
+  "ai_role": "雲端CSP白牌AI伺服器供應商",
+  "price": {"close": 5445, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": -1.45, "change_2w_pct": 6.45, "change_4w_pct": 12.04, "note": "高價股、波動大"},
+  "valuation": {"pe": 16.59, "pb": 6.56, "dividend_yield_pct": 3.33, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方"},
+  "earnings": {"eps_ttm": 298.4, "source": "股價÷本益比反推(財報基準115/1)", "note": "本益比約16.6倍不算貴，惟PB偏高"},
+  "assessment": {"signal": "基本面待補", "notes": "資料中心AI伺服器；本益比/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；本益比與EPS待補。非投資建議。"
+}

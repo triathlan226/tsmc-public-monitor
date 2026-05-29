@@ -31,8 +31,9 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir _site
-          cp index.html dashboard.html tsmc_public_monitor_dashboard.html _site/
+          cp index.html dashboard.html tsmc_public_monitor_dashboard.html yageo_dashboard.html _site/
           cp -R data _site/data
+          cp -R artifact01 _site/artifact01
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

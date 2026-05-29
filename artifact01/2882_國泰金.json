@@ -1,0 +1,11 @@
+{
+  "name": "國泰金", "ticker": "2882", "market": "TWSE 上市",
+  "sector": "金融", "ai_concept": false, "ai_role": "金控（壽險+銀行）",
+  "price": {"close": 85.7, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 7.53, "change_2w_pct": 10.01, "change_4w_pct": 12.47},
+  "valuation": {"pe": 12.83, "pb": 1.48, "dividend_yield_pct": 4.13, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方",
+    "note": "金融股看PB與殖利率，PB為5家金控中較低者"},
+  "earnings": {"eps_ttm": 6.61, "source": "股價÷本益比反推", "note": "本益比約12.8倍、殖利率4.1%，估值偏便宜"},
+  "assessment": {"signal": "非AI·基本面待補", "notes": "PB/殖利率/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；估值與EPS待補。非投資建議。"
+}

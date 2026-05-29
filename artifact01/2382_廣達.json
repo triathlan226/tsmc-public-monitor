@@ -1,0 +1,52 @@
+{
+  "name": "廣達",
+  "name_en": "Quanta Computer",
+  "ticker": "2382",
+  "market": "TWSE 上市",
+  "sector": "電子代工 - AI伺服器",
+  "ai_role": "全球主要AI伺服器供應商，輝達GB200/GB300伺服器大量出貨受惠者，AI伺服器營收佔比2026年估逾80%",
+  "business": "筆電代工起家，現以AI伺服器與雲端資料中心為主力成長動能。",
+  "as_of_date": "2026-05-29",
+  "currency": "TWD",
+  "price": {
+    "close": 339,
+    "close_date": "2026-05-29",
+    "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 7.28,
+    "change_2w_pct": 10.78,
+    "change_4w_pct": 8.48,
+    "history_6m_monthclose": {"2025-12": 272, "2026-02": 291.5, "2026-04": 312.5, "2026-05": 339},
+    "note": "5/29單日大漲，半年區間整理後上攻，與其低本益比相呼應"
+  },
+  "valuation": {
+    "pe": 17.0,
+    "pe_band_comment": "本益比約15~17倍，遠低於電腦及週邊設備同業平均約32倍，估值相對便宜",
+    "pb": null,
+    "dividend_yield_pct": null,
+    "analyst_target": null
+  },
+  "earnings": {
+    "eps_ttm": 19.89,
+    "eps_2025": 19.45,
+    "eps_q1_2026": 5.5,
+    "eps_2026e": 23.5,
+    "eps_growth_comment": "2026Q1 EPS年增9%，AI伺服器帶動營收創同期新高(2月營收年增43%)"
+  },
+  "fundamentals": {
+    "market_cap_twd": null,
+    "roe_pct": null,
+    "gross_margin_pct": null,
+    "revenue_yoy_pct": 43.18
+  },
+  "assessment": {
+    "valuation_signal": "估值偏低、獲利成長",
+    "is_dream_pe": false,
+    "notes": "本益比僅約17倍卻有AI伺服器高成長，配息率約80%(現金股利15.6元)，是估值與獲利兼具的代表。需留意代工業毛利率偏低的特性。"
+  },
+  "sources": [
+    "https://www.wantgoo.com/stock/2382/enterprise-value/price-to-earning-ratio",
+    "https://www.cnyes.com/twstock/2382",
+    "https://winvest.tw/Stock/Symbol/Comment/2382"
+  ],
+  "data_quality_note": "本檔為試點示範資料，數字為搜尋摘要結果，僅供流程示範，非投資建議，下單前務必至公開資訊觀測站核對。"
+}

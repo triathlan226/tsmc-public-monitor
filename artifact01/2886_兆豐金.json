@@ -1,0 +1,11 @@
+{
+  "name": "兆豐金", "ticker": "2886", "market": "TWSE 上市",
+  "sector": "金融", "ai_concept": false, "ai_role": "官股金控（以銀行為主）",
+  "price": {"close": 40.0, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 0.25, "change_2w_pct": 1.52, "change_4w_pct": 2.56},
+  "valuation": {"pe": 16.18, "pb": 1.47, "dividend_yield_pct": 4.40, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方",
+    "note": "官股金控，殖利率約4.4%、PB 1.47倍，存股型"},
+  "earnings": {"eps_ttm": 2.46, "source": "股價÷本益比反推", "note": "股價波動小"},
+  "assessment": {"signal": "非AI·基本面待補", "notes": "殖利率/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；估值與EPS待補。非投資建議。"
+}

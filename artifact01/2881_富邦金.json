@@ -1,0 +1,11 @@
+{
+  "name": "富邦金", "ticker": "2881", "market": "TWSE 上市",
+  "sector": "金融", "ai_concept": false, "ai_role": "金控（壽險+銀行+證券）",
+  "price": {"close": 110.0, "close_date": "2026-05-29", "source": "證交所TWSE官方逐日成交",
+    "change_1w_pct": 15.67, "change_2w_pct": 14.46, "change_4w_pct": 20.88, "note": "金融股近月大漲"},
+  "valuation": {"pe": 14.19, "pb": 1.75, "dividend_yield_pct": 3.86, "as_of": "2026-05-28", "source": "TWSE BWIBBU官方",
+    "note": "金融股評價常用股價淨值比(PB)與殖利率，近月大漲後PB升高需留意"},
+  "earnings": {"eps_ttm": 7.75, "source": "股價÷本益比反推", "note": "本益比約14倍、殖利率3.9%"},
+  "assessment": {"signal": "非AI·基本面待補", "notes": "金控龍頭；PB/殖利率/EPS待補。"},
+  "data_quality_note": "股價為TWSE官方資料；估值與EPS待補。非投資建議。"
+}
