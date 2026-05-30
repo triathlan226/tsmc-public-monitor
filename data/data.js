@@ -4,7 +4,7 @@ window.TSMC_DASHBOARD_DATA = {
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-05-30T07:01:01+08:00",
+    "generated_at": "2026-05-31T06:43:32+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -21,7 +21,7 @@ window.TSMC_DASHBOARD_DATA = {
       "twse_stock_code": "2330"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-05-30T07:02:08+08:00",
+      "ran_at": "2026-05-31T06:44:36+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
         "TWSE T86 institutional trading history updated for 2330",
@@ -99,7 +99,7 @@ window.TSMC_DASHBOARD_DATA = {
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-05-30T07:01:02+08:00",
+      "as_of": "2026-05-31T06:43:32+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
@@ -138,7 +138,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-30T07:01:02+08:00"
+        "retrieved_at": "2026-05-31T06:43:32+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
@@ -153,7 +153,7 @@ window.TSMC_DASHBOARD_DATA = {
           {
             "datetime": "2026-05-29T09:00:00+08:00",
             "close": 2330.0,
-            "volume": 931000
+            "volume": 0
           },
           {
             "datetime": "2026-05-29T09:05:00+08:00",
@@ -422,7 +422,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-05-30T07:01:02+08:00"
+        "retrieved_at": "2026-05-31T06:43:32+08:00"
       }
     },
     "institutional_trading": {
@@ -447,7 +447,7 @@ window.TSMC_DASHBOARD_DATA = {
       "total_net": 14053662,
       "source_id": "SRC_TWSE_T86",
       "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260529&selectType=ALLBUT0999&response=json",
-      "retrieved_at": "2026-05-30T07:01:06+08:00"
+      "retrieved_at": "2026-05-31T06:43:37+08:00"
     },
     "institutional_trading_history": [
       {
@@ -472,7 +472,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 14053662,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260529&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:06+08:00"
+        "retrieved_at": "2026-05-31T06:43:37+08:00"
       },
       {
         "as_of": "20260528",
@@ -496,7 +496,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -6147103,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260528&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:09+08:00"
+        "retrieved_at": "2026-05-31T06:43:40+08:00"
       },
       {
         "as_of": "20260527",
@@ -520,7 +520,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 9183365,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260527&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:11+08:00"
+        "retrieved_at": "2026-05-31T06:43:42+08:00"
       },
       {
         "as_of": "20260526",
@@ -544,7 +544,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -8248077,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260526&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:14+08:00"
+        "retrieved_at": "2026-05-31T06:43:45+08:00"
       },
       {
         "as_of": "20260525",
@@ -568,7 +568,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 8271589,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260525&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:16+08:00"
+        "retrieved_at": "2026-05-31T06:43:47+08:00"
       },
       {
         "as_of": "20260522",
@@ -592,7 +592,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 455790,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260522&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:21+08:00"
+        "retrieved_at": "2026-05-31T06:43:51+08:00"
       },
       {
         "as_of": "20260521",
@@ -616,7 +616,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 1604835,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260521&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:23+08:00"
+        "retrieved_at": "2026-05-31T06:43:54+08:00"
       },
       {
         "as_of": "20260520",
@@ -640,7 +640,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -9554820,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260520&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:26+08:00"
+        "retrieved_at": "2026-05-31T06:43:55+08:00"
       },
       {
         "as_of": "20260519",
@@ -664,7 +664,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -12902966,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260519&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:28+08:00"
+        "retrieved_at": "2026-05-31T06:43:57+08:00"
       },
       {
         "as_of": "20260518",
@@ -688,7 +688,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -2572029,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260518&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:30+08:00"
+        "retrieved_at": "2026-05-31T06:44:00+08:00"
       },
       {
         "as_of": "20260515",
@@ -712,7 +712,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -33485,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260515&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:35+08:00"
+        "retrieved_at": "2026-05-31T06:44:04+08:00"
       },
       {
         "as_of": "20260514",
@@ -736,7 +736,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 5168801,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260514&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:38+08:00"
+        "retrieved_at": "2026-05-31T06:44:07+08:00"
       },
       {
         "as_of": "20260513",
@@ -760,7 +760,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -7085880,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260513&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:40+08:00"
+        "retrieved_at": "2026-05-31T06:44:09+08:00"
       },
       {
         "as_of": "20260512",
@@ -784,7 +784,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 66947,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260512&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:43+08:00"
+        "retrieved_at": "2026-05-31T06:44:11+08:00"
       },
       {
         "as_of": "20260511",
@@ -808,7 +808,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -17814753,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260511&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:45+08:00"
+        "retrieved_at": "2026-05-31T06:44:13+08:00"
       },
       {
         "as_of": "20260508",
@@ -832,7 +832,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 518965,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260508&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:50+08:00"
+        "retrieved_at": "2026-05-31T06:44:18+08:00"
       },
       {
         "as_of": "20260507",
@@ -856,7 +856,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 5466427,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260507&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:52+08:00"
+        "retrieved_at": "2026-05-31T06:44:20+08:00"
       },
       {
         "as_of": "20260506",
@@ -880,7 +880,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -2597919,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260506&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:54+08:00"
+        "retrieved_at": "2026-05-31T06:44:22+08:00"
       },
       {
         "as_of": "20260505",
@@ -904,7 +904,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -7280403,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260505&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:56+08:00"
+        "retrieved_at": "2026-05-31T06:44:24+08:00"
       },
       {
         "as_of": "20260504",
@@ -928,7 +928,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 10298708,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260504&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-05-30T07:01:58+08:00"
+        "retrieved_at": "2026-05-31T06:44:26+08:00"
       }
     ],
     "institutional_trading_summary": {
@@ -947,7 +947,7 @@ window.TSMC_DASHBOARD_DATA = {
         "direction": "buy",
         "days": 1
       },
-      "retrieved_at": "2026-05-30T07:01:58+08:00"
+      "retrieved_at": "2026-05-31T06:44:26+08:00"
     }
   },
   "financials": {
@@ -2076,28 +2076,28 @@ window.TSMC_DASHBOARD_DATA = {
       "name": "TWSE 三大法人買賣超日報",
       "type": "public_stock_price",
       "url": "https://www.twse.com.tw/zh/trading/foreign/t86.html",
-      "retrieved_at": "2026-05-30"
+      "retrieved_at": "2026-05-31"
     },
     {
       "id": "SRC_MOPS_T05ST01",
       "name": "MOPS 歷史重大訊息",
       "type": "official_mops",
       "url": "https://mops.twse.com.tw/mops/web/t05st01",
-      "retrieved_at": "2026-05-30"
+      "retrieved_at": "2026-05-31"
     },
     {
       "id": "SRC_TSMC_MONTHLY_REVENUE",
       "name": "TSMC Investor Relations - Monthly Revenue",
       "type": "official",
       "url": "https://investor.tsmc.com/english/monthly-revenue",
-      "retrieved_at": "2026-05-30"
+      "retrieved_at": "2026-05-31"
     },
     {
       "id": "SRC_SHEET_a40af467b8",
       "name": "MOPS 人工登錄重大訊息",
       "type": "google_sheet_mops",
       "url": "https://mops.twse.com.tw/mops/#/web/t05st01",
-      "retrieved_at": "2026-05-30"
+      "retrieved_at": "2026-05-31"
     }
   ],
   "mops_material_info": {
@@ -2215,7 +2215,7 @@ window.TSMC_DASHBOARD_DATA = {
     ],
     "source_id": "SRC_MOPS_T05ST01",
     "source_url": "https://mops.twse.com.tw/mops/web/t05st01",
-    "retrieved_at": "2026-05-30T07:02:07+08:00",
+    "retrieved_at": "2026-05-31T06:44:35+08:00",
     "entry_mode": "google_sheet_manual",
     "error": ""
   }
