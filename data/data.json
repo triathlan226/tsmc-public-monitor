@@ -4,7 +4,7 @@
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-06-14T06:51:20+08:00",
+    "generated_at": "2026-06-15T06:56:44+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -21,10 +21,10 @@
       "twse_stock_code": "2330"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-06-14T06:52:40+08:00",
+      "ran_at": "2026-06-15T06:57:25+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
-        "TWSE T86 institutional trading history updated for 2330",
+        "TWSE T86 skipped: No TWSE T86 row for 2330; 20260615: HTTP Error 307: Temporary Redirect | 20260614: HTTP Error 307: Temporary Redirect | 20260613: HTTP Error 307: Temporary Redirect",
         "TSMC monthly revenue history skipped: HTTP Error 403: Forbidden",
         "MOPS material info skipped: 115/06: MOPS security block | 115/05: MOPS security block | 115/03: MOPS security block",
         "Google Sheet events merged: 0",
@@ -99,7 +99,7 @@
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-06-14T06:51:20+08:00",
+      "as_of": "2026-06-15T06:56:45+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
@@ -138,7 +138,7 @@
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-06-14T06:51:20+08:00"
+        "retrieved_at": "2026-06-15T06:56:44+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
@@ -422,7 +422,7 @@
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-06-14T06:51:20+08:00"
+        "retrieved_at": "2026-06-15T06:56:45+08:00"
       }
     },
     "institutional_trading": {
@@ -2076,28 +2076,28 @@
       "name": "TWSE 三大法人買賣超日報",
       "type": "public_stock_price",
       "url": "https://www.twse.com.tw/zh/trading/foreign/t86.html",
-      "retrieved_at": "2026-06-14"
+      "retrieved_at": "2026-06-15"
     },
     {
       "id": "SRC_MOPS_T05ST01",
       "name": "MOPS 歷史重大訊息",
       "type": "official_mops",
       "url": "https://mops.twse.com.tw/mops/web/t05st01",
-      "retrieved_at": "2026-06-14"
+      "retrieved_at": "2026-06-15"
     },
     {
       "id": "SRC_TSMC_MONTHLY_REVENUE",
       "name": "TSMC Investor Relations - Monthly Revenue",
       "type": "official",
       "url": "https://investor.tsmc.com/english/monthly-revenue",
-      "retrieved_at": "2026-06-14"
+      "retrieved_at": "2026-06-15"
     },
     {
       "id": "SRC_SHEET_a40af467b8",
       "name": "MOPS 人工登錄重大訊息",
       "type": "google_sheet_mops",
       "url": "https://mops.twse.com.tw/mops/#/web/t05st01",
-      "retrieved_at": "2026-06-14"
+      "retrieved_at": "2026-06-15"
     }
   ],
   "mops_material_info": {
@@ -2215,7 +2215,7 @@
     ],
     "source_id": "SRC_MOPS_T05ST01",
     "source_url": "https://mops.twse.com.tw/mops/web/t05st01",
-    "retrieved_at": "2026-06-14T06:52:39+08:00",
+    "retrieved_at": "2026-06-15T06:57:24+08:00",
     "entry_mode": "google_sheet_manual",
     "error": ""
   }
