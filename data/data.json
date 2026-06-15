@@ -4,7 +4,7 @@
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-06-15T06:56:44+08:00",
+    "generated_at": "2026-06-16T07:27:43+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -21,10 +21,10 @@
       "twse_stock_code": "2330"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-06-15T06:57:25+08:00",
+      "ran_at": "2026-06-16T07:28:38+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
-        "TWSE T86 skipped: No TWSE T86 row for 2330; 20260615: HTTP Error 307: Temporary Redirect | 20260614: HTTP Error 307: Temporary Redirect | 20260613: HTTP Error 307: Temporary Redirect",
+        "TWSE T86 skipped: No TWSE T86 row for 2330; 20260616: HTTP Error 307: Temporary Redirect | 20260615: HTTP Error 307: Temporary Redirect | 20260614: HTTP Error 307: Temporary Redirect",
         "TSMC monthly revenue history skipped: HTTP Error 403: Forbidden",
         "MOPS material info skipped: 115/06: MOPS security block | 115/05: MOPS security block | 115/03: MOPS security block",
         "Google Sheet events merged: 0",
@@ -99,23 +99,18 @@
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-06-15T06:56:45+08:00",
+      "as_of": "2026-06-16T07:27:43+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
         "currency": "TWD",
         "exchange_name": "TAI",
         "instrument_type": "EQUITY",
-        "regular_market_price": 2310.0,
-        "previous_close": 2295.0,
+        "regular_market_price": 2375.0,
+        "previous_close": 2305.0,
         "range": "5d",
         "interval": "1d",
         "points": [
-          {
-            "datetime": "2026-06-08T09:00:00+08:00",
-            "close": 2295.0,
-            "volume": 44721632
-          },
           {
             "datetime": "2026-06-09T09:00:00+08:00",
             "close": 2305.0,
@@ -135,294 +130,299 @@
             "datetime": "2026-06-12T09:00:00+08:00",
             "close": 2310.0,
             "volume": 21560608
+          },
+          {
+            "datetime": "2026-06-15T09:00:00+08:00",
+            "close": 2375.0,
+            "volume": 25573718
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-06-15T06:56:44+08:00"
+        "retrieved_at": "2026-06-16T07:27:43+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
         "currency": "TWD",
         "exchange_name": "TAI",
         "instrument_type": "EQUITY",
-        "regular_market_price": 2310.0,
-        "previous_close": 2250.0,
+        "regular_market_price": 2375.0,
+        "previous_close": 2310.0,
         "range": "1d",
         "interval": "5m",
         "points": [
           {
-            "datetime": "2026-06-12T09:00:00+08:00",
-            "close": 2315.0,
-            "volume": 0
+            "datetime": "2026-06-15T09:00:00+08:00",
+            "close": 2355.0,
+            "volume": 854000
           },
           {
-            "datetime": "2026-06-12T09:05:00+08:00",
-            "close": 2310.0,
-            "volume": 539000
+            "datetime": "2026-06-15T09:05:00+08:00",
+            "close": 2350.0,
+            "volume": 685176
           },
           {
-            "datetime": "2026-06-12T09:10:00+08:00",
-            "close": 2305.0,
-            "volume": 947692
+            "datetime": "2026-06-15T09:10:00+08:00",
+            "close": 2355.0,
+            "volume": 1146615
           },
           {
-            "datetime": "2026-06-12T09:15:00+08:00",
-            "close": 2310.0,
-            "volume": 539507
+            "datetime": "2026-06-15T09:15:00+08:00",
+            "close": 2350.0,
+            "volume": 347526
           },
           {
-            "datetime": "2026-06-12T09:20:00+08:00",
-            "close": 2300.0,
-            "volume": 614484
+            "datetime": "2026-06-15T09:20:00+08:00",
+            "close": 2350.0,
+            "volume": 577675
           },
           {
-            "datetime": "2026-06-12T09:25:00+08:00",
-            "close": 2295.0,
-            "volume": 374351
+            "datetime": "2026-06-15T09:25:00+08:00",
+            "close": 2350.0,
+            "volume": 245462
           },
           {
-            "datetime": "2026-06-12T09:30:00+08:00",
-            "close": 2300.0,
-            "volume": 419147
+            "datetime": "2026-06-15T09:30:00+08:00",
+            "close": 2355.0,
+            "volume": 560779
           },
           {
-            "datetime": "2026-06-12T09:35:00+08:00",
-            "close": 2290.0,
-            "volume": 271731
+            "datetime": "2026-06-15T09:35:00+08:00",
+            "close": 2365.0,
+            "volume": 1187439
           },
           {
-            "datetime": "2026-06-12T09:40:00+08:00",
-            "close": 2295.0,
-            "volume": 362297
+            "datetime": "2026-06-15T09:40:00+08:00",
+            "close": 2365.0,
+            "volume": 386522
           },
           {
-            "datetime": "2026-06-12T09:45:00+08:00",
-            "close": 2295.0,
-            "volume": 247257
+            "datetime": "2026-06-15T09:45:00+08:00",
+            "close": 2360.0,
+            "volume": 879320
           },
           {
-            "datetime": "2026-06-12T09:50:00+08:00",
-            "close": 2295.0,
-            "volume": 316905
+            "datetime": "2026-06-15T09:50:00+08:00",
+            "close": 2360.0,
+            "volume": 337230
           },
           {
-            "datetime": "2026-06-12T09:55:00+08:00",
-            "close": 2300.0,
-            "volume": 653284
+            "datetime": "2026-06-15T09:55:00+08:00",
+            "close": 2360.0,
+            "volume": 250624
           },
           {
-            "datetime": "2026-06-12T10:00:00+08:00",
-            "close": 2295.0,
-            "volume": 80531
+            "datetime": "2026-06-15T10:00:00+08:00",
+            "close": 2360.0,
+            "volume": 216964
           },
           {
-            "datetime": "2026-06-12T10:05:00+08:00",
-            "close": 2295.0,
-            "volume": 119725
+            "datetime": "2026-06-15T10:05:00+08:00",
+            "close": 2355.0,
+            "volume": 226099
           },
           {
-            "datetime": "2026-06-12T10:10:00+08:00",
-            "close": 2295.0,
-            "volume": 223773
+            "datetime": "2026-06-15T10:10:00+08:00",
+            "close": 2355.0,
+            "volume": 180474
           },
           {
-            "datetime": "2026-06-12T10:15:00+08:00",
-            "close": 2290.0,
-            "volume": 186778
+            "datetime": "2026-06-15T10:15:00+08:00",
+            "close": 2355.0,
+            "volume": 172739
           },
           {
-            "datetime": "2026-06-12T10:20:00+08:00",
-            "close": 2295.0,
-            "volume": 353452
+            "datetime": "2026-06-15T10:20:00+08:00",
+            "close": 2355.0,
+            "volume": 212172
           },
           {
-            "datetime": "2026-06-12T10:25:00+08:00",
-            "close": 2295.0,
-            "volume": 109754
+            "datetime": "2026-06-15T10:25:00+08:00",
+            "close": 2355.0,
+            "volume": 238466
           },
           {
-            "datetime": "2026-06-12T10:30:00+08:00",
-            "close": 2295.0,
-            "volume": 170305
+            "datetime": "2026-06-15T10:30:00+08:00",
+            "close": 2355.0,
+            "volume": 317536
           },
           {
-            "datetime": "2026-06-12T10:35:00+08:00",
-            "close": 2295.0,
-            "volume": 352372
+            "datetime": "2026-06-15T10:35:00+08:00",
+            "close": 2360.0,
+            "volume": 108673
           },
           {
-            "datetime": "2026-06-12T10:40:00+08:00",
-            "close": 2300.0,
-            "volume": 99416
+            "datetime": "2026-06-15T10:40:00+08:00",
+            "close": 2360.0,
+            "volume": 139221
           },
           {
-            "datetime": "2026-06-12T10:45:00+08:00",
-            "close": 2295.0,
-            "volume": 114685
+            "datetime": "2026-06-15T10:45:00+08:00",
+            "close": 2360.0,
+            "volume": 1403216
           },
           {
-            "datetime": "2026-06-12T10:50:00+08:00",
-            "close": 2300.0,
-            "volume": 564940
+            "datetime": "2026-06-15T10:50:00+08:00",
+            "close": 2360.0,
+            "volume": 198650
           },
           {
-            "datetime": "2026-06-12T10:55:00+08:00",
-            "close": 2300.0,
-            "volume": 78576
+            "datetime": "2026-06-15T10:55:00+08:00",
+            "close": 2360.0,
+            "volume": 100622
           },
           {
-            "datetime": "2026-06-12T11:00:00+08:00",
-            "close": 2300.0,
-            "volume": 303110
+            "datetime": "2026-06-15T11:00:00+08:00",
+            "close": 2365.0,
+            "volume": 85093
           },
           {
-            "datetime": "2026-06-12T11:05:00+08:00",
-            "close": 2300.0,
-            "volume": 104142
+            "datetime": "2026-06-15T11:05:00+08:00",
+            "close": 2360.0,
+            "volume": 170584
           },
           {
-            "datetime": "2026-06-12T11:10:00+08:00",
-            "close": 2300.0,
-            "volume": 122025
+            "datetime": "2026-06-15T11:10:00+08:00",
+            "close": 2365.0,
+            "volume": 108452
           },
           {
-            "datetime": "2026-06-12T11:15:00+08:00",
-            "close": 2295.0,
-            "volume": 127527
+            "datetime": "2026-06-15T11:15:00+08:00",
+            "close": 2365.0,
+            "volume": 116084
           },
           {
-            "datetime": "2026-06-12T11:20:00+08:00",
-            "close": 2295.0,
-            "volume": 130550
+            "datetime": "2026-06-15T11:20:00+08:00",
+            "close": 2365.0,
+            "volume": 198937
           },
           {
-            "datetime": "2026-06-12T11:25:00+08:00",
-            "close": 2300.0,
-            "volume": 67850
+            "datetime": "2026-06-15T11:25:00+08:00",
+            "close": 2360.0,
+            "volume": 279807
           },
           {
-            "datetime": "2026-06-12T11:30:00+08:00",
-            "close": 2290.0,
-            "volume": 322866
+            "datetime": "2026-06-15T11:30:00+08:00",
+            "close": 2375.0,
+            "volume": 2440066
           },
           {
-            "datetime": "2026-06-12T11:35:00+08:00",
-            "close": 2295.0,
-            "volume": 375283
+            "datetime": "2026-06-15T11:35:00+08:00",
+            "close": 2365.0,
+            "volume": 657106
           },
           {
-            "datetime": "2026-06-12T11:40:00+08:00",
-            "close": 2295.0,
-            "volume": 145918
+            "datetime": "2026-06-15T11:40:00+08:00",
+            "close": 2370.0,
+            "volume": 60444
           },
           {
-            "datetime": "2026-06-12T11:45:00+08:00",
-            "close": 2290.0,
-            "volume": 38417
+            "datetime": "2026-06-15T11:45:00+08:00",
+            "close": 2365.0,
+            "volume": 55058
           },
           {
-            "datetime": "2026-06-12T11:50:00+08:00",
-            "close": 2295.0,
-            "volume": 64369
+            "datetime": "2026-06-15T11:50:00+08:00",
+            "close": 2370.0,
+            "volume": 75028
           },
           {
-            "datetime": "2026-06-12T11:55:00+08:00",
-            "close": 2295.0,
-            "volume": 125507
+            "datetime": "2026-06-15T11:55:00+08:00",
+            "close": 2365.0,
+            "volume": 109617
           },
           {
-            "datetime": "2026-06-12T12:00:00+08:00",
-            "close": 2295.0,
-            "volume": 52680
+            "datetime": "2026-06-15T12:00:00+08:00",
+            "close": 2370.0,
+            "volume": 98371
           },
           {
-            "datetime": "2026-06-12T12:05:00+08:00",
-            "close": 2295.0,
-            "volume": 248053
+            "datetime": "2026-06-15T12:05:00+08:00",
+            "close": 2365.0,
+            "volume": 107562
           },
           {
-            "datetime": "2026-06-12T12:10:00+08:00",
-            "close": 2300.0,
-            "volume": 390158
+            "datetime": "2026-06-15T12:10:00+08:00",
+            "close": 2365.0,
+            "volume": 122613
           },
           {
-            "datetime": "2026-06-12T12:15:00+08:00",
-            "close": 2295.0,
-            "volume": 166829
+            "datetime": "2026-06-15T12:15:00+08:00",
+            "close": 2365.0,
+            "volume": 256934
           },
           {
-            "datetime": "2026-06-12T12:20:00+08:00",
-            "close": 2295.0,
-            "volume": 51195
+            "datetime": "2026-06-15T12:20:00+08:00",
+            "close": 2370.0,
+            "volume": 127928
           },
           {
-            "datetime": "2026-06-12T12:25:00+08:00",
-            "close": 2300.0,
-            "volume": 53636
+            "datetime": "2026-06-15T12:25:00+08:00",
+            "close": 2365.0,
+            "volume": 165316
           },
           {
-            "datetime": "2026-06-12T12:30:00+08:00",
-            "close": 2295.0,
-            "volume": 145537
+            "datetime": "2026-06-15T12:30:00+08:00",
+            "close": 2365.0,
+            "volume": 109016
           },
           {
-            "datetime": "2026-06-12T12:35:00+08:00",
-            "close": 2300.0,
-            "volume": 188997
+            "datetime": "2026-06-15T12:35:00+08:00",
+            "close": 2365.0,
+            "volume": 170380
           },
           {
-            "datetime": "2026-06-12T12:40:00+08:00",
-            "close": 2300.0,
-            "volume": 124497
+            "datetime": "2026-06-15T12:40:00+08:00",
+            "close": 2365.0,
+            "volume": 154045
           },
           {
-            "datetime": "2026-06-12T12:45:00+08:00",
-            "close": 2295.0,
-            "volume": 307845
+            "datetime": "2026-06-15T12:45:00+08:00",
+            "close": 2365.0,
+            "volume": 131893
           },
           {
-            "datetime": "2026-06-12T12:50:00+08:00",
-            "close": 2305.0,
-            "volume": 878567
+            "datetime": "2026-06-15T12:50:00+08:00",
+            "close": 2360.0,
+            "volume": 317162
           },
           {
-            "datetime": "2026-06-12T12:55:00+08:00",
-            "close": 2300.0,
-            "volume": 307545
+            "datetime": "2026-06-15T12:55:00+08:00",
+            "close": 2365.0,
+            "volume": 117197
           },
           {
-            "datetime": "2026-06-12T13:00:00+08:00",
-            "close": 2300.0,
-            "volume": 243126
+            "datetime": "2026-06-15T13:00:00+08:00",
+            "close": 2370.0,
+            "volume": 966861
           },
           {
-            "datetime": "2026-06-12T13:05:00+08:00",
-            "close": 2300.0,
-            "volume": 298689
+            "datetime": "2026-06-15T13:05:00+08:00",
+            "close": 2370.0,
+            "volume": 154312
           },
           {
-            "datetime": "2026-06-12T13:10:00+08:00",
-            "close": 2295.0,
-            "volume": 141918
+            "datetime": "2026-06-15T13:10:00+08:00",
+            "close": 2365.0,
+            "volume": 207470
           },
           {
-            "datetime": "2026-06-12T13:15:00+08:00",
-            "close": 2295.0,
-            "volume": 672237
+            "datetime": "2026-06-15T13:15:00+08:00",
+            "close": 2365.0,
+            "volume": 245940
           },
           {
-            "datetime": "2026-06-12T13:20:00+08:00",
-            "close": 2295.0,
-            "volume": 892463
+            "datetime": "2026-06-15T13:20:00+08:00",
+            "close": 2370.0,
+            "volume": 666209
           },
           {
-            "datetime": "2026-06-12T13:30:00+08:00",
-            "close": 2310.0,
+            "datetime": "2026-06-15T13:30:00+08:00",
+            "close": 2375.0,
             "volume": 0
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-06-15T06:56:45+08:00"
+        "retrieved_at": "2026-06-16T07:27:43+08:00"
       }
     },
     "institutional_trading": {
@@ -2076,28 +2076,28 @@
       "name": "TWSE 三大法人買賣超日報",
       "type": "public_stock_price",
       "url": "https://www.twse.com.tw/zh/trading/foreign/t86.html",
-      "retrieved_at": "2026-06-15"
+      "retrieved_at": "2026-06-16"
     },
     {
       "id": "SRC_MOPS_T05ST01",
       "name": "MOPS 歷史重大訊息",
       "type": "official_mops",
       "url": "https://mops.twse.com.tw/mops/web/t05st01",
-      "retrieved_at": "2026-06-15"
+      "retrieved_at": "2026-06-16"
     },
     {
       "id": "SRC_TSMC_MONTHLY_REVENUE",
       "name": "TSMC Investor Relations - Monthly Revenue",
       "type": "official",
       "url": "https://investor.tsmc.com/english/monthly-revenue",
-      "retrieved_at": "2026-06-15"
+      "retrieved_at": "2026-06-16"
     },
     {
       "id": "SRC_SHEET_a40af467b8",
       "name": "MOPS 人工登錄重大訊息",
       "type": "google_sheet_mops",
       "url": "https://mops.twse.com.tw/mops/#/web/t05st01",
-      "retrieved_at": "2026-06-15"
+      "retrieved_at": "2026-06-16"
     }
   ],
   "mops_material_info": {
@@ -2215,7 +2215,7 @@
     ],
     "source_id": "SRC_MOPS_T05ST01",
     "source_url": "https://mops.twse.com.tw/mops/web/t05st01",
-    "retrieved_at": "2026-06-15T06:57:24+08:00",
+    "retrieved_at": "2026-06-16T07:28:37+08:00",
     "entry_mode": "google_sheet_manual",
     "error": ""
   }
