@@ -4,7 +4,7 @@ window.TSMC_DASHBOARD_DATA = {
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-07-05T06:42:58+08:00",
+    "generated_at": "2026-07-06T06:44:34+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -21,7 +21,7 @@ window.TSMC_DASHBOARD_DATA = {
       "twse_stock_code": "2330"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-07-05T06:43:50+08:00",
+      "ran_at": "2026-07-06T06:45:49+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
         "TWSE T86 institutional trading history updated for 2330",
@@ -99,7 +99,7 @@ window.TSMC_DASHBOARD_DATA = {
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-07-05T06:42:59+08:00",
+      "as_of": "2026-07-06T06:44:34+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
@@ -138,7 +138,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-07-05T06:42:58+08:00"
+        "retrieved_at": "2026-07-06T06:44:34+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
@@ -422,7 +422,7 @@ window.TSMC_DASHBOARD_DATA = {
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-07-05T06:42:59+08:00"
+        "retrieved_at": "2026-07-06T06:44:34+08:00"
       }
     },
     "institutional_trading": {
@@ -447,7 +447,7 @@ window.TSMC_DASHBOARD_DATA = {
       "total_net": -11062663,
       "source_id": "SRC_TWSE_T86",
       "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260703&selectType=ALLBUT0999&response=json",
-      "retrieved_at": "2026-07-05T06:43:03+08:00"
+      "retrieved_at": "2026-07-06T06:44:41+08:00"
     },
     "institutional_trading_history": [
       {
@@ -472,7 +472,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -11062663,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260703&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-07-05T06:43:03+08:00"
+        "retrieved_at": "2026-07-06T06:44:41+08:00"
       },
       {
         "as_of": "20260702",
@@ -496,7 +496,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -11010938,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260702&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-07-05T06:43:05+08:00"
+        "retrieved_at": "2026-07-06T06:44:43+08:00"
       },
       {
         "as_of": "20260701",
@@ -520,7 +520,7 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": 11755982,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260701&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-07-05T06:43:07+08:00"
+        "retrieved_at": "2026-07-06T06:44:45+08:00"
       },
       {
         "as_of": "20260630",
@@ -544,26 +544,410 @@ window.TSMC_DASHBOARD_DATA = {
         "total_net": -862914,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260630&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-07-05T06:43:09+08:00"
+        "retrieved_at": "2026-07-06T06:44:48+08:00"
+      },
+      {
+        "as_of": "20260629",
+        "title": "115年06月29日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 26335534,
+          "sell": 28248024,
+          "net": -1912490
+        },
+        "investment_trust": {
+          "buy": 1287446,
+          "sell": 368230,
+          "net": 919216
+        },
+        "dealers": {
+          "net": 996850
+        },
+        "total_net": 3576,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260629&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:44:50+08:00"
+      },
+      {
+        "as_of": "20260626",
+        "title": "115年06月26日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 22676018,
+          "sell": 36957173,
+          "net": -14281155
+        },
+        "investment_trust": {
+          "buy": 1034258,
+          "sell": 299860,
+          "net": 734398
+        },
+        "dealers": {
+          "net": 1009368
+        },
+        "total_net": -12537389,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260626&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:44:55+08:00"
+      },
+      {
+        "as_of": "20260625",
+        "title": "115年06月25日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 26592649,
+          "sell": 32696321,
+          "net": -6103672
+        },
+        "investment_trust": {
+          "buy": 375613,
+          "sell": 196553,
+          "net": 179060
+        },
+        "dealers": {
+          "net": -310438
+        },
+        "total_net": -6235050,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260625&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:44:57+08:00"
+      },
+      {
+        "as_of": "20260624",
+        "title": "115年06月24日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 16769354,
+          "sell": 55219528,
+          "net": -38450174
+        },
+        "investment_trust": {
+          "buy": 746000,
+          "sell": 88469,
+          "net": 657531
+        },
+        "dealers": {
+          "net": 1078085
+        },
+        "total_net": -36714558,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260624&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:00+08:00"
+      },
+      {
+        "as_of": "20260623",
+        "title": "115年06月23日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 24698966,
+          "sell": 27425264,
+          "net": -2726298
+        },
+        "investment_trust": {
+          "buy": 320913,
+          "sell": 155816,
+          "net": 165097
+        },
+        "dealers": {
+          "net": 1192045
+        },
+        "total_net": -1369156,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260623&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:03+08:00"
+      },
+      {
+        "as_of": "20260622",
+        "title": "115年06月22日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 29849998,
+          "sell": 15488900,
+          "net": 14361098
+        },
+        "investment_trust": {
+          "buy": 560696,
+          "sell": 762350,
+          "net": -201654
+        },
+        "dealers": {
+          "net": 1145627
+        },
+        "total_net": 15305071,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260622&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:06+08:00"
+      },
+      {
+        "as_of": "20260618",
+        "title": "115年06月18日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 38296328,
+          "sell": 30780433,
+          "net": 7515895
+        },
+        "investment_trust": {
+          "buy": 465116,
+          "sell": 7733465,
+          "net": -7268349
+        },
+        "dealers": {
+          "net": 36915
+        },
+        "total_net": 284461,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260618&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:12+08:00"
+      },
+      {
+        "as_of": "20260617",
+        "title": "115年06月17日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 15268364,
+          "sell": 22145224,
+          "net": -6876860
+        },
+        "investment_trust": {
+          "buy": 70000,
+          "sell": 387313,
+          "net": -317313
+        },
+        "dealers": {
+          "net": 895192
+        },
+        "total_net": -6298981,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260617&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:15+08:00"
+      },
+      {
+        "as_of": "20260616",
+        "title": "115年06月16日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 24206273,
+          "sell": 24588364,
+          "net": -382091
+        },
+        "investment_trust": {
+          "buy": 4150246,
+          "sell": 301570,
+          "net": 3848676
+        },
+        "dealers": {
+          "net": -157723
+        },
+        "total_net": 3308862,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260616&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:17+08:00"
+      },
+      {
+        "as_of": "20260615",
+        "title": "115年06月15日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 23238768,
+          "sell": 13591782,
+          "net": 9646986
+        },
+        "investment_trust": {
+          "buy": 115121,
+          "sell": 29600,
+          "net": 85521
+        },
+        "dealers": {
+          "net": 107319
+        },
+        "total_net": 9839826,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260615&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:19+08:00"
+      },
+      {
+        "as_of": "20260612",
+        "title": "115年06月12日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 19306946,
+          "sell": 15379522,
+          "net": 3927424
+        },
+        "investment_trust": {
+          "buy": 173000,
+          "sell": 322460,
+          "net": -149460
+        },
+        "dealers": {
+          "net": -180577
+        },
+        "total_net": 3597387,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260612&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:24+08:00"
+      },
+      {
+        "as_of": "20260611",
+        "title": "115年06月11日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 24199349,
+          "sell": 29103633,
+          "net": -4904284
+        },
+        "investment_trust": {
+          "buy": 949489,
+          "sell": 337000,
+          "net": 612489
+        },
+        "dealers": {
+          "net": 2909269
+        },
+        "total_net": -1382526,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260611&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:26+08:00"
+      },
+      {
+        "as_of": "20260610",
+        "title": "115年06月10日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 22444418,
+          "sell": 37987280,
+          "net": -15542862
+        },
+        "investment_trust": {
+          "buy": 116156,
+          "sell": 119953,
+          "net": -3797
+        },
+        "dealers": {
+          "net": -730914
+        },
+        "total_net": -16277573,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260610&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:29+08:00"
+      },
+      {
+        "as_of": "20260609",
+        "title": "115年06月09日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 15648460,
+          "sell": 30656852,
+          "net": -15008392
+        },
+        "investment_trust": {
+          "buy": 2705000,
+          "sell": 44913,
+          "net": 2660087
+        },
+        "dealers": {
+          "net": -1253628
+        },
+        "total_net": -13601933,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260609&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:31+08:00"
+      },
+      {
+        "as_of": "20260608",
+        "title": "115年06月08日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 11957129,
+          "sell": 32421778,
+          "net": -20464649
+        },
+        "investment_trust": {
+          "buy": 773000,
+          "sell": 43000,
+          "net": 730000
+        },
+        "dealers": {
+          "net": -214367
+        },
+        "total_net": -19949016,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260608&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:33+08:00"
+      },
+      {
+        "as_of": "20260605",
+        "title": "115年06月05日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 14565767,
+          "sell": 32405348,
+          "net": -17839581
+        },
+        "investment_trust": {
+          "buy": 3142206,
+          "sell": 241778,
+          "net": 2900428
+        },
+        "dealers": {
+          "net": 516810
+        },
+        "total_net": -14422343,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260605&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-07-06T06:45:38+08:00"
       }
     ],
     "institutional_trading_summary": {
       "source_id": "SRC_TWSE_T86",
       "latest_date": "20260703",
-      "trading_days": 4,
-      "foreign_5d_net": -18816202,
-      "foreign_20d_net": -18816202,
-      "trust_5d_net": 6499839,
-      "trust_20d_net": 6499839,
-      "dealer_5d_net": 1135830,
-      "dealer_20d_net": 1135830,
-      "total_5d_net": -11180533,
-      "total_20d_net": -11180533,
+      "trading_days": 20,
+      "foreign_5d_net": -20728692,
+      "foreign_20d_net": -127857307,
+      "trust_5d_net": 7419055,
+      "trust_20d_net": 12051769,
+      "dealer_5d_net": 2132680,
+      "dealer_20d_net": 8175663,
+      "total_5d_net": -11176957,
+      "total_20d_net": -107629875,
       "foreign_streak": {
         "direction": "sell",
         "days": 2
       },
-      "retrieved_at": "2026-07-05T06:43:43+08:00"
+      "retrieved_at": "2026-07-06T06:45:38+08:00"
     }
   },
   "financials": {
@@ -1692,28 +2076,28 @@ window.TSMC_DASHBOARD_DATA = {
       "name": "TWSE 三大法人買賣超日報",
       "type": "public_stock_price",
       "url": "https://www.twse.com.tw/zh/trading/foreign/t86.html",
-      "retrieved_at": "2026-07-05"
+      "retrieved_at": "2026-07-06"
     },
     {
       "id": "SRC_MOPS_T05ST01",
       "name": "MOPS 歷史重大訊息",
       "type": "official_mops",
       "url": "https://mops.twse.com.tw/mops/web/t05st01",
-      "retrieved_at": "2026-07-05"
+      "retrieved_at": "2026-07-06"
     },
     {
       "id": "SRC_TSMC_MONTHLY_REVENUE",
       "name": "TSMC Investor Relations - Monthly Revenue",
       "type": "official",
       "url": "https://investor.tsmc.com/english/monthly-revenue",
-      "retrieved_at": "2026-07-05"
+      "retrieved_at": "2026-07-06"
     },
     {
       "id": "SRC_SHEET_a40af467b8",
       "name": "MOPS 人工登錄重大訊息",
       "type": "google_sheet_mops",
       "url": "https://mops.twse.com.tw/mops/#/web/t05st01",
-      "retrieved_at": "2026-07-05"
+      "retrieved_at": "2026-07-06"
     }
   ],
   "mops_material_info": {
@@ -1831,7 +2215,7 @@ window.TSMC_DASHBOARD_DATA = {
     ],
     "source_id": "SRC_MOPS_T05ST01",
     "source_url": "https://mops.twse.com.tw/mops/web/t05st01",
-    "retrieved_at": "2026-07-05T06:43:49+08:00",
+    "retrieved_at": "2026-07-06T06:45:48+08:00",
     "entry_mode": "google_sheet_manual",
     "error": ""
   }
