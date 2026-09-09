@@ -4,7 +4,7 @@
     "company": "Taiwan Semiconductor Manufacturing Company Limited",
     "ticker_tw": "2330.TW",
     "ticker_us": "TSM",
-    "generated_at": "2026-09-09T07:43:00+08:00",
+    "generated_at": "2026-09-10T07:34:07+08:00",
     "timezone": "Asia/Taipei",
     "monitoring_window": {
       "start": "2026-05-19",
@@ -21,14 +21,14 @@
       "twse_stock_code": "2330"
     },
     "last_pipeline_run": {
-      "ran_at": "2026-09-09T07:44:31+08:00",
+      "ran_at": "2026-09-10T07:35:23+08:00",
       "log": [
         "Yahoo Finance updated for 2330.TW",
         "TWSE T86 institutional trading history updated for 2330",
         "TSMC monthly revenue history skipped: HTTP Error 403: Forbidden",
         "MOPS material info skipped: 115/09: MOPS security block | 115/08: MOPS security block | 115/07: MOPS security block",
-        "Google Sheet events skipped: The read operation timed out",
-        "Google Sheet MOPS events skipped: The read operation timed out",
+        "Google Sheet events merged: 0",
+        "Google Sheet MOPS events merged: 20",
         "Google Sheet watchlist rows: 12"
       ]
     }
@@ -99,23 +99,18 @@
     "one_year_low": 1065,
     "pe_ratio": 31.06,
     "yahoo_finance": {
-      "as_of": "2026-09-09T07:43:00+08:00",
+      "as_of": "2026-09-10T07:34:08+08:00",
       "ticker": "2330.TW",
       "daily": {
         "symbol": "2330.TW",
         "currency": "TWD",
         "exchange_name": "TAI",
         "instrument_type": "EQUITY",
-        "regular_market_price": 2470.0,
-        "previous_close": 2385.0,
+        "regular_market_price": 2465.0,
+        "previous_close": 2390.0,
         "range": "5d",
         "interval": "1d",
         "points": [
-          {
-            "datetime": "2026-09-02T09:00:00+08:00",
-            "close": 2385.0,
-            "volume": 19825721
-          },
           {
             "datetime": "2026-09-03T09:00:00+08:00",
             "close": 2390.0,
@@ -135,321 +130,350 @@
             "datetime": "2026-09-08T09:00:00+08:00",
             "close": 2470.0,
             "volume": 25823278
+          },
+          {
+            "datetime": "2026-09-09T09:00:00+08:00",
+            "close": 2465.0,
+            "volume": 15619432
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-09-09T07:43:00+08:00"
+        "retrieved_at": "2026-09-10T07:34:08+08:00"
       },
       "intraday": {
         "symbol": "2330.TW",
         "currency": "TWD",
         "exchange_name": "TAI",
         "instrument_type": "EQUITY",
-        "regular_market_price": 2470.0,
-        "previous_close": 2460.0,
+        "regular_market_price": 2465.0,
+        "previous_close": 2470.0,
         "range": "1d",
         "interval": "5m",
         "points": [
           {
-            "datetime": "2026-09-08T09:00:00+08:00",
-            "close": 2465.0,
-            "volume": 670000
+            "datetime": "2026-09-09T09:00:00+08:00",
+            "close": 2480.0,
+            "volume": 854000
           },
           {
-            "datetime": "2026-09-08T09:05:00+08:00",
-            "close": 2465.0,
-            "volume": 509000
-          },
-          {
-            "datetime": "2026-09-08T09:10:00+08:00",
-            "close": 2465.0,
-            "volume": 437550
-          },
-          {
-            "datetime": "2026-09-08T09:15:00+08:00",
-            "close": 2470.0,
-            "volume": 405778
-          },
-          {
-            "datetime": "2026-09-08T09:20:00+08:00",
+            "datetime": "2026-09-09T09:05:00+08:00",
             "close": 2475.0,
-            "volume": 638404
+            "volume": 167000
           },
           {
-            "datetime": "2026-09-08T09:25:00+08:00",
+            "datetime": "2026-09-09T09:10:00+08:00",
             "close": 2475.0,
-            "volume": 500695
+            "volume": 183064
           },
           {
-            "datetime": "2026-09-08T09:30:00+08:00",
+            "datetime": "2026-09-09T09:15:00+08:00",
             "close": 2480.0,
-            "volume": 669783
+            "volume": 99262
           },
           {
-            "datetime": "2026-09-08T09:35:00+08:00",
-            "close": 2475.0,
-            "volume": 254634
-          },
-          {
-            "datetime": "2026-09-08T09:40:00+08:00",
+            "datetime": "2026-09-09T09:20:00+08:00",
             "close": 2480.0,
-            "volume": 316979
+            "volume": 364809
           },
           {
-            "datetime": "2026-09-08T09:45:00+08:00",
-            "close": 2480.0,
-            "volume": 193662
-          },
-          {
-            "datetime": "2026-09-08T09:50:00+08:00",
-            "close": 2480.0,
-            "volume": 340356
-          },
-          {
-            "datetime": "2026-09-08T09:55:00+08:00",
-            "close": 2490.0,
-            "volume": 1711189
-          },
-          {
-            "datetime": "2026-09-08T10:00:00+08:00",
-            "close": 2490.0,
-            "volume": 1029559
-          },
-          {
-            "datetime": "2026-09-08T10:05:00+08:00",
-            "close": 2500.0,
-            "volume": 1032937
-          },
-          {
-            "datetime": "2026-09-08T10:10:00+08:00",
-            "close": 2500.0,
-            "volume": 566105
-          },
-          {
-            "datetime": "2026-09-08T10:15:00+08:00",
-            "close": 2505.0,
-            "volume": 2525810
-          },
-          {
-            "datetime": "2026-09-08T10:20:00+08:00",
-            "close": 2505.0,
-            "volume": 608878
-          },
-          {
-            "datetime": "2026-09-08T10:25:00+08:00",
-            "close": 2500.0,
-            "volume": 701187
-          },
-          {
-            "datetime": "2026-09-08T10:30:00+08:00",
-            "close": 2490.0,
-            "volume": 335730
-          },
-          {
-            "datetime": "2026-09-08T10:35:00+08:00",
-            "close": 2495.0,
-            "volume": 296034
-          },
-          {
-            "datetime": "2026-09-08T10:40:00+08:00",
-            "close": 2490.0,
-            "volume": 339841
-          },
-          {
-            "datetime": "2026-09-08T10:45:00+08:00",
-            "close": 2490.0,
-            "volume": 237130
-          },
-          {
-            "datetime": "2026-09-08T10:50:00+08:00",
+            "datetime": "2026-09-09T09:25:00+08:00",
             "close": 2485.0,
-            "volume": 125605
+            "volume": 123692
           },
           {
-            "datetime": "2026-09-08T10:55:00+08:00",
-            "close": 2490.0,
-            "volume": 132186
-          },
-          {
-            "datetime": "2026-09-08T11:00:00+08:00",
-            "close": 2490.0,
-            "volume": 143788
-          },
-          {
-            "datetime": "2026-09-08T11:05:00+08:00",
-            "close": 2490.0,
-            "volume": 153641
-          },
-          {
-            "datetime": "2026-09-08T11:10:00+08:00",
-            "close": 2490.0,
-            "volume": 169732
-          },
-          {
-            "datetime": "2026-09-08T11:15:00+08:00",
-            "close": 2495.0,
-            "volume": 332104
-          },
-          {
-            "datetime": "2026-09-08T11:20:00+08:00",
-            "close": 2495.0,
-            "volume": 89662
-          },
-          {
-            "datetime": "2026-09-08T11:25:00+08:00",
-            "close": 2495.0,
-            "volume": 87412
-          },
-          {
-            "datetime": "2026-09-08T11:30:00+08:00",
-            "close": 2495.0,
-            "volume": 77920
-          },
-          {
-            "datetime": "2026-09-08T11:35:00+08:00",
-            "close": 2490.0,
-            "volume": 67726
-          },
-          {
-            "datetime": "2026-09-08T11:40:00+08:00",
-            "close": 2490.0,
-            "volume": 364378
-          },
-          {
-            "datetime": "2026-09-08T11:45:00+08:00",
-            "close": 2490.0,
-            "volume": 136769
-          },
-          {
-            "datetime": "2026-09-08T11:50:00+08:00",
-            "close": 2480.0,
-            "volume": 951427
-          },
-          {
-            "datetime": "2026-09-08T11:55:00+08:00",
+            "datetime": "2026-09-09T09:30:00+08:00",
             "close": 2485.0,
-            "volume": 321754
+            "volume": 117148
           },
           {
-            "datetime": "2026-09-08T12:00:00+08:00",
+            "datetime": "2026-09-09T09:35:00+08:00",
             "close": 2480.0,
-            "volume": 168833
+            "volume": 243065
           },
           {
-            "datetime": "2026-09-08T12:05:00+08:00",
+            "datetime": "2026-09-09T09:40:00+08:00",
             "close": 2480.0,
-            "volume": 55742
+            "volume": 121988
           },
           {
-            "datetime": "2026-09-08T12:10:00+08:00",
+            "datetime": "2026-09-09T09:45:00+08:00",
             "close": 2485.0,
-            "volume": 180340
+            "volume": 217858
           },
           {
-            "datetime": "2026-09-08T12:15:00+08:00",
+            "datetime": "2026-09-09T09:50:00+08:00",
+            "close": 2485.0,
+            "volume": 213285
+          },
+          {
+            "datetime": "2026-09-09T09:55:00+08:00",
             "close": 2480.0,
-            "volume": 225398
+            "volume": 53729
           },
           {
-            "datetime": "2026-09-08T12:20:00+08:00",
+            "datetime": "2026-09-09T10:00:00+08:00",
+            "close": 2485.0,
+            "volume": 271285
+          },
+          {
+            "datetime": "2026-09-09T10:05:00+08:00",
+            "close": 2490.0,
+            "volume": 79225
+          },
+          {
+            "datetime": "2026-09-09T10:10:00+08:00",
+            "close": 2485.0,
+            "volume": 119883
+          },
+          {
+            "datetime": "2026-09-09T10:15:00+08:00",
+            "close": 2485.0,
+            "volume": 58519
+          },
+          {
+            "datetime": "2026-09-09T10:20:00+08:00",
+            "close": 2485.0,
+            "volume": 204538
+          },
+          {
+            "datetime": "2026-09-09T10:25:00+08:00",
+            "close": 2485.0,
+            "volume": 46148
+          },
+          {
+            "datetime": "2026-09-09T10:30:00+08:00",
+            "close": 2485.0,
+            "volume": 42473
+          },
+          {
+            "datetime": "2026-09-09T10:35:00+08:00",
             "close": 2480.0,
-            "volume": 155078
+            "volume": 97270
           },
           {
-            "datetime": "2026-09-08T12:25:00+08:00",
+            "datetime": "2026-09-09T10:40:00+08:00",
+            "close": 2485.0,
+            "volume": 160113
+          },
+          {
+            "datetime": "2026-09-09T10:45:00+08:00",
+            "close": 2485.0,
+            "volume": 394102
+          },
+          {
+            "datetime": "2026-09-09T10:50:00+08:00",
+            "close": 2485.0,
+            "volume": 91061
+          },
+          {
+            "datetime": "2026-09-09T10:55:00+08:00",
+            "close": 2485.0,
+            "volume": 87751
+          },
+          {
+            "datetime": "2026-09-09T11:00:00+08:00",
+            "close": 2485.0,
+            "volume": 61434
+          },
+          {
+            "datetime": "2026-09-09T11:05:00+08:00",
             "close": 2480.0,
-            "volume": 101909
+            "volume": 71316
           },
           {
-            "datetime": "2026-09-08T12:30:00+08:00",
+            "datetime": "2026-09-09T11:10:00+08:00",
             "close": 2475.0,
-            "volume": 127672
+            "volume": 827002
           },
           {
-            "datetime": "2026-09-08T12:35:00+08:00",
+            "datetime": "2026-09-09T11:15:00+08:00",
             "close": 2480.0,
-            "volume": 149420
+            "volume": 55411
           },
           {
-            "datetime": "2026-09-08T12:40:00+08:00",
+            "datetime": "2026-09-09T11:20:00+08:00",
             "close": 2480.0,
-            "volume": 206981
+            "volume": 90034
           },
           {
-            "datetime": "2026-09-08T12:45:00+08:00",
+            "datetime": "2026-09-09T11:25:00+08:00",
             "close": 2480.0,
-            "volume": 135896
+            "volume": 43483
           },
           {
-            "datetime": "2026-09-08T12:50:00+08:00",
+            "datetime": "2026-09-09T11:30:00+08:00",
             "close": 2480.0,
-            "volume": 134502
+            "volume": 25047
           },
           {
-            "datetime": "2026-09-08T12:55:00+08:00",
+            "datetime": "2026-09-09T11:35:00+08:00",
+            "close": 2480.0,
+            "volume": 36175
+          },
+          {
+            "datetime": "2026-09-09T11:40:00+08:00",
+            "close": 2480.0,
+            "volume": 158111
+          },
+          {
+            "datetime": "2026-09-09T11:45:00+08:00",
             "close": 2475.0,
-            "volume": 102416
+            "volume": 606647
           },
           {
-            "datetime": "2026-09-08T13:00:00+08:00",
-            "close": 2480.0,
-            "volume": 260708
-          },
-          {
-            "datetime": "2026-09-08T13:05:00+08:00",
+            "datetime": "2026-09-09T11:50:00+08:00",
             "close": 2475.0,
-            "volume": 574535
+            "volume": 155806
           },
           {
-            "datetime": "2026-09-08T13:10:00+08:00",
+            "datetime": "2026-09-09T11:55:00+08:00",
             "close": 2475.0,
-            "volume": 185933
+            "volume": 70852
           },
           {
-            "datetime": "2026-09-08T13:15:00+08:00",
+            "datetime": "2026-09-09T12:00:00+08:00",
             "close": 2470.0,
-            "volume": 404396
+            "volume": 47324
           },
           {
-            "datetime": "2026-09-08T13:20:00+08:00",
-            "close": 2475.0,
-            "volume": 599832
-          },
-          {
-            "datetime": "2026-09-08T13:30:00+08:00",
+            "datetime": "2026-09-09T12:05:00+08:00",
             "close": 2470.0,
+            "volume": 88365
+          },
+          {
+            "datetime": "2026-09-09T12:10:00+08:00",
+            "close": 2465.0,
+            "volume": 1073094
+          },
+          {
+            "datetime": "2026-09-09T12:15:00+08:00",
+            "close": 2460.0,
+            "volume": 85582
+          },
+          {
+            "datetime": "2026-09-09T12:20:00+08:00",
+            "close": 2470.0,
+            "volume": 350454
+          },
+          {
+            "datetime": "2026-09-09T12:25:00+08:00",
+            "close": 2470.0,
+            "volume": 86588
+          },
+          {
+            "datetime": "2026-09-09T12:30:00+08:00",
+            "close": 2470.0,
+            "volume": 65864
+          },
+          {
+            "datetime": "2026-09-09T12:35:00+08:00",
+            "close": 2465.0,
+            "volume": 68930
+          },
+          {
+            "datetime": "2026-09-09T12:40:00+08:00",
+            "close": 2465.0,
+            "volume": 139150
+          },
+          {
+            "datetime": "2026-09-09T12:45:00+08:00",
+            "close": 2465.0,
+            "volume": 133164
+          },
+          {
+            "datetime": "2026-09-09T12:50:00+08:00",
+            "close": 2470.0,
+            "volume": 62005
+          },
+          {
+            "datetime": "2026-09-09T12:55:00+08:00",
+            "close": 2465.0,
+            "volume": 103572
+          },
+          {
+            "datetime": "2026-09-09T13:00:00+08:00",
+            "close": 2465.0,
+            "volume": 383138
+          },
+          {
+            "datetime": "2026-09-09T13:05:00+08:00",
+            "close": 2465.0,
+            "volume": 519326
+          },
+          {
+            "datetime": "2026-09-09T13:10:00+08:00",
+            "close": 2470.0,
+            "volume": 106887
+          },
+          {
+            "datetime": "2026-09-09T13:15:00+08:00",
+            "close": 2460.0,
+            "volume": 347177
+          },
+          {
+            "datetime": "2026-09-09T13:20:00+08:00",
+            "close": 2460.0,
+            "volume": 372284
+          },
+          {
+            "datetime": "2026-09-09T13:30:00+08:00",
+            "close": 2465.0,
             "volume": 0
           }
         ],
         "source_url": "https://finance.yahoo.com/quote/2330.TW",
-        "retrieved_at": "2026-09-09T07:43:00+08:00"
+        "retrieved_at": "2026-09-10T07:34:08+08:00"
       }
     },
     "institutional_trading": {
-      "as_of": "20260908",
-      "title": "115年09月08日 三大法人買賣超日報",
+      "as_of": "20260909",
+      "title": "115年09月09日 三大法人買賣超日報",
       "stock_code": "2330",
       "stock_name": "台積電",
       "unit": "shares",
       "foreign_investors": {
-        "buy": 18025415,
-        "sell": 12528679,
-        "net": 5496736
+        "buy": 10943041,
+        "sell": 13501903,
+        "net": -2558862
       },
       "investment_trust": {
-        "buy": 1426224,
-        "sell": 221605,
-        "net": 1204619
+        "buy": 118231,
+        "sell": 321824,
+        "net": -203593
       },
       "dealers": {
-        "net": -397962
+        "net": 41730
       },
-      "total_net": 6303393,
+      "total_net": -2720725,
       "source_id": "SRC_TWSE_T86",
-      "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260908&selectType=ALLBUT0999&response=json",
-      "retrieved_at": "2026-09-09T07:43:03+08:00"
+      "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260909&selectType=ALLBUT0999&response=json",
+      "retrieved_at": "2026-09-10T07:34:12+08:00"
     },
     "institutional_trading_history": [
+      {
+        "as_of": "20260909",
+        "title": "115年09月09日 三大法人買賣超日報",
+        "stock_code": "2330",
+        "stock_name": "台積電",
+        "unit": "shares",
+        "foreign_investors": {
+          "buy": 10943041,
+          "sell": 13501903,
+          "net": -2558862
+        },
+        "investment_trust": {
+          "buy": 118231,
+          "sell": 321824,
+          "net": -203593
+        },
+        "dealers": {
+          "net": 41730
+        },
+        "total_net": -2720725,
+        "source_id": "SRC_TWSE_T86",
+        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260909&selectType=ALLBUT0999&response=json",
+        "retrieved_at": "2026-09-10T07:34:12+08:00"
+      },
       {
         "as_of": "20260908",
         "title": "115年09月08日 三大法人買賣超日報",
@@ -472,7 +496,7 @@
         "total_net": 6303393,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260908&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:03+08:00"
+        "retrieved_at": "2026-09-10T07:34:15+08:00"
       },
       {
         "as_of": "20260907",
@@ -496,7 +520,7 @@
         "total_net": 16487834,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260907&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:04+08:00"
+        "retrieved_at": "2026-09-10T07:34:17+08:00"
       },
       {
         "as_of": "20260904",
@@ -520,7 +544,7 @@
         "total_net": 1969801,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260904&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:07+08:00"
+        "retrieved_at": "2026-09-10T07:34:23+08:00"
       },
       {
         "as_of": "20260903",
@@ -544,7 +568,7 @@
         "total_net": -998322,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260903&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:09+08:00"
+        "retrieved_at": "2026-09-10T07:34:26+08:00"
       },
       {
         "as_of": "20260902",
@@ -568,7 +592,7 @@
         "total_net": -12751244,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260902&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:10+08:00"
+        "retrieved_at": "2026-09-10T07:34:28+08:00"
       },
       {
         "as_of": "20260901",
@@ -592,7 +616,7 @@
         "total_net": 5965297,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260901&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:11+08:00"
+        "retrieved_at": "2026-09-10T07:34:31+08:00"
       },
       {
         "as_of": "20260831",
@@ -616,7 +640,7 @@
         "total_net": -5694366,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260831&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:12+08:00"
+        "retrieved_at": "2026-09-10T07:34:33+08:00"
       },
       {
         "as_of": "20260828",
@@ -640,7 +664,7 @@
         "total_net": 1243293,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260828&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:15+08:00"
+        "retrieved_at": "2026-09-10T07:34:38+08:00"
       },
       {
         "as_of": "20260827",
@@ -664,7 +688,7 @@
         "total_net": 4340632,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260827&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:16+08:00"
+        "retrieved_at": "2026-09-10T07:34:41+08:00"
       },
       {
         "as_of": "20260826",
@@ -688,7 +712,7 @@
         "total_net": 4910121,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260826&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:17+08:00"
+        "retrieved_at": "2026-09-10T07:34:44+08:00"
       },
       {
         "as_of": "20260825",
@@ -712,7 +736,7 @@
         "total_net": -17120,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260825&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:19+08:00"
+        "retrieved_at": "2026-09-10T07:34:47+08:00"
       },
       {
         "as_of": "20260824",
@@ -736,7 +760,7 @@
         "total_net": -1486767,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260824&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:21+08:00"
+        "retrieved_at": "2026-09-10T07:34:50+08:00"
       },
       {
         "as_of": "20260821",
@@ -760,7 +784,7 @@
         "total_net": 6543857,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260821&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:25+08:00"
+        "retrieved_at": "2026-09-10T07:34:56+08:00"
       },
       {
         "as_of": "20260820",
@@ -784,7 +808,7 @@
         "total_net": 1116777,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260820&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:27+08:00"
+        "retrieved_at": "2026-09-10T07:34:59+08:00"
       },
       {
         "as_of": "20260819",
@@ -808,7 +832,7 @@
         "total_net": -7367011,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260819&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:29+08:00"
+        "retrieved_at": "2026-09-10T07:35:02+08:00"
       },
       {
         "as_of": "20260818",
@@ -832,7 +856,7 @@
         "total_net": -2728347,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260818&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:31+08:00"
+        "retrieved_at": "2026-09-10T07:35:04+08:00"
       },
       {
         "as_of": "20260817",
@@ -856,7 +880,7 @@
         "total_net": 2525734,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260817&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:33+08:00"
+        "retrieved_at": "2026-09-10T07:35:06+08:00"
       },
       {
         "as_of": "20260814",
@@ -880,7 +904,7 @@
         "total_net": -3777766,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260814&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:37+08:00"
+        "retrieved_at": "2026-09-10T07:35:11+08:00"
       },
       {
         "as_of": "20260813",
@@ -904,50 +928,26 @@
         "total_net": 4801405,
         "source_id": "SRC_TWSE_T86",
         "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260813&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:39+08:00"
-      },
-      {
-        "as_of": "20260812",
-        "title": "115年08月12日 三大法人買賣超日報",
-        "stock_code": "2330",
-        "stock_name": "台積電",
-        "unit": "shares",
-        "foreign_investors": {
-          "buy": 12178064,
-          "sell": 9551161,
-          "net": 2626903
-        },
-        "investment_trust": {
-          "buy": 868191,
-          "sell": 281137,
-          "net": 587054
-        },
-        "dealers": {
-          "net": -290286
-        },
-        "total_net": 2923671,
-        "source_id": "SRC_TWSE_T86",
-        "source_url": "https://www.twse.com.tw/rwd/zh/fund/T86?date=20260812&selectType=ALLBUT0999&response=json",
-        "retrieved_at": "2026-09-09T07:43:41+08:00"
+        "retrieved_at": "2026-09-10T07:35:13+08:00"
       }
     ],
     "institutional_trading_summary": {
       "source_id": "SRC_TWSE_T86",
-      "latest_date": "20260908",
+      "latest_date": "20260909",
       "trading_days": 20,
-      "foreign_5d_net": 10569397,
-      "foreign_20d_net": 25593313,
-      "trust_5d_net": -270406,
-      "trust_20d_net": -3380936,
-      "dealer_5d_net": 712471,
-      "dealer_20d_net": 2098495,
-      "total_5d_net": 11011462,
-      "total_20d_net": 24310872,
+      "foreign_5d_net": 19997518,
+      "foreign_20d_net": 20407548,
+      "trust_5d_net": 362746,
+      "trust_20d_net": -4171583,
+      "dealer_5d_net": 681717,
+      "dealer_20d_net": 2430511,
+      "total_5d_net": 21041981,
+      "total_20d_net": 18666476,
       "foreign_streak": {
-        "direction": "buy",
-        "days": 3
+        "direction": "sell",
+        "days": 1
       },
-      "retrieved_at": "2026-09-09T07:43:41+08:00"
+      "retrieved_at": "2026-09-10T07:35:13+08:00"
     }
   },
   "financials": {
@@ -2076,37 +2076,147 @@
       "name": "TWSE 三大法人買賣超日報",
       "type": "public_stock_price",
       "url": "https://www.twse.com.tw/zh/trading/foreign/t86.html",
-      "retrieved_at": "2026-09-09"
+      "retrieved_at": "2026-09-10"
     },
     {
       "id": "SRC_MOPS_T05ST01",
       "name": "MOPS 歷史重大訊息",
       "type": "official_mops",
       "url": "https://mops.twse.com.tw/mops/web/t05st01",
-      "retrieved_at": "2026-09-09"
+      "retrieved_at": "2026-09-10"
     },
     {
       "id": "SRC_TSMC_MONTHLY_REVENUE",
       "name": "TSMC Investor Relations - Monthly Revenue",
       "type": "official",
       "url": "https://investor.tsmc.com/english/monthly-revenue",
-      "retrieved_at": "2026-09-09"
+      "retrieved_at": "2026-09-10"
     },
     {
       "id": "SRC_SHEET_a40af467b8",
       "name": "MOPS 人工登錄重大訊息",
       "type": "google_sheet_mops",
       "url": "https://mops.twse.com.tw/mops/#/web/t05st01",
-      "retrieved_at": "2026-09-08"
+      "retrieved_at": "2026-09-10"
     }
   ],
   "mops_material_info": {
-    "status": "unavailable",
+    "status": "ok",
     "stock_code": "2330",
-    "items": [],
+    "items": [
+      {
+        "date": "2026-05-25",
+        "time": "20:00:03",
+        "company": "2330 台積電",
+        "title": "本公司受邀參加機構投資人說明會",
+        "summary": "本公司受邀參加機構投資人說明會",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-25",
+        "time": "16:12:55",
+        "company": "2330 台積電",
+        "title": "本公司限制員工權利新股收回註銷完成實收資本額變更登記事宜",
+        "summary": "本公司限制員工權利新股收回註銷完成實收資本額變更登記事宜",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-20",
+        "time": "17:42:11",
+        "company": "2330 台積電",
+        "title": "本公司受邀參加機構投資人說明會",
+        "summary": "本公司受邀參加機構投資人說明會",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-18",
+        "time": "19:12:13",
+        "company": "2330 台積電",
+        "title": "本公司公告處分世界先進積體電路股份有限公司股票 (補充115/05/15公告)",
+        "summary": "本公司公告處分世界先進積體電路股份有限公司股票 (補充115/05/15公告)",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-15",
+        "time": "19:24:19",
+        "company": "2330 台積電",
+        "title": "本公司公告處分世界先進積體電路股份有限公司股票",
+        "summary": "本公司公告處分世界先進積體電路股份有限公司股票",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-15",
+        "time": "15:15:47",
+        "company": "2330 台積電",
+        "title": "台積公司擬出售8.1%世界先進公司股權",
+        "summary": "台積公司擬出售8.1%世界先進公司股權",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-13",
+        "time": "14:29:32",
+        "company": "2330 台積電",
+        "title": "公告本公司115年度第2期無擔保普通公司債(綠色債券) 主要發行條件",
+        "summary": "公告本公司115年度第2期無擔保普通公司債(綠色債券) 主要發行條件",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-12",
+        "time": "19:31:56",
+        "company": "2330 台積電",
+        "title": "公告本公司董事會決議辦理限制員工權利新股收回註銷 減資事宜",
+        "summary": "公告本公司董事會決議辦理限制員工權利新股收回註銷 減資事宜",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-12",
+        "time": "19:20:15",
+        "company": "2330 台積電",
+        "title": "本公司代子公司TSMC Arizona Corporation公告 董事會決議增資",
+        "summary": "本公司代子公司TSMC Arizona Corporation公告 董事會決議增資",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-12",
+        "time": "19:17:00",
+        "company": "2330 台積電",
+        "title": "本公司董事會核准增資子公司TSMC Arizona",
+        "summary": "本公司董事會核准增資子公司TSMC Arizona",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-12",
+        "time": "19:13:56",
+        "company": "2330 台積電",
+        "title": "本公司董事會核准機器設備、不動產及資本化租賃資產資本預算案",
+        "summary": "本公司董事會核准機器設備、不動產及資本化租賃資產資本預算案",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      },
+      {
+        "date": "2026-05-12",
+        "time": "18:52:22",
+        "company": "2330 台積電",
+        "title": "本公司訂定民國115年第一季之現金股利除息交易日",
+        "summary": "本公司訂定民國115年第一季之現金股利除息交易日",
+        "source_id": "SRC_SHEET_a40af467b8",
+        "source_url": "https://mops.twse.com.tw/mops/#/web/t05st01"
+      }
+    ],
     "source_id": "SRC_MOPS_T05ST01",
     "source_url": "https://mops.twse.com.tw/mops/web/t05st01",
-    "retrieved_at": "2026-09-09T07:43:48+08:00",
-    "error": "115/09: MOPS security block | 115/08: MOPS security block | 115/07: MOPS security block"
+    "retrieved_at": "2026-09-10T07:35:22+08:00",
+    "entry_mode": "google_sheet_manual",
+    "error": ""
   }
 }
